@@ -27,6 +27,15 @@ abstract final class Balance {
     (0.60, 1.00), // přední vrstva — nejrychlejší
   ];
 
+  // ── Juice ─────────────────────────────────────────────────────────────────
+  static const double hitStopDuration    = 0.05;  // s, zmrazení hry při hitu
+  static const double knockbackImpulse   = 280.0; // px/s, síla odrazu nepřítele
+  static const double knockbackDecay     = 12.0;  // koeficient útlumu za frame
+  static const int    hitParticleCount   = 6;
+  static const int    deathParticleCount = 14;
+  static const double particleSpeed      = 180.0; // px/s
+  static const double particleLifetime   = 0.4;   // s
+
   // ── Dash ─────────────────────────────────────────────────────────────────
   static const double dashSpeed           = 900.0;  // px/s
   static const double dashDuration        = 0.12;   // s

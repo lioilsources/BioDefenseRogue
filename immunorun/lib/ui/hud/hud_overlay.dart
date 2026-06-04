@@ -37,23 +37,77 @@ class HudOverlay extends ConsumerWidget {
     final fever = ref.watch(feverProvider);
     final hp    = ref.watch(playerHpProvider);
 
-    return SafeArea(
-      child: Stack(
-        children: [
-          Positioned(
-            right: 16,
-            top:   16,
-            child: Thermometer(snapshot: fever),
+    return Stack(
+      children: [
+        // fever vignette — fullscreen, pod HUD prvky
+        Positioned.fill(
+          child: _FeverVignette(normalized: fever.normalized, zone: fever.zone),
+        ),
+        SafeArea(
+          child: Stack(
+            children: [
+              Positioned(right: 16, top: 16, child: Thermometer(snapshot: fever)),
+              Positioned(left:  16, top: 16, child: _HpBar(normalized: hp)),
+            ],
           ),
-          Positioned(
-            left: 16,
-            top:  16,
-            child: _HpBar(normalized: hp),
-          ),
-        ],
+        ),
+      ],
+    );
+  }
+}
+
+// ── Fever vignette ────────────────────────────────────────────────────────
+
+class _FeverVignette extends StatelessWidget {
+  const _FeverVignette({required this.normalized, required this.zone});
+  final double    normalized;
+  final FeverZone zone;
+
+  @override
+  Widget build(BuildContext context) {
+    if (normalized < 0.05) return const SizedBox.shrink();
+    return IgnorePointer(
+      child: CustomPaint(
+        painter: _VignettePainter(normalized, zone),
+        size:    Size.infinite,
       ),
     );
   }
+}
+
+class _VignettePainter extends CustomPainter {
+  _VignettePainter(this.n, this.zone);
+  final double    n;
+  final FeverZone zone;
+
+  @override
+  void paint(Canvas canvas, Size size) {
+    final center = Offset(size.width / 2, size.height / 2);
+    final radius = size.longestSide * 0.85;
+
+    Color edge;
+    if (n < 0.3) {
+      edge = Color.lerp(
+          const Color(0x00F4D03F), const Color(0x55F4D03F), n / 0.3)!;
+    } else if (n < 0.7) {
+      edge = Color.lerp(
+          const Color(0x55F4D03F), const Color(0x99E67E22), (n - 0.3) / 0.4)!;
+    } else {
+      edge = Color.lerp(
+          const Color(0x99E67E22), const Color(0xCCE74C3C), (n - 0.7) / 0.3)!;
+    }
+
+    final paint = Paint()
+      ..shader = RadialGradient(
+        colors: [Colors.transparent, edge],
+        stops:  const [0.35, 1.0],
+      ).createShader(Rect.fromCircle(center: center, radius: radius));
+
+    canvas.drawRect(Offset.zero & size, paint);
+  }
+
+  @override
+  bool shouldRepaint(_VignettePainter old) => n != old.n;
 }
 
 class _HpBar extends StatelessWidget {

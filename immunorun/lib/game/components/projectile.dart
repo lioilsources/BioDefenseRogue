@@ -37,7 +37,10 @@ class Projectile extends CircleComponent with CollisionCallbacks {
   ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is Enemy) {
-      other.takeDamage(Balance.projectileDamage.round());
+      other.takeDamage(
+        Balance.projectileDamage.round(),
+        hitDir: velocity.normalized(),
+      );
       removeFromParent();
     }
   }
