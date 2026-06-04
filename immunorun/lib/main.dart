@@ -83,6 +83,7 @@ class _GameOverOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final waves = game.wavesCleared;
     return Center(
       child: Container(
         padding:    const EdgeInsets.symmetric(horizontal: 48, vertical: 36),
@@ -103,7 +104,15 @@ class _GameOverOverlay extends StatelessWidget {
                 letterSpacing: 4,
               ),
             ),
-            const SizedBox(height: 24),
+            const SizedBox(height: 12),
+            Text(
+              waves > 0 ? 'Přežito vln: $waves' : 'Padl jsi hned.',
+              style: const TextStyle(
+                color:    Colors.white70,
+                fontSize: 16,
+              ),
+            ),
+            const SizedBox(height: 28),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green.shade700,
@@ -111,7 +120,7 @@ class _GameOverOverlay extends StatelessWidget {
               ),
               onPressed: game.resetGame,
               child: const Text(
-                'RESTART',
+                'ZKUSIT ZNOVU',
                 style: TextStyle(fontSize: 18, letterSpacing: 2),
               ),
             ),

@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../config/balance.dart';
 import '../../game/systems/fever_controller.dart';
+import '../../game/systems/wave_controller.dart';
 import 'thermometer.dart';
 
 class FeverNotifier extends Notifier<FeverSnapshot> {
@@ -29,6 +30,19 @@ class PlayerHpNotifier extends Notifier<double> {
 final playerHpProvider =
     NotifierProvider<PlayerHpNotifier, double>(PlayerHpNotifier.new);
 
+class WaveNotifier extends Notifier<WaveSnapshot> {
+  @override
+  WaveSnapshot build() => const WaveSnapshot(
+        wave:          0,
+        phase:         WavePhase.countdown,
+        timeRemaining: Balance.waveCountdown,
+      );
+  void set(WaveSnapshot s) => state = s;
+}
+
+final waveProvider =
+    NotifierProvider<WaveNotifier, WaveSnapshot>(WaveNotifier.new);
+
 class HudOverlay extends ConsumerWidget {
   const HudOverlay({super.key});
 
@@ -36,10 +50,10 @@ class HudOverlay extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final fever = ref.watch(feverProvider);
     final hp    = ref.watch(playerHpProvider);
+    final wave  = ref.watch(waveProvider);
 
     return Stack(
       children: [
-        // fever vignette — fullscreen, pod HUD prvky
         Positioned.fill(
           child: _FeverVignette(normalized: fever.normalized, zone: fever.zone),
         ),
@@ -48,6 +62,12 @@ class HudOverlay extends ConsumerWidget {
             children: [
               Positioned(right: 16, top: 16, child: Thermometer(snapshot: fever)),
               Positioned(left:  16, top: 16, child: _HpBar(normalized: hp)),
+              Positioned(
+                top:   0,
+                left:  0,
+                right: 0,
+                child: Center(child: _WaveIndicator(snapshot: wave)),
+              ),
             ],
           ),
         ),
@@ -108,6 +128,54 @@ class _VignettePainter extends CustomPainter {
 
   @override
   bool shouldRepaint(_VignettePainter old) => n != old.n;
+}
+
+// ── Wave indicator ────────────────────────────────────────────────────────
+
+class _WaveIndicator extends StatelessWidget {
+  const _WaveIndicator({required this.snapshot});
+  final WaveSnapshot snapshot;
+
+  @override
+  Widget build(BuildContext context) {
+    final String label;
+    final Color  color;
+
+    switch (snapshot.phase) {
+      case WavePhase.countdown:
+        final secs = snapshot.timeRemaining.ceil();
+        label = snapshot.wave == 0
+            ? 'ZAČÍNÁME ZA ${secs}s'
+            : 'VLNA ${snapshot.wave + 1} ZA ${secs}s';
+        color = const Color(0xFF2ECC71);
+      case WavePhase.active:
+        label = 'VLNA ${snapshot.wave}';
+        color = const Color(0xFFE74C3C);
+      case WavePhase.cleared:
+        label = 'VLNA ${snapshot.wave} — VYČIŠTĚNO!';
+        color = const Color(0xFF2ECC71);
+    }
+
+    return Container(
+      margin:  const EdgeInsets.only(top: 8),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
+      decoration: BoxDecoration(
+        color:        Colors.black54,
+        borderRadius: BorderRadius.circular(20),
+        border:       Border.all(color: color.withValues(alpha: 0.6)),
+      ),
+      child: Text(
+        label,
+        style: TextStyle(
+          color:      color,
+          fontSize:   14,
+          fontWeight: FontWeight.bold,
+          letterSpacing: 1.5,
+          shadows: const [Shadow(blurRadius: 4, color: Colors.black)],
+        ),
+      ),
+    );
+  }
 }
 
 class _HpBar extends StatelessWidget {

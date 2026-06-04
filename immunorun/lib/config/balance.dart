@@ -53,11 +53,15 @@ abstract final class Balance {
   // ── Swarmer ───────────────────────────────────────────────────────────────
   static const double swarmerContactInterval = 0.6; // s mezi kontaktními zásahy
 
-  // ── Spawner ───────────────────────────────────────────────────────────────
-  static const double spawnIntervalMin    = 1.8;    // s
-  static const double spawnIntervalMax    = 3.5;    // s
+  // ── Spawner / Wave ────────────────────────────────────────────────────────
   static const double spawnRadius         = 550.0;  // px od hráče
   static const int    maxActiveEnemies    = 20;
+  static const double waveCountdown       = 3.0;    // s před začátkem vlny
+  static const double waveClearDelay      = 3.0;    // s po vyčištění vlny
+  static const int    waveBaseEnemies     = 3;      // enemies ve vlně 1
+  static const int    waveEnemiesPerWave  = 2;      // +N za každou vlnu
+  // ── Arena brány ───────────────────────────────────────────────────────────
+  static const double gateSize            = 120.0;  // šířka/výška brány
 
   // ── Horečka ───────────────────────────────────────────────────────────────
   static const double feverMin                  = 36.5;

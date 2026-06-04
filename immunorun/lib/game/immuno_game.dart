@@ -8,10 +8,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../config/balance.dart';
 import '../ui/hud/hud_overlay.dart';
 import 'components/enemies/enemy.dart';
-import 'components/enemies/enemy_spawner.dart';
 import 'components/player/player.dart';
 import 'components/player/player_controller.dart';
 import 'systems/fever_controller.dart';
+import 'systems/wave_controller.dart';
 import 'world/arena.dart';
 import 'world/background.dart';
 
@@ -25,12 +25,14 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
   late final FeverController  _fever;
   late final BackgroundLayer  _background;
   late final World            _activeWorld;
+  late final ArenaComponent   _arena;
+  late final WaveController   _waves;
 
-  FeverController  get fever           => _fever;
   PlayerController get playerController => _controller;
 
-  bool   _gameOver    = false;
+  bool   _gameOver     = false;
   double _hitStopTimer = 0;
+  int    _wavesCleared = 0; // pro game over statistiku
 
   @override
   Color backgroundColor() => const Color(0xFF0D1F0D);
@@ -50,8 +52,9 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     await add(cam);
 
     _background = BackgroundLayer();
+    _arena      = ArenaComponent();
     await _activeWorld.add(_background);
-    await _activeWorld.add(ArenaComponent());
+    await _activeWorld.add(_arena);
 
     _controller = PlayerController();
     _player     = Player(controller: _controller);
@@ -62,15 +65,21 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     cam.follow(_player);
     _fever = FeverController();
 
-    await _activeWorld.add(
-      EnemySpawner(
-        player:          _player,
-        world:           _activeWorld,
-        onPlayerContact: _onEnemyHitPlayer,
-      ),
-    );
+    _waves = WaveController(
+      player:          _player,
+      world:           _activeWorld,
+      onPlayerContact: _onEnemyHitPlayer,
+    )
+      ..onWaveStart   = (_) {}
+      ..onWaveCleared = (n) {
+        _wavesCleared = n;
+        _fever.setRoomClear(true);
+      };
 
-    // napoj hit-stop na každého spawnutého nepřítele
+    // onWaveStart: fever stoupá opět normálně
+    _waves.onWaveStart = (_) => _fever.setRoomClear(false);
+
+    await _activeWorld.add(_waves);
     _activeWorld.children.register<Enemy>();
 
     await _tryLoadFluidShader();
@@ -82,9 +91,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     triggerHitStop();
   }
 
-  void triggerHitStop() {
-    _hitStopTimer = Balance.hitStopDuration;
-  }
+  void triggerHitStop() => _hitStopTimer = Balance.hitStopDuration;
 
   Future<void> _tryLoadFluidShader() async {
     try {
@@ -98,10 +105,9 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
   @override
   void update(double dt) {
-    // Hit-stop: zmrazíme hru na krátký okamžik
     if (_hitStopTimer > 0) {
       _hitStopTimer -= dt;
-      return; // přeskočíme super.update → nic se nehýbe
+      return;
     }
 
     super.update(dt);
@@ -109,10 +115,12 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
     _wireNewEnemies();
 
+    // Synchronizuj fázi arény s wave stavem
+    _arena.phase = _waves.phase;
+
     final activeEnemies = _activeWorld.children.whereType<Enemy>().length;
     _fever.update(dt, activeEnemies: activeEnemies);
 
-    // HP drain v hyper/kritické zóně
     if (_fever.snapshot.zone == FeverZone.hyper ||
         _fever.snapshot.zone == FeverZone.critical) {
       _player.takeDamage((Balance.feverHpDrainHyper * dt).round());
@@ -120,15 +128,16 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
     if (_player.isDead || _fever.isDead) _triggerGameOver();
 
-    final snap   = _fever.snapshot;
-    final hpNorm = _player.hp / Balance.playerMaxHp;
+    final snap    = _fever.snapshot;
+    final hpNorm  = _player.hp / Balance.playerMaxHp;
+    final waveSn  = _waves.snapshot;
     Future.microtask(() {
       providerContainer.read(feverProvider.notifier).setSnapshot(snap);
       providerContainer.read(playerHpProvider.notifier).set(hpNorm);
+      providerContainer.read(waveProvider.notifier).set(waveSn);
     });
   }
 
-  // Napoj hit-stop callback na nově spawnuté nepřátele
   void _wireNewEnemies() {
     for (final e in _activeWorld.children.query<Enemy>()) {
       e.onHitCallback ??= triggerHitStop;
@@ -140,9 +149,12 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     overlays.add('gameOver');
   }
 
+  int get wavesCleared => _wavesCleared;
+
   void resetGame() {
     _gameOver    = false;
     _hitStopTimer = 0;
+    _wavesCleared = 0;
 
     _activeWorld.children
         .where((c) =>
@@ -150,13 +162,14 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
             c is! PlayerController &&
             c is! ArenaComponent &&
             c is! BackgroundLayer &&
-            c is! EnemySpawner)
+            c is! WaveController)
         .toList()
         .forEach((c) => c.removeFromParent());
 
     _player.position = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
     _player.reset();
     _fever.reset();
+    _waves.reset();
     overlays.remove('gameOver');
   }
 }
