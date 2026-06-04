@@ -7,14 +7,15 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/balance.dart';
 import '../ui/hud/hud_overlay.dart';
+import 'components/enemies/enemy.dart';
+import 'components/enemies/enemy_spawner.dart';
 import 'components/player/player.dart';
 import 'components/player/player_controller.dart';
 import 'systems/fever_controller.dart';
 import 'world/arena.dart';
 import 'world/background.dart';
 
-class ImmunoGame extends FlameGame
-    with HasCollisionDetection {
+class ImmunoGame extends FlameGame with HasCollisionDetection {
   ImmunoGame({required this.providerContainer});
 
   final ProviderContainer providerContainer;
@@ -23,8 +24,12 @@ class ImmunoGame extends FlameGame
   late final PlayerController _controller;
   late final FeverController  _fever;
   late final BackgroundLayer  _background;
+  late final World            _activeWorld;
 
+  FeverController get fever => _fever;
   PlayerController get playerController => _controller;
+
+  bool _gameOver = false;
 
   @override
   Color backgroundColor() => const Color(0xFF0D1F0D);
@@ -33,37 +38,39 @@ class ImmunoGame extends FlameGame
   Future<void> onLoad() async {
     await super.onLoad();
 
-    // World musí být přidán do hry PŘED nastavením camera.world,
-    // jinak CameraComponent přidá world jako své dítě a dojde k dvojímu přidání.
-    final world = World();
-    await add(world);
+    _activeWorld = World();
+    await add(_activeWorld);
 
-    final camera = CameraComponent.withFixedResolution(
+    final cam = CameraComponent.withFixedResolution(
       width:  size.x,
       height: size.y,
     );
-    // Přiřazení referencí — world je už mounted, setter ho znovu nepřidává.
-    camera.world = world;
-    await add(camera);
+    cam.world = _activeWorld;
+    await add(cam);
 
     _background = BackgroundLayer();
-    await world.add(_background);
+    await _activeWorld.add(_background);
+    await _activeWorld.add(ArenaComponent());
 
-    await world.add(ArenaComponent());
+    _controller = PlayerController();
+    _player     = Player(controller: _controller);
+    _player.position = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
+    await _activeWorld.add(_controller);
+    await _activeWorld.add(_player);
 
-    // Controller přidán do world — HasKeyboardHandlerComponents propaguje rekurzivně.
-    _controller       = PlayerController();
-    _player           = Player(controller: _controller);
-    _player.position  = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
-    await world.add(_controller);
-    await world.add(_player);
-
-    camera.follow(_player);
+    cam.follow(_player);
 
     _fever = FeverController();
 
-    await _tryLoadFluidShader();
+    await _activeWorld.add(
+      EnemySpawner(
+        player:          _player,
+        world:           _activeWorld,
+        onPlayerContact: _fever.onHit,
+      ),
+    );
 
+    await _tryLoadFluidShader();
     overlays.add('hud');
   }
 
@@ -80,12 +87,50 @@ class ImmunoGame extends FlameGame
   @override
   void update(double dt) {
     super.update(dt);
-    _fever.update(dt);
-    // Flame volá update() během Flutter layout fáze (LayoutBuilder).
-    // Riverpod 3.x zakazuje měnit stav během buildu → odkládáme na microtask.
+    if (_gameOver) return;
+
+    final activeEnemies = _activeWorld.children.whereType<Enemy>().length;
+    _fever.update(dt, activeEnemies: activeEnemies);
+
+    // HP drain v hyper zóně
+    if (_fever.snapshot.zone == FeverZone.hyper ||
+        _fever.snapshot.zone == FeverZone.critical) {
+      _player.takeDamage((Balance.feverHpDrainHyper * dt).round());
+    }
+
+    // Game over
+    if (_player.isDead || _fever.isDead) {
+      _triggerGameOver();
+    }
+
     final snap = _fever.snapshot;
-    Future.microtask(
-      () => providerContainer.read(feverProvider.notifier).setSnapshot(snap),
-    );
+    final hpNorm = _player.hp / Balance.playerMaxHp;
+    Future.microtask(() {
+      providerContainer.read(feverProvider.notifier).setSnapshot(snap);
+      providerContainer.read(playerHpProvider.notifier).set(hpNorm);
+    });
+  }
+
+  void _triggerGameOver() {
+    _gameOver = true;
+    overlays.add('gameOver');
+  }
+
+  void resetGame() {
+    _gameOver = false;
+
+    // odstraň nepřátele a projektily
+    _activeWorld.children
+        .where((c) => c is! Player && c is! PlayerController &&
+                      c is! ArenaComponent && c is! BackgroundLayer &&
+                      c is! EnemySpawner)
+        .toList()
+        .forEach((c) => c.removeFromParent());
+
+    _player.position = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
+    _player.reset();
+    _fever.reset();
+
+    overlays.remove('gameOver');
   }
 }

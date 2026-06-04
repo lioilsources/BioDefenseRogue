@@ -1,25 +1,41 @@
-import 'package:flame/components.dart';
-
+import '../../../config/balance.dart';
 import '../../../domain/enemy_archetype.dart';
+import '../player/player.dart';
 import 'enemy.dart';
 
-// Swarmer — první archetyp nepřítele (steering AI přijde v F1).
 class Swarmer extends Enemy {
-  Swarmer() : super(archetype: swarmerArchetype);
+  Swarmer({
+    required this.player,
+    required this.onPlayerContact,
+  }) : super(archetype: swarmerArchetype);
 
-  // Cíl pronásledování — nastaví spawner
-  Vector2? target;
+  final Player          player;
+  final void Function() onPlayerContact;
+
+  double _contactTimer = 0;
 
   @override
   void update(double dt) {
     super.update(dt);
-    final t = target;
-    if (t == null || isDead) return;
+    if (isDead) return;
 
-    final dir = (t - position);
+    // chase
+    final dir = player.position - position;
     if (dir.length2 > 1.0) {
-      dir.normalize();
-      position += dir * archetype.speed * dt;
+      position += dir.normalized() * archetype.speed * dt;
+    }
+
+    // contact damage
+    final dist = dir.length;
+    if (dist < archetype.radius + Balance.playerRadius) {
+      _contactTimer -= dt;
+      if (_contactTimer <= 0) {
+        _contactTimer = Balance.swarmerContactInterval;
+        player.takeDamage(archetype.contactDamage.round());
+        onPlayerContact();
+      }
+    } else {
+      _contactTimer = 0;
     }
   }
 }

@@ -27,6 +27,29 @@ abstract final class Balance {
     (0.60, 1.00), // přední vrstva — nejrychlejší
   ];
 
+  // ── Dash ─────────────────────────────────────────────────────────────────
+  static const double dashSpeed           = 900.0;  // px/s
+  static const double dashDuration        = 0.12;   // s
+  static const double dashCooldown        = 0.5;    // s
+  static const double dashIframes         = 0.3;    // s (delší než dashDuration)
+  static const double hitInvulnerability  = 0.5;    // s i-frames po zásahu
+
+  // ── Primární zbraň ────────────────────────────────────────────────────────
+  static const double primaryFireRate     = 2.0;    // výstřelů/s
+  static const double primaryRange        = 380.0;  // px, auto-aim radius
+  static const double projectileSpeed     = 620.0;  // px/s
+  static const double projectileDamage    = 15.0;   // base damage
+  static const double projectileLifetime  = 1.2;    // s
+
+  // ── Swarmer ───────────────────────────────────────────────────────────────
+  static const double swarmerContactInterval = 0.6; // s mezi kontaktními zásahy
+
+  // ── Spawner ───────────────────────────────────────────────────────────────
+  static const double spawnIntervalMin    = 1.8;    // s
+  static const double spawnIntervalMax    = 3.5;    // s
+  static const double spawnRadius         = 550.0;  // px od hráče
+  static const int    maxActiveEnemies    = 20;
+
   // ── Horečka ───────────────────────────────────────────────────────────────
   static const double feverMin                  = 36.5;
   static const double feverMax                  = 42.0;

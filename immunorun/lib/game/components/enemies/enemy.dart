@@ -4,7 +4,6 @@ import 'package:flutter/painting.dart';
 
 import '../../../domain/enemy_archetype.dart';
 
-// Základní třída pro všechny nepřátele — rozšíří se v F1.
 abstract class Enemy extends CircleComponent with CollisionCallbacks {
   Enemy({required this.archetype})
       : super(
@@ -14,18 +13,21 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
         );
 
   final EnemyArchetype archetype;
+  late int _hp;
 
-  int _hp = 0;
-
-  void init(Vector2 spawnPosition) {
-    position = spawnPosition;
-    _hp      = archetype.maxHp;
+  @override
+  Future<void> onLoad() async {
+    await super.onLoad();
+    _hp = archetype.maxHp;
     add(CircleHitbox(radius: archetype.radius, anchor: Anchor.center));
   }
 
   bool get isDead => _hp <= 0;
+  int  get hp     => _hp;
 
   void takeDamage(int amount) {
+    if (isDead) return;
     _hp = (_hp - amount).clamp(0, archetype.maxHp);
+    if (isDead) removeFromParent();
   }
 }

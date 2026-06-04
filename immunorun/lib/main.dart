@@ -64,14 +64,60 @@ class _GameScreenState extends State<_GameScreen> {
           'joystick': (_, game) => VirtualJoystickOverlay(
                 controller: game.playerController,
               ),
+          'gameOver': (context, game) => _GameOverOverlay(game: game),
         },
-        initialActiveOverlays: kIsWeb || isDesktop ? [] : ['joystick'],
+        initialActiveOverlays: kIsWeb || _isDesktop ? [] : ['joystick'],
       ),
     );
   }
 
-  static bool get isDesktop =>
+  static bool get _isDesktop =>
       defaultTargetPlatform == TargetPlatform.macOS ||
       defaultTargetPlatform == TargetPlatform.windows ||
       defaultTargetPlatform == TargetPlatform.linux;
+}
+
+class _GameOverOverlay extends StatelessWidget {
+  const _GameOverOverlay({required this.game});
+  final ImmunoGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    return Center(
+      child: Container(
+        padding:    const EdgeInsets.symmetric(horizontal: 48, vertical: 36),
+        decoration: BoxDecoration(
+          color:        Colors.black87,
+          borderRadius: BorderRadius.circular(16),
+          border:       Border.all(color: Colors.red.shade700, width: 2),
+        ),
+        child: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            const Text(
+              'GAME OVER',
+              style: TextStyle(
+                color:      Colors.redAccent,
+                fontSize:   36,
+                fontWeight: FontWeight.bold,
+                letterSpacing: 4,
+              ),
+            ),
+            const SizedBox(height: 24),
+            ElevatedButton(
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.green.shade700,
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
+              ),
+              onPressed: game.resetGame,
+              child: const Text(
+                'RESTART',
+                style: TextStyle(fontSize: 18, letterSpacing: 2),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
 }
