@@ -71,6 +71,10 @@ class Player extends CircleComponent with CollisionCallbacks {
     _invulnerableTimer = max(_invulnerableTimer, Balance.hitInvulnerability);
   }
 
+  void heal(int amount) {
+    _hp = (_hp + amount).clamp(0, Balance.playerMaxHp);
+  }
+
   void reset() {
     _hp              = Balance.playerMaxHp;
     _invulnerableTimer = 0;

@@ -63,6 +63,26 @@ abstract final class Balance {
   // ── Arena brány ───────────────────────────────────────────────────────────
   static const double gateSize            = 120.0;  // šířka/výška brány
 
+  // ── Mini-boss ─────────────────────────────────────────────────────────────
+  static const double bossOrbitRadius       = 300.0;  // px od středu arény
+  static const double bossPhase1OrbitSpeed  = 80.0;   // px/s po obvodu
+  static const double bossPhase1FireRate    = 0.8;    // výstřelů/s
+  static const double bossPhase2OrbitSpeed  = 170.0;  // px/s
+  static const double bossPhase2FireRate    = 1.8;    // výstřelů/s (burst 3×)
+  static const double bossFeverTrigger      = 39.5;   // °C → přechod do fáze 2
+  static const double bossPhase2HpFraction  = 0.5;    // HP pod 50 % → fáze 2
+  static const double bossProjectileSpeed   = 360.0;  // px/s
+  static const double bossProjectileRadius  = 10.0;   // px
+  static const double bossProjectileDamage  = 15.0;   // HP
+  static const double bossProjectileLife    = 2.0;    // s
+  static const double bossPhase2Spread      = 0.35;   // rad, úhel burstu
+
+  // ── Místnosti / přechody ──────────────────────────────────────────────────
+  static const double transitionFadeDuration = 0.5;   // s (černá obrazovka)
+  static const double gateDetectDepth        = 80.0;  // px detekce vstupu do brány
+  static const double eliteEnemyMultiplier   = 1.5;   // počet swarmers × 1.5
+  static const int    treasureHealAmount     = 25;    // HP bonus v treasure místnosti
+
   // ── Horečka ───────────────────────────────────────────────────────────────
   static const double feverMin                  = 36.5;
   static const double feverMax                  = 42.0;

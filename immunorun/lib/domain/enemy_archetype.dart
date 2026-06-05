@@ -33,3 +33,13 @@ const swarmerArchetype = EnemyArchetype(
   radius:          14.0,
   xpDrop:          5,
 );
+
+const bossArchetype = EnemyArchetype(
+  type:            EnemyType.shooter,
+  maxHp:           300,
+  speed:           0.0,   // pohyb řeší orbit logika v MiniBoss
+  contactDamage:   15.0,
+  feverRiseOnHit:  0.5,
+  radius:          40.0,
+  xpDrop:          50,
+);

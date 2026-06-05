@@ -3,6 +3,7 @@ import 'dart:math';
 import 'package:flame/components.dart';
 
 import '../../config/balance.dart';
+import '../../domain/room_type.dart';
 import '../components/enemies/enemy.dart';
 import '../components/enemies/swarmer.dart';
 import '../components/player/player.dart';
@@ -36,10 +37,12 @@ class WaveController extends Component {
   void Function(int wave)? onWaveStart;
   void Function(int wave)? onWaveCleared;
 
-  int       _wave  = 0;
-  WavePhase _phase = WavePhase.countdown;
-  double    _timer = Balance.waveCountdown;
-  final _rng = Random();
+  int       _wave       = 0;
+  WavePhase _phase      = WavePhase.countdown;
+  double    _timer      = Balance.waveCountdown;
+  RoomType  _roomType   = RoomType.combat;
+  int       _difficulty = 0; // číslo místnosti pro škálování obtížnosti
+  final     _rng        = Random();
 
   int       get wave  => _wave;
   WavePhase get phase => _phase;
@@ -50,11 +53,18 @@ class WaveController extends Component {
         timeRemaining: _timer.clamp(0.0, double.infinity),
       );
 
+  void setRoom(RoomType type, {int difficulty = 0}) {
+    _roomType   = type;
+    _difficulty = difficulty;
+  }
+
   int get _enemyCount => world.children.whereType<Enemy>().length;
 
-  int get _enemiesToSpawn =>
-      (Balance.waveBaseEnemies + _wave * Balance.waveEnemiesPerWave)
-          .clamp(1, Balance.maxActiveEnemies);
+  int get _enemiesToSpawn {
+    final base = Balance.waveBaseEnemies + _difficulty * Balance.waveEnemiesPerWave;
+    final mult = _roomType == RoomType.elite ? Balance.eliteEnemyMultiplier : 1.0;
+    return (base * mult).round().clamp(1, Balance.maxActiveEnemies);
+  }
 
   @override
   void update(double dt) {
@@ -67,14 +77,9 @@ class WaveController extends Component {
         if (_enemyCount == 0) _onCleared();
 
       case WavePhase.cleared:
-        _timer -= dt;
-        if (_timer <= 0) _startCountdown();
+        if (_timer > 0) _timer -= dt;
+        // Záměrně nespouštíme novou vlnu — ImmunoGame přejde do další místnosti
     }
-  }
-
-  void _startCountdown() {
-    _phase = WavePhase.countdown;
-    _timer = Balance.waveCountdown;
   }
 
   void _startWave() {
@@ -82,9 +87,16 @@ class WaveController extends Component {
     _phase = WavePhase.active;
     _timer = 0;
 
-    final n = _enemiesToSpawn;
-    for (var i = 0; i < n; i++) {
-      final angle  = (i / n) * 2 * pi + _rng.nextDouble() * 0.8;
+    // Boss a treasure nerozrodí swarmery — boss spawne ImmunoGame via onWaveStart callback
+    if (_roomType != RoomType.boss && _roomType != RoomType.treasure) {
+      _spawnSwarmers(_enemiesToSpawn);
+    }
+    onWaveStart?.call(_wave);
+  }
+
+  void _spawnSwarmers(int count) {
+    for (var i = 0; i < count; i++) {
+      final angle  = (i / count) * 2 * pi + _rng.nextDouble() * 0.8;
       final offset = Balance.spawnRadius + _rng.nextDouble() * 80;
       final pos    = player.position +
                      Vector2(cos(angle), sin(angle)) * offset;
@@ -93,7 +105,6 @@ class WaveController extends Component {
           ..position = pos,
       );
     }
-    onWaveStart?.call(_wave);
   }
 
   void _onCleared() {
