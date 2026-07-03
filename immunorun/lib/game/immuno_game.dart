@@ -8,13 +8,16 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/balance.dart';
-import '../ui/hud/hud_overlay.dart';
+import '../ui/hud/hud_overlay.dart' show feverProvider, playerHpProvider, waveProvider, atpProvider;
 import 'components/enemies/enemy.dart';
 import 'components/enemies/mini_boss.dart';
+import 'components/enemies/swarmer.dart';
+import 'components/fever_overlay.dart';
 import 'components/player/player.dart';
 import 'components/player/player_controller.dart';
 import 'rooms/room_graph.dart';
 import 'systems/fever_controller.dart';
+import 'systems/swarmer_pool.dart';
 import 'systems/wave_controller.dart';
 import 'world/arena.dart';
 import 'world/background.dart';
@@ -30,7 +33,9 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
   late final BackgroundLayer  _background;
   late final World            _activeWorld;
   late final ArenaComponent   _arena;
-  late final WaveController   _waves;
+  late final WaveController        _waves;
+  late final SwarmerPool           _swarmerPool;
+  late final FeverOverlayComponent _feverOverlay;
 
   PlayerController get playerController => _controller;
 
@@ -79,10 +84,16 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     cam.follow(_player);
     _fever = FeverController();
 
+    _player.onAbilityUsed = _fever.onAbility;
+
+    _swarmerPool = SwarmerPool(onPlayerContact: _onEnemyHitPlayer);
+    _swarmerPool.prewarm(Balance.maxActiveEnemies, _player);
+
     _waves = WaveController(
       player:          _player,
       world:           _activeWorld,
       onPlayerContact: _onEnemyHitPlayer,
+      swarmerPool:     _swarmerPool,
     );
     _waves.onWaveStart   = (_) => _fever.setRoomClear(false);
     _waves.onWaveCleared = _onWaveCleared;
@@ -95,7 +106,11 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _currentNode = _roomGraph.start;
     _setupRoom(_currentNode!);
 
+    _feverOverlay = FeverOverlayComponent();
+    await add(_feverOverlay);
+
     await _tryLoadFluidShader();
+    await _tryLoadFeverShader();
     // Joystick až po inicializaci controlleru (ochrana před LateInitializationError)
     if (!kIsWeb && !_isDesktop) overlays.add('joystick');
     overlays.add('hud');
@@ -190,14 +205,16 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _currentNode = next;
     _roomNumber++;
 
-    // Odstraň všechny nepřátele a projektily
+    // Vrať swarmery do poolu, odstraň zbytek (boss, projektily, částice)
+    _swarmerPool.releaseAll(_activeWorld);
     _activeWorld.children
         .where((c) =>
             c is! Player &&
             c is! PlayerController &&
             c is! ArenaComponent &&
             c is! BackgroundLayer &&
-            c is! WaveController)
+            c is! WaveController &&
+            c is! Swarmer)
         .toList()
         .forEach((c) => c.removeFromParent());
 
@@ -262,6 +279,16 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     }
   }
 
+  Future<void> _tryLoadFeverShader() async {
+    try {
+      final program =
+          await ui.FragmentProgram.fromAsset('assets/shaders/fever.frag');
+      _feverOverlay.applyShader(program);
+    } catch (e) {
+      debugPrint('ImmunoGame: fever shader nedostupný: $e');
+    }
+  }
+
   // ─── Update loop ─────────────────────────────────────────────────────────
 
   @override
@@ -293,10 +320,14 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     final snap   = _fever.snapshot;
     final hpNorm = _player.hp / Balance.playerMaxHp;
     final waveSn = _waves.snapshot;
+
+    _feverOverlay.setFever(snap.normalized);
+
     Future.microtask(() {
       providerContainer.read(feverProvider.notifier).setSnapshot(snap);
       providerContainer.read(playerHpProvider.notifier).set(hpNorm);
       providerContainer.read(waveProvider.notifier).set(waveSn);
+      providerContainer.read(atpProvider.notifier).set(_player.atpNorm);
     });
   }
 
@@ -326,13 +357,15 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     overlays.remove('transition');
     overlays.remove('roomChoice');
 
+    _swarmerPool.releaseAll(_activeWorld);
     _activeWorld.children
         .where((c) =>
             c is! Player &&
             c is! PlayerController &&
             c is! ArenaComponent &&
             c is! BackgroundLayer &&
-            c is! WaveController)
+            c is! WaveController &&
+            c is! Swarmer)
         .toList()
         .forEach((c) => c.removeFromParent());
 

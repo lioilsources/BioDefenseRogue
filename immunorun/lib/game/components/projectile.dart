@@ -6,15 +6,22 @@ import '../../config/balance.dart';
 import 'enemies/enemy.dart';
 
 class Projectile extends CircleComponent with CollisionCallbacks {
-  Projectile({required this.velocity})
-      : super(
-          radius: 6.0,
+  Projectile({
+    required this.velocity,
+    this.damage  = Balance.projectileDamage,
+    double radius    = 6.0,
+    Color  color     = const Color(0xFFF1C40F),
+    double lifetime  = Balance.projectileLifetime,
+  })  : _life = lifetime,
+        super(
+          radius: radius,
           anchor: Anchor.center,
-          paint:  Paint()..color = const Color(0xFFF1C40F),
+          paint:  Paint()..color = color,
         );
 
   final Vector2 velocity;
-  double _life = Balance.projectileLifetime;
+  final double  damage;
+  double _life;
 
   @override
   Future<void> onLoad() async {
@@ -38,7 +45,7 @@ class Projectile extends CircleComponent with CollisionCallbacks {
     super.onCollisionStart(intersectionPoints, other);
     if (other is Enemy) {
       other.takeDamage(
-        Balance.projectileDamage.round(),
+        damage.round(),
         hitDir: velocity.normalized(),
       );
       removeFromParent();

@@ -10,12 +10,15 @@ import '../enemies/enemy.dart';
 import '../projectile.dart';
 import 'player_controller.dart';
 
+// Callback volaný při použití speciální schopnosti (pro FeverController)
+typedef AbilityCallback = void Function();
+
 class Player extends CircleComponent with CollisionCallbacks {
   Player({required this.controller})
       : super(
           radius: Balance.playerRadius,
           anchor: Anchor.center,
-          paint:  Paint()..color = const Color(0xFF5DADE2),
+          paint:  Paint()..color = const Color(0x00000000),
         );
 
   final PlayerController controller;
@@ -30,11 +33,20 @@ class Player extends CircleComponent with CollisionCallbacks {
   bool get isInvulnerable => _invulnerableTimer > 0;
 
   // Dash
-  bool   _dashing         = false;
-  double _dashTimer        = 0;
-  double _dashCooldown     = 0;
-  Vector2 _dashDir         = Vector2.zero();
-  bool   _spaceWasDown     = false;
+  bool    _dashing     = false;
+  double  _dashTimer   = 0;
+  double  _dashCooldown = 0;
+  Vector2 _dashDir     = Vector2.zero();
+  bool    _spaceWasDown = false;
+
+  // ATP / special ability
+  double _atp        = Balance.atpMax;
+  bool   _eWasDown   = false;
+  double get atp     => _atp;
+  double get atpNorm => _atp / Balance.atpMax;
+
+  /// Voláno při použití speciální schopnosti — FeverController.onAbility()
+  AbilityCallback? onAbilityUsed;
 
   // Auto-aim / primary weapon
   double _fireCooldown = 0;
@@ -43,6 +55,14 @@ class Player extends CircleComponent with CollisionCallbacks {
   Future<void> onLoad() async {
     await super.onLoad();
     add(CircleHitbox(radius: Balance.playerRadius, anchor: Anchor.center));
+    final sprite = await Sprite.load('cells/macrophage.png');
+    final h      = Balance.playerSpriteHeight;
+    final aspect = sprite.srcSize.x / sprite.srcSize.y;
+    add(SpriteComponent(
+      sprite: sprite,
+      size:   Vector2(h * aspect, h),
+      anchor: Anchor.center,
+    ));
   }
 
   @override
@@ -60,6 +80,7 @@ class Player extends CircleComponent with CollisionCallbacks {
     }
 
     _tryFire(dt);
+    _trySpecial();
     _clampToArena();
   }
 
@@ -76,12 +97,13 @@ class Player extends CircleComponent with CollisionCallbacks {
   }
 
   void reset() {
-    _hp              = Balance.playerMaxHp;
+    _hp               = Balance.playerMaxHp;
     _invulnerableTimer = 0;
-    _dashing         = false;
-    _dashTimer       = 0;
-    _dashCooldown    = 0;
-    _fireCooldown    = 0;
+    _dashing          = false;
+    _dashTimer        = 0;
+    _dashCooldown     = 0;
+    _fireCooldown     = 0;
+    _atp              = Balance.atpMax;
   }
 
   // ─── Internal ────────────────────────────────────────────────────────────
@@ -90,6 +112,7 @@ class Player extends CircleComponent with CollisionCallbacks {
     if (_invulnerableTimer > 0) _invulnerableTimer -= dt;
     if (_dashCooldown > 0)      _dashCooldown      -= dt;
     if (_fireCooldown > 0)      _fireCooldown      -= dt;
+    if (_atp < Balance.atpMax)  _atp = (_atp + Balance.atpRegen * dt).clamp(0, Balance.atpMax);
   }
 
   void _updateDash(double dt) {
@@ -138,6 +161,59 @@ class Player extends CircleComponent with CollisionCallbacks {
     final proj = Projectile(velocity: dir * Balance.projectileSpeed)
       ..position = position.clone();
     parent?.add(proj);
+  }
+
+  void _trySpecial() {
+    final eDown      = HardwareKeyboard.instance.logicalKeysPressed
+        .contains(LogicalKeyboardKey.keyE);
+    final justPressed = eDown && !_eWasDown;
+    _eWasDown = eDown;
+
+    if (!justPressed || _atp < Balance.atpSpecialCost) return;
+
+    final enemies = parent?.children.whereType<Enemy>().toList() ?? [];
+    Enemy? nearest;
+    double nearestDist = double.infinity;
+    for (final e in enemies) {
+      if (e.isDead) continue;
+      final d = (e.position - position).length;
+      if (d < nearestDist) { nearestDist = d; nearest = e; }
+    }
+
+    final Vector2 baseDir;
+    if (nearest != null) {
+      baseDir = (nearest.position - position).normalized();
+    } else {
+      final dir = controller.direction;
+      baseDir = dir.length2 > 0 ? dir.normalized() : Vector2(0, -1);
+    }
+
+    _atp -= Balance.atpSpecialCost;
+    onAbilityUsed?.call();
+    _fireSpecialBurst(baseDir);
+  }
+
+  void _fireSpecialBurst(Vector2 baseDir) {
+    final count  = Balance.specialBurstCount;
+    final spread = Balance.specialBurstSpread;
+    for (var i = 0; i < count; i++) {
+      final t     = count == 1 ? 0.0 : (i / (count - 1) - 0.5) * 2.0; // -1..1
+      final angle = t * (spread / 2);
+      final c = cos(angle), s = sin(angle);
+      final dir = Vector2(
+        baseDir.x * c - baseDir.y * s,
+        baseDir.x * s + baseDir.y * c,
+      );
+      parent?.add(
+        Projectile(
+          velocity: dir * Balance.specialSpeed,
+          damage:   Balance.specialDamage,
+          radius:   Balance.specialRadius,
+          color:    const Color(0xFF3498DB),
+          lifetime: Balance.specialLifetime,
+        )..position = position.clone(),
+      );
+    }
   }
 
   void _clampToArena() {

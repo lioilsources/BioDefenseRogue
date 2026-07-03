@@ -5,8 +5,8 @@ import 'package:flame/components.dart';
 import '../../config/balance.dart';
 import '../../domain/room_type.dart';
 import '../components/enemies/enemy.dart';
-import '../components/enemies/swarmer.dart';
 import '../components/player/player.dart';
+import 'swarmer_pool.dart';
 
 enum WavePhase { countdown, active, cleared }
 
@@ -27,11 +27,13 @@ class WaveController extends Component {
     required this.player,
     required this.world,
     required this.onPlayerContact,
+    required this.swarmerPool,
   });
 
   final Player          player;
   final World           world;
   final void Function() onPlayerContact;
+  final SwarmerPool     swarmerPool;
 
   // Callbacks pro ImmunoGame
   void Function(int wave)? onWaveStart;
@@ -100,10 +102,7 @@ class WaveController extends Component {
       final offset = Balance.spawnRadius + _rng.nextDouble() * 80;
       final pos    = player.position +
                      Vector2(cos(angle), sin(angle)) * offset;
-      world.add(
-        Swarmer(player: player, onPlayerContact: onPlayerContact)
-          ..position = pos,
-      );
+      world.add(swarmerPool.acquire(pos, player));
     }
   }
 

@@ -10,6 +10,8 @@ abstract final class Balance {
   static const double playerSpeed        = 280.0; // px/s
   static const double playerRadius       = 24.0;  // px (hitbox poloměr)
   static const int    playerMaxHp        = 100;
+  static const double playerSpriteHeight  = 96.0;  // px výška spritu (šířka = aspect ratio)
+  static const double swarmerSpriteHeight = 52.0;  // px výška spritu
 
   // ── Joystick ──────────────────────────────────────────────────────────────
   static const double joystickKnobRadius = 24.0;  // px
@@ -82,6 +84,17 @@ abstract final class Balance {
   static const double gateDetectDepth        = 80.0;  // px detekce vstupu do brány
   static const double eliteEnemyMultiplier   = 1.5;   // počet swarmers × 1.5
   static const int    treasureHealAmount     = 25;    // HP bonus v treasure místnosti
+
+  // ── ATP / Special ability ────────────────────────────────────────────────
+  static const double atpMax             = 100.0;
+  static const double atpRegen           = 8.0;   // /s (bez dropů zatím)
+  static const double atpSpecialCost     = 35.0;
+  static const double specialDamage      = 40.0;
+  static const double specialSpeed       = 800.0;  // px/s
+  static const double specialRadius      = 9.0;    // px
+  static const double specialLifetime    = 1.4;    // s
+  static const int    specialBurstCount  = 3;
+  static const double specialBurstSpread = 0.30;   // rad, celkový úhel fanu
 
   // ── Horečka ───────────────────────────────────────────────────────────────
   static const double feverMin                  = 36.5;

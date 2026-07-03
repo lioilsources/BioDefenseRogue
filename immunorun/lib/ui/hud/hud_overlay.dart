@@ -43,6 +43,14 @@ class WaveNotifier extends Notifier<WaveSnapshot> {
 final waveProvider =
     NotifierProvider<WaveNotifier, WaveSnapshot>(WaveNotifier.new);
 
+class AtpNotifier extends Notifier<double> {
+  @override
+  double build() => 1.0;
+  void set(double norm) => state = norm.clamp(0.0, 1.0);
+}
+
+final atpProvider = NotifierProvider<AtpNotifier, double>(AtpNotifier.new);
+
 class HudOverlay extends ConsumerWidget {
   const HudOverlay({super.key});
 
@@ -51,6 +59,7 @@ class HudOverlay extends ConsumerWidget {
     final fever = ref.watch(feverProvider);
     final hp    = ref.watch(playerHpProvider);
     final wave  = ref.watch(waveProvider);
+    final atp   = ref.watch(atpProvider);
 
     return Stack(
       children: [
@@ -62,6 +71,7 @@ class HudOverlay extends ConsumerWidget {
             children: [
               Positioned(right: 16, top: 16, child: Thermometer(snapshot: fever)),
               Positioned(left:  16, top: 16, child: _HpBar(normalized: hp)),
+              Positioned(left:  16, top: 52, child: _AtpBar(normalized: atp)),
               Positioned(
                 top:   0,
                 left:  0,
@@ -174,6 +184,53 @@ class _WaveIndicator extends StatelessWidget {
           shadows: const [Shadow(blurRadius: 4, color: Colors.black)],
         ),
       ),
+    );
+  }
+}
+
+class _AtpBar extends StatelessWidget {
+  const _AtpBar({required this.normalized});
+  final double normalized;
+
+  @override
+  Widget build(BuildContext context) {
+    final ready = normalized >= (Balance.atpSpecialCost / Balance.atpMax);
+    final color = ready
+        ? const Color(0xFF3498DB)
+        : const Color(0xFF1A5276);
+
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Text(
+          'ATP  [E]',
+          style: TextStyle(
+            color:    ready ? const Color(0xFF3498DB) : Colors.white38,
+            fontSize: 11,
+            shadows: const [Shadow(blurRadius: 3, color: Colors.black)],
+          ),
+        ),
+        const SizedBox(height: 2),
+        Container(
+          width:  120,
+          height: 10,
+          decoration: BoxDecoration(
+            color:        Colors.black45,
+            border:       Border.all(color: Colors.white24),
+            borderRadius: BorderRadius.circular(5),
+          ),
+          child: FractionallySizedBox(
+            widthFactor: normalized.clamp(0.0, 1.0),
+            alignment:   Alignment.centerLeft,
+            child: Container(
+              decoration: BoxDecoration(
+                color:        color,
+                borderRadius: BorderRadius.circular(5),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }

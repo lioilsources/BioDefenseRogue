@@ -11,7 +11,7 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
       : super(
           radius: archetype.radius,
           anchor: Anchor.center,
-          paint:  Paint()..color = const Color(0xFFE74C3C),
+          paint:  Paint()..color = const Color(0x00000000),
         );
 
   final EnemyArchetype archetype;
@@ -20,14 +20,28 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
   // Knockback
   Vector2 _knockVelocity = Vector2.zero();
 
-  // Callback volaný při zásahu — ImmunoGame ho napojí na hit-stop
+  // Callbacks
   void Function()? onHitCallback;
+  // Volaný při přirozené smrti — pool.release() nebo removeFromParent()
+  void Function()? onDeath;
+
+  bool _componentsLoaded = false;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
     _hp = archetype.maxHp;
-    add(CircleHitbox(radius: archetype.radius, anchor: Anchor.center));
+    if (!_componentsLoaded) {
+      _componentsLoaded = true;
+      add(CircleHitbox(radius: archetype.radius, anchor: Anchor.center));
+    }
+  }
+
+  void resetEnemy() {
+    _hp             = archetype.maxHp;
+    _knockVelocity  = Vector2.zero();
+    onHitCallback   = null;
+    onDeath         = null;
   }
 
   @override
@@ -62,6 +76,10 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
     }
     onHitCallback?.call();
     _spawnParticles(isDead);
-    if (isDead) removeFromParent();
+    if (isDead) {
+      final cb = onDeath;
+      onDeath = null;
+      cb != null ? cb() : removeFromParent();
+    }
   }
 }

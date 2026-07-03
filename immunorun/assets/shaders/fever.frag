@@ -4,37 +4,48 @@ precision mediump float;
 uniform vec2  uResolution;
 uniform float uTime;
 uniform float uFever;   // 0..1 normalizováno z 36.5..42
-uniform sampler2D uTexture;
 
 out vec4 fragColor;
 
 void main() {
-    vec2 uv = FlutterFragCoord().xy / uResolution;
+    vec2 uv     = FlutterFragCoord().xy / uResolution;
+    vec2 center = uv - 0.5;
+    float dist  = length(center) * 2.0;  // 0 = střed, ~1.41 = rohy
 
-    // UV jitter při vysoké horečce
-    vec2 suv = uv;
-    if (uFever > 0.8) {
-        float jitter = (uFever - 0.8) * 0.02;
-        suv.x += sin(uv.y * 40.0 + uTime * 8.0) * jitter;
-        suv.y += cos(uv.x * 35.0 + uTime * 7.0) * jitter;
+    // Žádný efekt při normální teplotě
+    if (uFever < 0.05) {
+        fragColor = vec4(0.0);
+        return;
     }
 
-    vec4 color = texture(uTexture, suv);
+    // Vinětace: silnější s horečkou, kraje → střed
+    float vigStrength = smoothstep(0.35, 1.0, dist) * (0.2 + uFever * 0.65);
 
-    // vinětace: přechod modrá→zlatá→červená podle horečky
-    vec2 center = uv - 0.5;
-    float dist = length(center) * 2.0;
-    float vignette = 1.0 - smoothstep(0.4, 1.0, dist) * (0.3 + uFever * 0.5);
-
-    vec3 tint = mix(vec3(0.7, 0.85, 1.0),   // normální — chladně modravé
-                    vec3(1.0, 0.85, 0.3),    // febrilní — zlaté
-                    smoothstep(0.0, 0.6, uFever));
+    // Barva: modrá (febrile) → oranžová (hyper) → červená (critical)
+    vec3 tint = mix(vec3(0.15, 0.45, 1.0),
+                    vec3(1.0, 0.45, 0.05),
+                    smoothstep(0.2, 0.6, uFever));
     tint = mix(tint,
-               vec3(1.0, 0.3, 0.1),          // kritická — červená
-               smoothstep(0.7, 1.0, uFever));
+               vec3(1.0, 0.08, 0.04),
+               smoothstep(0.6, 1.0, uFever));
 
-    // pulsující jas při horečce
-    float pulse = 1.0 + sin(uTime * 3.0) * uFever * 0.04;
+    // Pulzování při hyper/critical
+    float pulse = 1.0;
+    if (uFever > 0.6) {
+        float rate  = 2.5 + uFever * 5.0;
+        float depth = (uFever - 0.6) * 0.9;
+        pulse = 1.0 - depth * (0.5 - 0.5 * sin(uTime * rate));
+    }
 
-    fragColor = vec4(color.rgb * tint * vignette * pulse, color.a);
+    // Jitter UV efekt při critical (šum na okrajích)
+    float jitter = 0.0;
+    if (uFever > 0.82) {
+        float j = (uFever - 0.82) * 0.06;
+        jitter = sin(uv.y * 45.0 + uTime * 9.0) * j * smoothstep(0.5, 1.0, dist);
+    }
+
+    float alpha = (vigStrength + jitter) * pulse;
+    alpha = clamp(alpha, 0.0, 0.88);
+
+    fragColor = vec4(tint, alpha);
 }
