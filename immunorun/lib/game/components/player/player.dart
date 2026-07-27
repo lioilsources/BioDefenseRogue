@@ -8,6 +8,7 @@ import 'package:flutter/services.dart';
 import '../../../config/balance.dart';
 import '../enemies/enemy.dart';
 import '../projectile.dart';
+import '../swim_sprite.dart';
 import 'player_controller.dart';
 
 // Callback volaný při použití zánětlivé schopnosti (pro FeverController)
@@ -64,7 +65,7 @@ class Player extends CircleComponent with CollisionCallbacks {
     final sprite = await Sprite.load('cells/macrophage.png');
     final h      = Balance.playerSpriteHeight;
     final aspect = sprite.srcSize.x / sprite.srcSize.y;
-    add(SpriteComponent(
+    add(SwimSprite(
       sprite: sprite,
       size:   Vector2(h * aspect, h),
       anchor: Anchor.center,

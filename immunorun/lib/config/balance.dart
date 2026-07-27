@@ -34,18 +34,28 @@ abstract final class Balance {
   static const double fluidTimeScale     = 0.15;  // rychlost animace
 
   // ── Plavání v roztoku (mikroskopový drift kamery) ─────────────────────────
-  static const double swimDriftAmplitude = 14.0;   // px, max posun kamery
-  static const double swimRotationMaxRad = 0.014;  // rad (~0.8°), max náklon
-  static const double swimZoomAmplitude  = 0.012;  // ±1.2 % „dýchání" zoomu
+  static const double swimDriftAmplitude = 55.0;   // px, max posun kamery
+  static const double swimRotationMaxRad = 0.05;   // rad (~2.9°), max náklon
+  static const double swimZoomAmplitude  = 0.03;   // ±3 % „dýchání" zoomu
   // Váhy sinusoid (součet 1.0) a fáze — sdílené všemi kanály
   static const List<double> swimWeights = [0.5, 0.3, 0.2];
   static const List<double> swimPhases  = [0.0, 1.7, 3.9];
-  // Frekvence v Hz, poměry ~1:√2:√5 → neperiodický dojem
-  static const List<double> swimFreqsX     = [0.053, 0.075, 0.118];
-  static const List<double> swimFreqsY     = [0.061, 0.086, 0.137];
-  static const List<double> swimFreqsAngle = [0.047, 0.066, 0.104];
-  static const List<double> swimFreqsZoom  = [0.058, 0.082, 0.129];
+  // Frekvence v Hz, poměry ~1:√2:√5 → neperiodický dojem (perioda ~4–9 s)
+  static const List<double> swimFreqsX     = [0.110, 0.156, 0.245];
+  static const List<double> swimFreqsY     = [0.127, 0.179, 0.285];
+  static const List<double> swimFreqsAngle = [0.098, 0.137, 0.216];
+  static const List<double> swimFreqsZoom  = [0.121, 0.170, 0.268];
   static const double microscopeIntensity  = 0.6;  // 0..1 síla overlay shaderu
+
+  // ── Sprite „plavání" (idle život buňky) ────────────────────────────────────
+  // Jen vizuál (scale/rotace/bob spritu), hitbox rodiče se nemění.
+  static const double spriteSwimBreatheAmp  = 0.06; // ±6 % scale (nádech/výdech)
+  static const double spriteSwimBreatheFreq = 0.5;  // Hz
+  static const double spriteSwimSwayRad     = 0.10; // rad (~5,7°) kolébání
+  static const double spriteSwimSwayFreq    = 0.35; // Hz
+  static const double spriteSwimBobAmp      = 3.0;  // px drobný posun
+  static const double spriteSwimBobFreq     = 0.45; // Hz
+  static const double spriteSwimSpeedJitter = 0.25; // ±25 % rychlosti (desync mezi buňkami)
 
   // ── Paralaxní pozadí ──────────────────────────────────────────────────────
   // Každá vrstva: (scrollSpeedFactor, alpha)
