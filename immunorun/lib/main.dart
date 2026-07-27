@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'game/immuno_game.dart';
 import 'ui/hud/hud_overlay.dart';
-import 'ui/input/virtual_joystick.dart';
+import 'ui/input/gesture_pad.dart';
 import 'ui/overlays/room_choice_overlay.dart';
 
 void main() {
@@ -61,7 +61,7 @@ class _GameScreenState extends State<_GameScreen> {
         autofocus:  true,
         overlayBuilderMap: {
           'hud':        (context, game) => const HudOverlay(),
-          'joystick':   (_, game) => VirtualJoystickOverlay(
+          'gesture':    (_, game) => GesturePadOverlay(
                 controller: game.playerController,
               ),
           'gameOver':   (context, game) => _GameOverOverlay(game: game),

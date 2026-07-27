@@ -13,6 +13,7 @@ import 'components/enemies/enemy.dart';
 import 'components/enemies/mini_boss.dart';
 import 'components/enemies/swarmer.dart';
 import 'components/fever_overlay.dart';
+import 'components/movement_trail.dart';
 import 'components/player/player.dart';
 import 'components/player/player_controller.dart';
 import 'rooms/room_graph.dart';
@@ -29,6 +30,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
   late final Player           _player;
   late final PlayerController _controller;
+  late final MovementTrail    _trail;
   late final FeverController  _fever;
   late final BackgroundLayer  _background;
   late final World            _activeWorld;
@@ -78,7 +80,9 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _controller = PlayerController();
     _player     = Player(controller: _controller);
     _player.position = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
+    _trail = MovementTrail(positionGetter: () => _player.position);
     await _activeWorld.add(_controller);
+    await _activeWorld.add(_trail);  // pod hráče (dřív v pořadí renderu)
     await _activeWorld.add(_player);
 
     cam.follow(_player);
@@ -111,8 +115,8 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
     await _tryLoadFluidShader();
     await _tryLoadFeverShader();
-    // Joystick až po inicializaci controlleru (ochrana před LateInitializationError)
-    if (!kIsWeb && !_isDesktop) overlays.add('joystick');
+    // Gesta až po inicializaci controlleru (ochrana před LateInitializationError)
+    if (!kIsWeb && !_isDesktop) overlays.add('gesture');
     overlays.add('hud');
   }
 
@@ -211,6 +215,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
         .where((c) =>
             c is! Player &&
             c is! PlayerController &&
+            c is! MovementTrail &&
             c is! ArenaComponent &&
             c is! BackgroundLayer &&
             c is! WaveController &&
@@ -219,6 +224,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
         .forEach((c) => c.removeFromParent());
 
     _player.position = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
+    _trail.clear(); // ať teleport na střed nenakreslí pruh přes arénu
     _fever.setRoomClear(false);
 
     _setupRoom(next);
@@ -362,6 +368,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
         .where((c) =>
             c is! Player &&
             c is! PlayerController &&
+            c is! MovementTrail &&
             c is! ArenaComponent &&
             c is! BackgroundLayer &&
             c is! WaveController &&
@@ -371,6 +378,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
     _player.position = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
     _player.reset();
+    _trail.clear();
     _fever.reset();
 
     _roomGraph   = RoomGraph.generateRun();

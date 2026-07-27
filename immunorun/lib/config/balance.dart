@@ -1,6 +1,8 @@
 // Všechna laditelná čísla hry — žádná magic numbers mimo tento soubor.
 // Konvence: skupiny odděleny prázdným řádkem, názvy popisné.
 
+import 'dart:ui' show Color;
+
 abstract final class Balance {
   // ── Aréna ────────────────────────────────────────────────────────────────
   static const double arenaWidth  = 3200.0;
@@ -13,10 +15,20 @@ abstract final class Balance {
   static const double playerSpriteHeight  = 96.0;  // px výška spritu (šířka = aspect ratio)
   static const double swarmerSpriteHeight = 52.0;  // px výška spritu
 
-  // ── Joystick ──────────────────────────────────────────────────────────────
-  static const double joystickKnobRadius = 24.0;  // px
-  static const double joystickBaseRadius = 64.0;  // px
-  static const double joystickDeadzone   = 0.12;  // 0..1, pod tím = nula
+  // ── Gesta / ovládání (mobil) ───────────────────────────────────────────────
+  // Pohyb = drift (pomalé tažení) + dash (flick). Combos = swipe vzory.
+  static const double driftSpeed          = 155.0; // px/s pomalý drift (~0.55× playerSpeed)
+  static const double gestureDriftRadius  = 96.0;  // px od originu = plný drift (screen space)
+  static const double gestureDriftDeadzone = 0.10; // 0..1, pod tím = nula
+  // Rozpoznávání gest (vše ve screen-space px / s)
+  static const double gestureFlickMinSpeed   = 850.0; // px/s prstu = flick (dash); pod = drift
+  static const double gestureFlickMinDist    = 44.0;  // px min. dráha flicku
+  static const double gestureFlickMaxDuration = 0.28; // s max. trvání flicku
+  static const double gestureComboMinLength  = 130.0; // px min. dráha, aby šlo o combo
+  static const double gestureComboReturnDist = 70.0;  // px návrat k originu = combo (juke/AoE)
+  static const double gestureAoeMinTurn      = 4.0;   // rad celkové otočení = kruh (AoE)
+  static const double gestureDoubleFlickWindow = 0.34; // s okno pro dvojflick → charge dash
+  static const double gestureDoubleFlickDot    = 0.55; // podobnost směru dvojflicku (dot)
 
   // ── Fluid shader ──────────────────────────────────────────────────────────
   static const double fluidTimeScale     = 0.15;  // rychlost animace
@@ -29,6 +41,15 @@ abstract final class Balance {
     (0.60, 1.00), // přední vrstva — nejrychlejší
   ];
 
+  // ── Pohybová stopa (trail) ──────────────────────────────────────────────────
+  static const double trailLifetime   = 0.5;   // s než bod zmizí (fade-out)
+  static const double trailMinSpacing = 5.0;   // px min. posun pro nový bod
+  static const double trailMaxSegment = 140.0; // px — delší spoj = teleport, nekreslit
+  static const double trailBaseWidth  = 9.0;   // px šířka pruhu při pomalém pohybu
+  static const double trailMaxWidth   = 22.0;  // px šířka při dash rychlosti
+  static const double trailMaxAlpha   = 0.55;  // 0..1 průhlednost čela stopy
+  static const Color  trailColor      = Color(0xFF4DE8E8); // azurová (ladí s dash pips)
+
   // ── Juice ─────────────────────────────────────────────────────────────────
   static const double hitStopDuration    = 0.05;  // s, zmrazení hry při hitu
   static const double knockbackImpulse   = 280.0; // px/s, síla odrazu nepřítele
@@ -38,12 +59,28 @@ abstract final class Balance {
   static const double particleSpeed      = 180.0; // px/s
   static const double particleLifetime   = 0.4;   // s
 
-  // ── Dash ─────────────────────────────────────────────────────────────────
+  // ── Dash (nábojový systém) ─────────────────────────────────────────────────
   static const double dashSpeed           = 900.0;  // px/s
   static const double dashDuration        = 0.12;   // s
-  static const double dashCooldown        = 0.5;    // s
   static const double dashIframes         = 0.3;    // s (delší než dashDuration)
+  static const int    dashMaxCharges      = 3;      // řetězení dashů = plynulý pohyb
+  static const double dashChargeRegenTime = 0.7;    // s na obnovu 1 náboje
+  static const double dashInputLockout    = 0.08;   // s minimální rozestup dvou dashů
   static const double hitInvulnerability  = 0.5;    // s i-frames po zásahu
+
+  // ── Combo: charge dash (dvojflick) ──────────────────────────────────────────
+  static const int    chargeDashCost      = 2;      // náboje
+  static const double chargeDashSpeed     = 1080.0; // px/s
+  static const double chargeDashDuration  = 0.22;   // s
+  static const double chargeDashIframes   = 0.30;   // s
+  static const double chargeDashDamage    = 30.0;   // dmg při průjezdu nepřítelem
+  static const double chargeDashHitRadius = 46.0;   // px zásahový poloměr při průjezdu
+
+  // ── Combo: juke (flick tam a zpět) ──────────────────────────────────────────
+  static const int    jukeCost            = 1;      // náboj
+  static const double jukeIframes         = 0.45;   // s neporazitelnost
+  static const double jukePulseRadius     = 150.0;  // px dosah odrazové pulzace
+  static const int    jukePulseDamage     = 6;      // dmg pulzace okolním nepřátelům
 
   // ── Primární zbraň ────────────────────────────────────────────────────────
   static const double primaryFireRate     = 2.0;    // výstřelů/s
@@ -95,6 +132,8 @@ abstract final class Balance {
   static const double specialLifetime    = 1.4;    // s
   static const int    specialBurstCount  = 3;
   static const double specialBurstSpread = 0.30;   // rad, celkový úhel fanu
+  // Combo: radiální nova (kruhové gesto) — 360° výstřel, stojí ATP
+  static const int    aoeNovaCount       = 12;     // projektily rovnoměrně po kruhu
 
   // ── Horečka ───────────────────────────────────────────────────────────────
   static const double feverMin                  = 36.5;
