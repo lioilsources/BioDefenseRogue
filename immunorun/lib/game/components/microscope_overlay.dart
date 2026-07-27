@@ -4,19 +4,19 @@ import 'package:flame/components.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/painting.dart';
 
-class FeverOverlayComponent extends PositionComponent
+import '../../config/balance.dart';
+
+class MicroscopeOverlayComponent extends PositionComponent
     with HasGameReference<FlameGame> {
-  FeverOverlayComponent() : super(position: Vector2.zero(), priority: 100);
+  // Priority 90 — pod fever overlayem (100), varování horečky musí zůstat navrchu.
+  MicroscopeOverlayComponent() : super(position: Vector2.zero(), priority: 90);
 
   ui.FragmentShader? _shader;
-  double _time  = 0.0;
-  double _fever = 0.0;  // 0..1 normalizováno
+  double _time = 0.0;
 
   void applyShader(ui.FragmentProgram program) {
     _shader = program.fragmentShader();
   }
-
-  void setFever(double normalized) => _fever = normalized.clamp(0.0, 1.0);
 
   @override
   void onGameResize(Vector2 size) {
@@ -30,13 +30,13 @@ class FeverOverlayComponent extends PositionComponent
   @override
   void render(Canvas canvas) {
     final s = _shader;
-    if (s == null || _fever < 0.05) return;
+    if (s == null) return;
 
     s
       ..setFloat(0, size.x)
       ..setFloat(1, size.y)
       ..setFloat(2, _time)
-      ..setFloat(3, _fever);
+      ..setFloat(3, Balance.microscopeIntensity);
 
     canvas.drawRect(
       Rect.fromLTWH(0, 0, size.x, size.y),

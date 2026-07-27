@@ -13,11 +13,13 @@ import 'components/enemies/enemy.dart';
 import 'components/enemies/mini_boss.dart';
 import 'components/enemies/swarmer.dart';
 import 'components/fever_overlay.dart';
+import 'components/microscope_overlay.dart';
 import 'components/player/player.dart';
 import 'components/player/player_controller.dart';
 import 'rooms/room_graph.dart';
 import 'systems/fever_controller.dart';
 import 'systems/swarmer_pool.dart';
+import 'systems/swim_controller.dart';
 import 'systems/wave_controller.dart';
 import 'world/arena.dart';
 import 'world/background.dart';
@@ -36,6 +38,10 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
   late final WaveController        _waves;
   late final SwarmerPool           _swarmerPool;
   late final FeverOverlayComponent _feverOverlay;
+  late final MicroscopeOverlayComponent _microscopeOverlay;
+  late final CameraComponent  _cam;
+  late final SwimController   _swim;
+  late final double           _camBaseZoom;
 
   PlayerController get playerController => _controller;
 
@@ -63,12 +69,14 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _activeWorld = World();
     await add(_activeWorld);
 
-    final cam = CameraComponent.withFixedResolution(
+    _cam = CameraComponent.withFixedResolution(
       width:  size.x,
       height: size.y,
     );
-    cam.world = _activeWorld;
-    await add(cam);
+    _cam.world = _activeWorld;
+    await add(_cam);
+    _camBaseZoom = _cam.viewfinder.zoom;
+    _swim = SwimController();
 
     _background = BackgroundLayer();
     _arena      = ArenaComponent();
@@ -81,7 +89,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     await _activeWorld.add(_controller);
     await _activeWorld.add(_player);
 
-    cam.follow(_player);
+    _cam.follow(_player);
     _fever = FeverController();
 
     _player.onAbilityUsed = _fever.onAbility;
@@ -106,11 +114,15 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _currentNode = _roomGraph.start;
     _setupRoom(_currentNode!);
 
+    _microscopeOverlay = MicroscopeOverlayComponent();
+    await add(_microscopeOverlay);
+
     _feverOverlay = FeverOverlayComponent();
     await add(_feverOverlay);
 
     await _tryLoadFluidShader();
     await _tryLoadFeverShader();
+    await _tryLoadMicroscopeShader();
     // Joystick až po inicializaci controlleru (ochrana před LateInitializationError)
     if (!kIsWeb && !_isDesktop) overlays.add('joystick');
     overlays.add('hud');
@@ -289,6 +301,16 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     }
   }
 
+  Future<void> _tryLoadMicroscopeShader() async {
+    try {
+      final program =
+          await ui.FragmentProgram.fromAsset('assets/shaders/microscope.frag');
+      _microscopeOverlay.applyShader(program);
+    } catch (e) {
+      debugPrint('ImmunoGame: microscope shader nedostupný: $e');
+    }
+  }
+
   // ─── Update loop ─────────────────────────────────────────────────────────
 
   @override
@@ -299,6 +321,15 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     }
 
     super.update(dt);
+
+    // Plavání v roztoku — follow už snapnul viewfinder na hráče,
+    // drift se přičítá až po něm a příští frame ho follow zase přepíše.
+    _swim.update(dt);
+    final swim = _swim.snapshot;
+    _cam.viewfinder.position += Vector2(swim.offsetX, swim.offsetY);
+    _cam.viewfinder.angle = swim.angleRad;
+    _cam.viewfinder.zoom  = _camBaseZoom * swim.zoomScale;
+
     if (_gameOver || _runWon) return;
 
     _wireNewEnemies();
@@ -372,6 +403,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _player.position = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
     _player.reset();
     _fever.reset();
+    _swim.reset();
 
     _roomGraph   = RoomGraph.generateRun();
     _currentNode = _roomGraph.start;

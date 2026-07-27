@@ -21,6 +21,20 @@ abstract final class Balance {
   // ── Fluid shader ──────────────────────────────────────────────────────────
   static const double fluidTimeScale     = 0.15;  // rychlost animace
 
+  // ── Plavání v roztoku (mikroskopový drift kamery) ─────────────────────────
+  static const double swimDriftAmplitude = 14.0;   // px, max posun kamery
+  static const double swimRotationMaxRad = 0.014;  // rad (~0.8°), max náklon
+  static const double swimZoomAmplitude  = 0.012;  // ±1.2 % „dýchání" zoomu
+  // Váhy sinusoid (součet 1.0) a fáze — sdílené všemi kanály
+  static const List<double> swimWeights = [0.5, 0.3, 0.2];
+  static const List<double> swimPhases  = [0.0, 1.7, 3.9];
+  // Frekvence v Hz, poměry ~1:√2:√5 → neperiodický dojem
+  static const List<double> swimFreqsX     = [0.053, 0.075, 0.118];
+  static const List<double> swimFreqsY     = [0.061, 0.086, 0.137];
+  static const List<double> swimFreqsAngle = [0.047, 0.066, 0.104];
+  static const List<double> swimFreqsZoom  = [0.058, 0.082, 0.129];
+  static const double microscopeIntensity  = 0.6;  // 0..1 síla overlay shaderu
+
   // ── Paralaxní pozadí ──────────────────────────────────────────────────────
   // Každá vrstva: (scrollSpeedFactor, alpha)
   static const List<(double, double)> parallaxLayers = [
