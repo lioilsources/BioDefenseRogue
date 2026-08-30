@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 import '../../../config/balance.dart';
 import '../../../domain/damage.dart';
+import '../../../domain/enemy_archetype.dart';
 import '../../systems/combat_resolver.dart';
 import '../../systems/fever_controller.dart';
 import '../../systems/upgrade_controller.dart';
@@ -28,10 +29,18 @@ class Player extends CircleComponent with CollisionCallbacks {
 
   final PlayerController controller;
 
-  // HP
-  int _hp = Balance.playerMaxHp;
+  // HP — maxHp je instanční (meta-progrese: paměťové buňky přidávají HP)
+  int maxHp = Balance.playerMaxHp;
+  int _hp   = Balance.playerMaxHp;
   int get hp => _hp;
   bool get isDead => _hp <= 0;
+
+  /// Vakcinace: proti tomuto typu platí dmg bonus (meta z minulého runu)
+  EnemyType? vaccinatedVs;
+
+  double _vsBonus(Enemy e) => vaccinatedVs == e.archetype.type
+      ? Balance.vaccinationDamageBonus
+      : 1.0;
 
   // i-frames (dash + hit)
   double _invulnerableTimer = 0;
@@ -238,7 +247,10 @@ class Player extends CircleComponent with CollisionCallbacks {
       if ((e.position - position).length2 <= r2) {
         _dashHits.add(e);
         final hit = _resolver.resolveHit(
-          Attacker(baseDamage: _dashDamage, type: DamageType.kinetic),
+          Attacker(
+            baseDamage: _dashDamage * _vsBonus(e),
+            type:       DamageType.kinetic,
+          ),
           Target(currentHp: e.hp, maxHp: e.archetype.maxHp),
           fever,
         );
@@ -263,7 +275,7 @@ class Player extends CircleComponent with CollisionCallbacks {
       if (delta.length2 <= r2) {
         final hit = _resolver.resolveHit(
           Attacker(
-            baseDamage: Balance.jukePulseDamage.toDouble(),
+            baseDamage: Balance.jukePulseDamage * _vsBonus(e),
             type:       DamageType.kinetic,
           ),
           Target(currentHp: e.hp, maxHp: e.archetype.maxHp),
@@ -300,12 +312,12 @@ class Player extends CircleComponent with CollisionCallbacks {
 
   void takeDamage(int amount) {
     if (isInvulnerable || isDead) return;
-    _hp = (_hp - amount).clamp(0, Balance.playerMaxHp);
+    _hp = (_hp - amount).clamp(0, maxHp);
     _invulnerableTimer = max(_invulnerableTimer, Balance.hitInvulnerability);
   }
 
   void heal(int amount) {
-    _hp = (_hp + amount).clamp(0, Balance.playerMaxHp);
+    _hp = (_hp + amount).clamp(0, maxHp);
   }
 
   /// Přičti ATP z dropu (pickup).
@@ -314,7 +326,7 @@ class Player extends CircleComponent with CollisionCallbacks {
   }
 
   void reset() {
-    _hp                = Balance.playerMaxHp;
+    _hp                = maxHp;
     _invulnerableTimer = 0;
     _dashing           = false;
     _dashTimer         = 0;
@@ -366,7 +378,9 @@ class Player extends CircleComponent with CollisionCallbacks {
 
     final hit = _resolver.resolveHit(
       Attacker(
-        baseDamage: Balance.projectileDamage * (upgrades?.damageMulti ?? 1.0),
+        baseDamage: Balance.projectileDamage *
+            (upgrades?.damageMulti ?? 1.0) *
+            _vsBonus(nearest),
         type:       DamageType.kinetic,
       ),
       Target(currentHp: nearest.hp, maxHp: nearest.archetype.maxHp),

@@ -1,0 +1,76 @@
+// Čistý Dart — bez Flame importů.
+// Meta-progrese: paměťové buňky přežívají smrt (očkování jako meta).
+
+import 'dart:math';
+
+import '../config/balance.dart';
+import 'enemy_archetype.dart';
+
+class MetaProgress {
+  const MetaProgress({
+    this.memoryCells      = 0,
+    this.totalRuns        = 0,
+    this.wins             = 0,
+    this.lastKilledByType,
+  });
+
+  final int     memoryCells;
+  final int     totalRuns;
+  final int     wins;
+  /// 'swarmer' | 'tank' | 'boss' | 'fever' | null (bez smrti / výhra)
+  final String? lastKilledByType;
+
+  static const empty = MetaProgress();
+
+  /// Bonus startovního max HP z paměťových buněk (s capem).
+  int get bonusStartHp =>
+      min(memoryCells * Balance.memoryHpPerCell, Balance.memoryHpCap);
+
+  MetaProgress copyWith({
+    int?     memoryCells,
+    int?     totalRuns,
+    int?     wins,
+    String?  lastKilledByType,
+    bool     clearLastKilledBy = false,
+  }) =>
+      MetaProgress(
+        memoryCells: memoryCells ?? this.memoryCells,
+        totalRuns:   totalRuns   ?? this.totalRuns,
+        wins:        wins        ?? this.wins,
+        lastKilledByType: clearLastKilledBy
+            ? null
+            : (lastKilledByType ?? this.lastKilledByType),
+      );
+
+  Map<String, Object?> toMap() => {
+        'memoryCells':      memoryCells,
+        'totalRuns':        totalRuns,
+        'wins':             wins,
+        'lastKilledByType': lastKilledByType,
+      };
+
+  factory MetaProgress.fromMap(Map<String, Object?> map) => MetaProgress(
+        memoryCells:      (map['memoryCells'] as int?) ?? 0,
+        totalRuns:        (map['totalRuns'] as int?) ?? 0,
+        wins:             (map['wins'] as int?) ?? 0,
+        lastKilledByType: map['lastKilledByType'] as String?,
+      );
+}
+
+/// Vakcinace: proti kterému EnemyType platí dmg bonus příští run.
+/// 'fever' není nepřítel — vakcinace se neaplikuje.
+EnemyType? vaccinationTarget(String? killedBy) => switch (killedBy) {
+      'swarmer' => EnemyType.swarmer,
+      'tank'    => EnemyType.tank,
+      'boss'    => EnemyType.shooter,
+      _         => null,
+    };
+
+/// Český popisek zabijáka pro game-over hint.
+String? killedByLabelCz(String? killedBy) => switch (killedBy) {
+      'swarmer' => 'roji (cocci)',
+      'tank'    => 'tankovi',
+      'boss'    => 'bossovi',
+      'fever'   => 'horečce',
+      _         => null,
+    };

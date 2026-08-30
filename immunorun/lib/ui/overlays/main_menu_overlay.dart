@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../game/immuno_game.dart';
+import '../meta_providers.dart';
 
 /// Hlavní menu — overlay, ne route (viz UX doc §12).
 class MainMenuOverlay extends StatefulWidget {
@@ -36,7 +38,23 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
               'Imunitní buňka vs. infekce',
               style: TextStyle(color: Colors.white54, fontSize: 14),
             ),
-            const SizedBox(height: 40),
+            const SizedBox(height: 16),
+            Consumer(
+              builder: (context, ref, _) {
+                final meta = ref.watch(metaProvider);
+                if (meta.memoryCells == 0) return const SizedBox.shrink();
+                return Text(
+                  'Paměťové buňky: ${meta.memoryCells}'
+                  '  ·  +${meta.bonusStartHp} max HP',
+                  style: const TextStyle(
+                    color:    Color(0xFF5DADE2),
+                    fontSize: 14,
+                    letterSpacing: 1,
+                  ),
+                );
+              },
+            ),
+            const SizedBox(height: 24),
             _MenuButton(
               label:     'SPUSTIT RUN',
               color:     Colors.green.shade700,

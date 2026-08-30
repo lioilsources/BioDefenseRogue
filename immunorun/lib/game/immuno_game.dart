@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/balance.dart';
 import '../domain/enemy_archetype.dart';
+import '../domain/meta_progress.dart';
 import '../domain/upgrade.dart';
 import '../ui/hud/hud_overlay.dart' show feverProvider, playerHpProvider, waveProvider, atpProvider;
 import 'components/enemies/enemy.dart';
@@ -36,9 +37,23 @@ import 'world/background.dart';
 
 class ImmunoGame extends FlameGame
     with HasCollisionDetection, KeyboardEvents {
-  ImmunoGame({required this.providerContainer});
+  ImmunoGame({
+    required this.providerContainer,
+    this.initialMeta = MetaProgress.empty,
+    this.onRunEnded,
+  }) : meta = initialMeta;
 
   final ProviderContainer providerContainer;
+
+  /// Meta-progrese — načtená při startu, aktualizovaná po konci runu.
+  final MetaProgress initialMeta;
+  MetaProgress meta;
+
+  /// Voláno po konci runu (smrt/výhra) s aktualizovanou metou — uložení.
+  final void Function(MetaProgress meta)? onRunEnded;
+
+  /// Buňky získané v posledním dohraném runu (pro game-over/run-won UI).
+  int lastRunCellsEarned = 0;
 
   late final Player           _player;
   late final PlayerController _controller;
@@ -62,6 +77,8 @@ class ImmunoGame extends FlameGame
   bool   _transitioning = false;
   double _hitStopTimer  = 0;
   int    _wavesCleared  = 0;
+  int    _roomsCleared  = 0;
+  String _lastDamageSource = 'swarmer'; // poslední zdroj zásahu hráče
 
   // Room/run state
   late RoomGraph   _roomGraph;
@@ -127,13 +144,15 @@ class ImmunoGame extends FlameGame
     _player.onFeverRise   = _fever.riseBy;
     _player.onDash        = () => audio.play(Sfx.dash);
 
-    _swarmerPool = SwarmerPool(onPlayerContact: _onEnemyHitPlayer);
+    _swarmerPool =
+        SwarmerPool(onPlayerContact: () => _onEnemyHitPlayerFrom('swarmer'));
     _swarmerPool.prewarm(Balance.maxActiveEnemies, _player);
 
     _waves = WaveController(
       player:          _player,
       world:           _activeWorld,
-      onPlayerContact: _onEnemyHitPlayer,
+      // WaveController předává callback tankům
+      onPlayerContact: () => _onEnemyHitPlayerFrom('tank'),
       swarmerPool:     _swarmerPool,
     );
     _waves.onWaveStart   = _onWaveStart;
@@ -141,6 +160,10 @@ class ImmunoGame extends FlameGame
 
     await _activeWorld.add(_waves);
     _activeWorld.children.register<Enemy>();
+
+    // Meta bonusy (paměťové buňky → max HP, vakcinace) na start runu
+    _applyMeta();
+    _player.reset();
 
     // Inicializuj první run
     _roomGraph   = RoomGraph.generateRun();
@@ -238,6 +261,7 @@ class ImmunoGame extends FlameGame
 
   void _onWaveCleared(int wave) {
     _wavesCleared = wave;
+    _roomsCleared++;
     _fever.setRoomClear(true);
 
     if (_currentNode?.type == RoomType.treasure) {
@@ -368,7 +392,7 @@ class ImmunoGame extends FlameGame
       (MiniBoss(
         player:          _player,
         feverGetter:     () => _fever.snapshot,
-        onPlayerContact: _onEnemyHitPlayer,
+        onPlayerContact: () => _onEnemyHitPlayerFrom('boss'),
       )..onPhaseShift = () => audio.play(Sfx.bossPhase))
         ..position = Vector2(
           Balance.arenaWidth / 2 + Balance.bossOrbitRadius,
@@ -383,6 +407,32 @@ class ImmunoGame extends FlameGame
     _fever.onHit();
     triggerHitStop();
     audio.play(Sfx.playerHurt);
+  }
+
+  /// Zásah hráče se zdrojem — kvůli vakcinaci (meta) víme, kdo zabil.
+  void _onEnemyHitPlayerFrom(String source) {
+    _lastDamageSource = source;
+    _onEnemyHitPlayer();
+  }
+
+  /// Aplikuj meta bonusy na začátku runu (paměťové buňky, vakcinace).
+  void _applyMeta() {
+    _player.maxHp        = Balance.playerMaxHp + meta.bonusStartHp;
+    _player.vaccinatedVs = vaccinationTarget(meta.lastKilledByType);
+  }
+
+  /// Konec runu — připiš paměťové buňky, zaznamenej zabijáka, ulož.
+  void _finishRun({required bool won, String? killedBy}) {
+    lastRunCellsEarned = _roomsCleared * Balance.memoryCellsPerRoom +
+        (won ? Balance.memoryCellsWinBonus : 0);
+    meta = meta.copyWith(
+      memoryCells:       meta.memoryCells + lastRunCellsEarned,
+      totalRuns:         meta.totalRuns + 1,
+      wins:              meta.wins + (won ? 1 : 0),
+      lastKilledByType:  killedBy,
+      clearLastKilledBy: killedBy == null,
+    );
+    onRunEnded?.call(meta);
   }
 
   /// Drop ATP pickupu na místě smrti nepřítele.
@@ -405,13 +455,19 @@ class ImmunoGame extends FlameGame
   void triggerHitStop() => _hitStopTimer = Balance.hitStopDuration;
 
   void _triggerGameOver() {
+    if (_gameOver) return;
     _gameOver = true;
+    _finishRun(
+      won:      false,
+      killedBy: _fever.isDead ? 'fever' : _lastDamageSource,
+    );
     overlays.add('gameOver');
   }
 
   void _triggerRunWon() {
     if (_runWon) return;
     _runWon = true;
+    _finishRun(won: true, killedBy: null);
     overlays.add('runWon');
   }
 
@@ -482,6 +538,7 @@ class ImmunoGame extends FlameGame
     if (_fever.snapshot.zone == FeverZone.hyper ||
         _fever.snapshot.zone == FeverZone.critical) {
       _player.takeDamage((Balance.feverHpDrainHyper * dt).round());
+      if (_player.isDead) _lastDamageSource = 'fever';
     }
 
     if (_player.isDead || _fever.isDead) _triggerGameOver();
@@ -489,7 +546,7 @@ class ImmunoGame extends FlameGame
     _checkGateEntry();
 
     final snap   = _fever.snapshot;
-    final hpNorm = _player.hp / Balance.playerMaxHp;
+    final hpNorm = _player.hp / _player.maxHp;
     final waveSn = _waves.snapshot;
 
     _feverOverlay.setFever(snap.normalized);
@@ -531,11 +588,13 @@ class ImmunoGame extends FlameGame
     _transitioning = false;
     _hitStopTimer  = 0;
     _wavesCleared  = 0;
+    _roomsCleared  = 0;
     _roomNumber    = 0;
     _pendingChoices  = [];
     _pendingUpgrades = [];
     _upgradePending  = false;
     upgrades.reset();
+    _applyMeta(); // nová meta (vakcinace z minulé smrti) platí od teď
 
     overlays.remove('gameOver');
     overlays.remove('runWon');

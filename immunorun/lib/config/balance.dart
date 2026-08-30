@@ -203,6 +203,13 @@ abstract final class Balance {
   static const int    membranaExtraDashCharges  = 1;    // +1 max dash náboj
   static const Color  opsonizedRingColor        = Color(0xFFF1C40F); // žlutý ring
 
+  // ── Meta-progrese (paměťové buňky, vakcinace) ─────────────────────────────
+  static const int    memoryCellsPerRoom     = 1;    // buňky za vyčištěnou místnost
+  static const int    memoryCellsWinBonus    = 5;    // bonus za výhru runu
+  static const int    memoryHpPerCell        = 2;    // +max HP za buňku
+  static const int    memoryHpCap            = 30;   // strop bonusu HP
+  static const double vaccinationDamageBonus = 1.15; // ×dmg proti typu, který tě zabil
+
   // ── Audio ─────────────────────────────────────────────────────────────────
   static const double sfxMasterVolume = 0.5;  // 0..1
   static const double sfxMinInterval  = 0.06; // s mezi přehráním téhož sfx

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/meta_progress.dart';
 import '../../game/immuno_game.dart';
 
 /// Game over — smrt hráče nebo kritická horečka.
@@ -38,6 +39,8 @@ class GameOverOverlay extends StatelessWidget {
                 fontSize: 16,
               ),
             ),
+            const SizedBox(height: 8),
+            _MetaSummary(game: game),
             const SizedBox(height: 28),
             _EndButton(
               label:     'ZKUSIT ZNOVU',
@@ -89,6 +92,8 @@ class RunWonOverlay extends StatelessWidget {
               'Patogen zničen. Host přežil.',
               style: TextStyle(color: Colors.white70, fontSize: 16),
             ),
+            const SizedBox(height: 8),
+            _MetaSummary(game: game),
             const SizedBox(height: 28),
             _EndButton(
               label:     'NOVÝ RUN',
@@ -104,6 +109,46 @@ class RunWonOverlay extends StatelessWidget {
           ],
         ),
       ),
+    );
+  }
+}
+
+/// Souhrn mety po runu: získané buňky + vakcinační hint (smrt = informace).
+class _MetaSummary extends StatelessWidget {
+  const _MetaSummary({required this.game});
+  final ImmunoGame game;
+
+  @override
+  Widget build(BuildContext context) {
+    final earned   = game.lastRunCellsEarned;
+    final killedBy = killedByLabelCz(game.meta.lastKilledByType);
+    final vaccinated =
+        vaccinationTarget(game.meta.lastKilledByType) != null;
+
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        if (earned > 0)
+          Text(
+            '+$earned paměťových buněk',
+            style: const TextStyle(
+              color:    Color(0xFF5DADE2),
+              fontSize: 14,
+              letterSpacing: 1,
+            ),
+          ),
+        if (vaccinated && killedBy != null)
+          Padding(
+            padding: const EdgeInsets.only(top: 4),
+            child: Text(
+              'Příště: imunizace proti $killedBy (+15 % dmg)',
+              style: const TextStyle(
+                color:    Color(0xFF58D68D),
+                fontSize: 13,
+              ),
+            ),
+          ),
+      ],
     );
   }
 }
