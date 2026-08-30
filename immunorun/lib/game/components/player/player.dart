@@ -6,6 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../../config/balance.dart';
+import '../../../domain/damage.dart';
+import '../../systems/combat_resolver.dart';
+import '../../systems/fever_controller.dart';
 import '../enemies/enemy.dart';
 import '../projectile.dart';
 import '../swim_sprite.dart';
@@ -57,6 +60,21 @@ class Player extends CircleComponent with CollisionCallbacks {
 
   // Auto-aim / primary weapon
   double _fireCooldown = 0;
+
+  // Veškerý outgoing damage jde přes resolver — horečka buffuje dmg i kadenci
+  final CombatResolver _resolver = CombatResolver();
+
+  /// Aktuální stav horečky — nastavuje ImmunoGame v onLoad
+  FeverSnapshot Function()? feverGetter;
+
+  static const _neutralFever = FeverSnapshot(
+    tempC:         Balance.feverMin,
+    normalized:    0.0,
+    zone:          FeverZone.normal,
+    atkSpeedMulti: Balance.feverAtkSpeedMin,
+  );
+
+  FeverSnapshot get _fever => feverGetter?.call() ?? _neutralFever;
 
   @override
   Future<void> onLoad() async {
@@ -199,12 +217,18 @@ class Player extends CircleComponent with CollisionCallbacks {
   void _applyDashPassThrough() {
     final enemies = parent?.children.whereType<Enemy>();
     if (enemies == null) return;
-    final r2 = _dashHitRadius * _dashHitRadius;
+    final r2    = _dashHitRadius * _dashHitRadius;
+    final fever = _fever;
     for (final e in enemies) {
       if (e.isDead || _dashHits.contains(e)) continue;
       if ((e.position - position).length2 <= r2) {
         _dashHits.add(e);
-        e.takeDamage(_dashDamage.round(), hitDir: _dashDir);
+        final hit = _resolver.resolveHit(
+          Attacker(baseDamage: _dashDamage, type: DamageType.kinetic),
+          Target(currentHp: e.hp, maxHp: e.archetype.maxHp),
+          fever,
+        );
+        e.takeDamage(hit.amount.round(), hitDir: _dashDir);
       }
     }
   }
@@ -217,12 +241,21 @@ class Player extends CircleComponent with CollisionCallbacks {
     // Odrazová pulzace: knockback + malý dmg okolním nepřátelům
     final enemies = parent?.children.whereType<Enemy>();
     if (enemies == null) return;
-    final r2 = Balance.jukePulseRadius * Balance.jukePulseRadius;
+    final r2    = Balance.jukePulseRadius * Balance.jukePulseRadius;
+    final fever = _fever;
     for (final e in enemies.toList()) {
       if (e.isDead) continue;
       final delta = e.position - position;
       if (delta.length2 <= r2) {
-        e.takeDamage(Balance.jukePulseDamage, hitDir: delta);
+        final hit = _resolver.resolveHit(
+          Attacker(
+            baseDamage: Balance.jukePulseDamage.toDouble(),
+            type:       DamageType.kinetic,
+          ),
+          Target(currentHp: e.hp, maxHp: e.archetype.maxHp),
+          fever,
+        );
+        e.takeDamage(hit.amount.round(), hitDir: delta);
       }
     }
   }
@@ -308,15 +341,34 @@ class Player extends CircleComponent with CollisionCallbacks {
     }
     if (nearest == null) return;
 
-    _fireCooldown = 1.0 / Balance.primaryFireRate;
+    final fever = _fever;
+    _fireCooldown = _resolver.fireIntervalFor(Balance.primaryFireRate, fever);
+
+    final hit = _resolver.resolveHit(
+      const Attacker(baseDamage: Balance.projectileDamage, type: DamageType.kinetic),
+      Target(currentHp: nearest.hp, maxHp: nearest.archetype.maxHp),
+      fever,
+    );
+
     final dir  = (nearest.position - position).normalized();
-    final proj = Projectile(velocity: dir * Balance.projectileSpeed)
-      ..position = position.clone();
+    final proj = Projectile(
+      velocity: dir * Balance.projectileSpeed,
+      damage:   hit.amount,
+      color:    hit.isCritical
+          ? Balance.projectileCritColor
+          : Balance.projectileColor,
+    )..position = position.clone();
     parent?.add(proj);
   }
 
   /// Radiální nova — projektily rovnoměrně po celém kruhu (kruhové gesto / E).
   void _fireRadialNova() {
+    // Cíl neznáme předem — resolver Target v matematice nepoužívá
+    final hit = _resolver.resolveHit(
+      const Attacker(baseDamage: Balance.specialDamage, type: DamageType.inflammatory),
+      const Target(currentHp: 1, maxHp: 1),
+      _fever,
+    );
     final count = Balance.aoeNovaCount;
     for (var i = 0; i < count; i++) {
       final angle = (i / count) * 2 * pi;
@@ -324,7 +376,7 @@ class Player extends CircleComponent with CollisionCallbacks {
       parent?.add(
         Projectile(
           velocity: dir * Balance.specialSpeed,
-          damage:   Balance.specialDamage,
+          damage:   hit.amount,
           radius:   Balance.specialRadius,
           color:    const Color(0xFF3498DB),
           lifetime: Balance.specialLifetime,

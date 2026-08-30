@@ -1,6 +1,7 @@
 // Čistý Dart — bez Flame importů. Unit-testovatelné.
 // Veškerá bojová matematika jde přes tento resolver.
 
+import '../../config/balance.dart';
 import '../../domain/damage.dart';
 import 'fever_controller.dart';
 
@@ -22,15 +23,16 @@ class CombatResolver {
     Target        target,
     FeverSnapshot fever,
   ) {
-    double amount = attacker.baseDamage * fever.atkSpeedMulti;
+    double amount = attacker.baseDamage;
 
     // febrilní bonus k poškození — jen v horečnaté zóně
+    // (atk speed jde do fireIntervalFor, ne do dmg — žádný double-dip)
     if (fever.zone == FeverZone.febrile || fever.zone == FeverZone.hyper) {
-      amount *= 1.1;
+      amount *= Balance.feverDamageMulti;
     }
 
     final isCrit = fever.zone == FeverZone.hyper;
-    if (isCrit) amount *= 1.5;
+    if (isCrit) amount *= Balance.feverCritMulti;
 
     return DamageResult(
       amount:     amount,
@@ -40,9 +42,13 @@ class CombatResolver {
     );
   }
 
+  /// Interval mezi výstřely — horečka zrychluje kadenci (febrilní buff).
+  double fireIntervalFor(double baseRate, FeverSnapshot fever) =>
+      1.0 / (baseRate * fever.atkSpeedMulti);
+
   double _feverRiseForType(DamageType type) => switch (type) {
-    DamageType.inflammatory => 0.15,
-    DamageType.thermal      => 0.25,
+    DamageType.inflammatory => Balance.feverRisePerInflammatoryHit,
+    DamageType.thermal      => Balance.feverRisePerThermalHit,
     _                       => 0.0,
   };
 }

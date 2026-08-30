@@ -112,6 +112,8 @@ abstract final class Balance {
   static const double projectileSpeed     = 620.0;  // px/s
   static const double projectileDamage    = 15.0;   // base damage
   static const double projectileLifetime  = 1.2;    // s
+  static const Color  projectileColor     = Color(0xFFF1C40F); // žlutá
+  static const Color  projectileCritColor = Color(0xFFE74C3C); // červená (hyper krit)
 
   // ── Swarmer ───────────────────────────────────────────────────────────────
   static const double swarmerContactInterval = 0.6; // s mezi kontaktními zásahy
@@ -174,4 +176,9 @@ abstract final class Balance {
   static const double feverAtkSpeedMin          = 1.0;
   static const double feverAtkSpeedMax          = 1.25;
   static const double feverHpDrainHyper         = 2.0;  // HP/s
+  // Ofenzivní bonusy horečky (CombatResolver)
+  static const double feverDamageMulti          = 1.1;  // febrilní+ zóna: ×dmg
+  static const double feverCritMulti            = 1.5;  // hyper zóna: krit ×dmg
+  static const double feverRisePerInflammatoryHit = 0.15; // °C za inflammatory zásah
+  static const double feverRisePerThermalHit      = 0.25; // °C za thermal zásah
 }

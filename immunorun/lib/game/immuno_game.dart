@@ -97,6 +97,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _fever = FeverController();
 
     _player.onAbilityUsed = _fever.onAbility;
+    _player.feverGetter   = () => _fever.snapshot;
 
     _swarmerPool = SwarmerPool(onPlayerContact: _onEnemyHitPlayer);
     _swarmerPool.prewarm(Balance.maxActiveEnemies, _player);
@@ -107,7 +108,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
       onPlayerContact: _onEnemyHitPlayer,
       swarmerPool:     _swarmerPool,
     );
-    _waves.onWaveStart   = (_) => _fever.setRoomClear(false);
+    _waves.onWaveStart   = _onWaveStart;
     _waves.onWaveCleared = _onWaveCleared;
 
     await _activeWorld.add(_waves);
@@ -141,6 +142,12 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
   void _setupRoom(RoomNode node) {
     _waves.setRoom(node.type, difficulty: _roomNumber);
+  }
+
+  /// Stabilní callback — žádné obalování při přechodech (jinak roste řetěz closures)
+  void _onWaveStart(int wave) {
+    _fever.setRoomClear(false);
+    if (_currentNode?.type == RoomType.boss) _spawnBoss();
   }
 
   void _onWaveCleared(int wave) {
@@ -241,15 +248,6 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
     _setupRoom(next);
     _waves.reset();
-
-    // Boss místnost — spawni MiniBoss přes onWaveStart callback
-    final oldOnWaveStart = _waves.onWaveStart;
-    _waves.onWaveStart = (w) {
-      oldOnWaveStart?.call(w);
-      if (next.type == RoomType.boss) {
-        _spawnBoss();
-      }
-    };
   }
 
   void _spawnBoss() {
@@ -415,8 +413,6 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
     _roomGraph   = RoomGraph.generateRun();
     _currentNode = _roomGraph.start;
-    _waves.onWaveStart   = (_) => _fever.setRoomClear(false);
-    _waves.onWaveCleared = _onWaveCleared;
     _setupRoom(_currentNode!);
     _waves.reset();
   }

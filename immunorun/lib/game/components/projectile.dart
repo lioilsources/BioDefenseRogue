@@ -10,7 +10,7 @@ class Projectile extends CircleComponent with CollisionCallbacks {
     required this.velocity,
     this.damage  = Balance.projectileDamage,
     double radius    = 6.0,
-    Color  color     = const Color(0xFFF1C40F),
+    Color  color     = Balance.projectileColor,
     double lifetime  = Balance.projectileLifetime,
   })  : _life = lifetime,
         super(
@@ -26,7 +26,7 @@ class Projectile extends CircleComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    add(CircleHitbox(radius: 6.0, anchor: Anchor.center));
+    add(CircleHitbox(radius: radius, anchor: Anchor.center));
   }
 
   @override
