@@ -5,8 +5,10 @@ import 'package:flame/components.dart';
 import '../../config/balance.dart';
 import '../../domain/room_type.dart';
 import '../components/enemies/enemy.dart';
+import '../components/enemies/tank.dart';
 import '../components/player/player.dart';
 import 'swarmer_pool.dart';
+import 'wave_composition.dart';
 
 enum WavePhase { countdown, active, cleared }
 
@@ -62,12 +64,6 @@ class WaveController extends Component {
 
   int get _enemyCount => world.children.whereType<Enemy>().length;
 
-  int get _enemiesToSpawn {
-    final base = Balance.waveBaseEnemies + _difficulty * Balance.waveEnemiesPerWave;
-    final mult = _roomType == RoomType.elite ? Balance.eliteEnemyMultiplier : 1.0;
-    return (base * mult).round().clamp(1, Balance.maxActiveEnemies);
-  }
-
   @override
   void update(double dt) {
     switch (_phase) {
@@ -89,20 +85,32 @@ class WaveController extends Component {
     _phase = WavePhase.active;
     _timer = 0;
 
-    // Boss a treasure nerozrodí swarmery — boss spawne ImmunoGame via onWaveStart callback
-    if (_roomType != RoomType.boss && _roomType != RoomType.treasure) {
-      _spawnSwarmers(_enemiesToSpawn);
-    }
+    // Boss a treasure nerozrodí řadové nepřátele (composeWave vrátí nuly);
+    // bosse spawne ImmunoGame via onWaveStart callback
+    final comp = composeWave(roomType: _roomType, difficulty: _difficulty);
+    _spawnSwarmers(comp.swarmers);
+    _spawnTanks(comp.tanks);
     onWaveStart?.call(_wave);
+  }
+
+  Vector2 _ringSpawnPos(int i, int count) {
+    final angle  = (i / count) * 2 * pi + _rng.nextDouble() * 0.8;
+    final offset = Balance.spawnRadius + _rng.nextDouble() * 80;
+    return player.position + Vector2(cos(angle), sin(angle)) * offset;
   }
 
   void _spawnSwarmers(int count) {
     for (var i = 0; i < count; i++) {
-      final angle  = (i / count) * 2 * pi + _rng.nextDouble() * 0.8;
-      final offset = Balance.spawnRadius + _rng.nextDouble() * 80;
-      final pos    = player.position +
-                     Vector2(cos(angle), sin(angle)) * offset;
-      world.add(swarmerPool.acquire(pos, player));
+      world.add(swarmerPool.acquire(_ringSpawnPos(i, count), player));
+    }
+  }
+
+  void _spawnTanks(int count) {
+    for (var i = 0; i < count; i++) {
+      world.add(
+        Tank(player: player, onPlayerContact: onPlayerContact)
+          ..position = _ringSpawnPos(i, count),
+      );
     }
   }
 

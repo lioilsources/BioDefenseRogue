@@ -47,7 +47,7 @@ class Swarmer extends Enemy {
 
     final dir = _player.position - position;
     if (dir.length2 > 1.0) {
-      position += dir.normalized() * archetype.speed * dt;
+      position += dir.normalized() * archetype.speed * statusSpeedMulti * dt;
     }
 
     final dist = dir.length;

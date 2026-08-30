@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import 'package:flutter/painting.dart';
 
 import '../../config/balance.dart';
+import '../../domain/status_effects.dart';
 import 'enemies/enemy.dart';
 
 class Projectile extends CircleComponent with CollisionCallbacks {
@@ -12,6 +13,7 @@ class Projectile extends CircleComponent with CollisionCallbacks {
     double radius    = 6.0,
     Color  color     = Balance.projectileColor,
     double lifetime  = Balance.projectileLifetime,
+    this.applyOnHit  = const [],
   })  : _life = lifetime,
         super(
           radius: radius,
@@ -21,6 +23,7 @@ class Projectile extends CircleComponent with CollisionCallbacks {
 
   final Vector2 velocity;
   final double  damage;
+  final List<StatusEffect> applyOnHit; // statusy aplikované při zásahu
   double _life;
 
   @override
@@ -44,6 +47,10 @@ class Projectile extends CircleComponent with CollisionCallbacks {
   ) {
     super.onCollisionStart(intersectionPoints, other);
     if (other is Enemy) {
+      // Status před dmg — opsonizace zesílí už tento zásah
+      for (final effect in applyOnHit) {
+        other.applyStatus(effect);
+      }
       other.takeDamage(
         damage.round(),
         hitDir: velocity.normalized(),

@@ -9,6 +9,7 @@ import '../../../config/balance.dart';
 import '../../../domain/damage.dart';
 import '../../systems/combat_resolver.dart';
 import '../../systems/fever_controller.dart';
+import '../../systems/upgrade_controller.dart';
 import '../enemies/enemy.dart';
 import '../projectile.dart';
 import '../swim_sprite.dart';
@@ -66,6 +67,15 @@ class Player extends CircleComponent with CollisionCallbacks {
 
   /// Aktuální stav horečky — nastavuje ImmunoGame v onLoad
   FeverSnapshot Function()? feverGetter;
+
+  /// In-run upgrady (receptory/cytokiny) — nastavuje ImmunoGame v onLoad
+  UpgradeController? upgrades;
+
+  /// Přímé zvýšení horečky (pyrogen za výstřel) — FeverController.riseBy
+  void Function(double amount)? onFeverRise;
+
+  int get _maxDashCharges =>
+      Balance.dashMaxCharges + (upgrades?.extraDashCharges ?? 0);
 
   static const _neutralFever = FeverSnapshot(
     tempC:         Balance.feverMin,
@@ -261,14 +271,15 @@ class Player extends CircleComponent with CollisionCallbacks {
   }
 
   void _tryAoe() {
-    if (_atp < Balance.atpSpecialCost) return;
-    _atp -= Balance.atpSpecialCost;
+    final cost = Balance.atpSpecialCost * (upgrades?.atpCostMulti ?? 1.0);
+    if (_atp < cost) return;
+    _atp -= cost;
     onAbilityUsed?.call();
     _fireRadialNova();
   }
 
   void _spendCharges(int n) {
-    _dashCharges = (_dashCharges - n).clamp(0.0, Balance.dashMaxCharges.toDouble());
+    _dashCharges = (_dashCharges - n).clamp(0.0, _maxDashCharges.toDouble());
     _publishCharges();
   }
 
@@ -293,6 +304,11 @@ class Player extends CircleComponent with CollisionCallbacks {
     _hp = (_hp + amount).clamp(0, Balance.playerMaxHp);
   }
 
+  /// Přičti ATP z dropu (pickup).
+  void gainAtp(double amount) {
+    _atp = (_atp + amount).clamp(0, Balance.atpMax);
+  }
+
   void reset() {
     _hp                = Balance.playerMaxHp;
     _invulnerableTimer = 0;
@@ -300,7 +316,7 @@ class Player extends CircleComponent with CollisionCallbacks {
     _dashTimer         = 0;
     _dashDamage        = 0;
     _dashLockout       = 0;
-    _dashCharges       = Balance.dashMaxCharges.toDouble();
+    _dashCharges       = _maxDashCharges.toDouble();
     _dashHits.clear();
     _fireCooldown      = 0;
     _atp               = Balance.atpMax;
@@ -316,9 +332,9 @@ class Player extends CircleComponent with CollisionCallbacks {
     if (_atp < Balance.atpMax) {
       _atp = (_atp + Balance.atpRegen * dt).clamp(0, Balance.atpMax);
     }
-    if (_dashCharges < Balance.dashMaxCharges) {
+    if (_dashCharges < _maxDashCharges) {
       _dashCharges = (_dashCharges + dt / Balance.dashChargeRegenTime)
-          .clamp(0.0, Balance.dashMaxCharges.toDouble());
+          .clamp(0.0, _maxDashCharges.toDouble());
       _publishCharges();
     }
   }
@@ -345,27 +361,38 @@ class Player extends CircleComponent with CollisionCallbacks {
     _fireCooldown = _resolver.fireIntervalFor(Balance.primaryFireRate, fever);
 
     final hit = _resolver.resolveHit(
-      const Attacker(baseDamage: Balance.projectileDamage, type: DamageType.kinetic),
+      Attacker(
+        baseDamage: Balance.projectileDamage * (upgrades?.damageMulti ?? 1.0),
+        type:       DamageType.kinetic,
+      ),
       Target(currentHp: nearest.hp, maxHp: nearest.archetype.maxHp),
       fever,
     );
 
     final dir  = (nearest.position - position).normalized();
     final proj = Projectile(
-      velocity: dir * Balance.projectileSpeed,
-      damage:   hit.amount,
-      color:    hit.isCritical
+      velocity:   dir * Balance.projectileSpeed,
+      damage:     hit.amount,
+      color:      hit.isCritical
           ? Balance.projectileCritColor
           : Balance.projectileColor,
+      applyOnHit: upgrades?.onHitStatuses ?? const [],
     )..position = position.clone();
     parent?.add(proj);
+
+    // Pyrogen: každý výstřel přitopí (risk/reward)
+    final feverPerShot = upgrades?.feverPerShot ?? 0.0;
+    if (feverPerShot > 0) onFeverRise?.call(feverPerShot);
   }
 
   /// Radiální nova — projektily rovnoměrně po celém kruhu (kruhové gesto / E).
   void _fireRadialNova() {
     // Cíl neznáme předem — resolver Target v matematice nepoužívá
     final hit = _resolver.resolveHit(
-      const Attacker(baseDamage: Balance.specialDamage, type: DamageType.inflammatory),
+      Attacker(
+        baseDamage: Balance.specialDamage * (upgrades?.damageMulti ?? 1.0),
+        type:       DamageType.inflammatory,
+      ),
       const Target(currentHp: 1, maxHp: 1),
       _fever,
     );
@@ -375,11 +402,12 @@ class Player extends CircleComponent with CollisionCallbacks {
       final dir   = Vector2(cos(angle), sin(angle));
       parent?.add(
         Projectile(
-          velocity: dir * Balance.specialSpeed,
-          damage:   hit.amount,
-          radius:   Balance.specialRadius,
-          color:    const Color(0xFF3498DB),
-          lifetime: Balance.specialLifetime,
+          velocity:   dir * Balance.specialSpeed,
+          damage:     hit.amount,
+          radius:     Balance.specialRadius,
+          color:      const Color(0xFF3498DB),
+          lifetime:   Balance.specialLifetime,
+          applyOnHit: upgrades?.onHitStatuses ?? const [],
         )..position = position.clone(),
       );
     }

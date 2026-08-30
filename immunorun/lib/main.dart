@@ -6,6 +6,7 @@ import 'game/immuno_game.dart';
 import 'ui/hud/hud_overlay.dart';
 import 'ui/input/gesture_pad.dart';
 import 'ui/overlays/room_choice_overlay.dart';
+import 'ui/overlays/upgrade_choice_overlay.dart';
 
 void main() {
   runApp(const ProviderScope(child: ImmunoApp()));
@@ -67,6 +68,7 @@ class _GameScreenState extends State<_GameScreen> {
           'gameOver':   (context, game) => _GameOverOverlay(game: game),
           'runWon':     (context, game) => _RunWonOverlay(game: game),
           'roomChoice': (context, game) => RoomChoiceOverlay(game: game),
+          'upgradeChoice': (context, game) => UpgradeChoiceOverlay(game: game),
           'transition': (context, game) => const _TransitionOverlay(),
         },
         initialActiveOverlays: const [],

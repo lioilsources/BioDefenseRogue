@@ -1,4 +1,5 @@
 import 'dart:async' as async;
+import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flame/components.dart';
@@ -8,6 +9,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/balance.dart';
+import '../domain/enemy_archetype.dart';
+import '../domain/upgrade.dart';
 import '../ui/hud/hud_overlay.dart' show feverProvider, playerHpProvider, waveProvider, atpProvider;
 import 'components/enemies/enemy.dart';
 import 'components/enemies/mini_boss.dart';
@@ -15,12 +18,15 @@ import 'components/enemies/swarmer.dart';
 import 'components/fever_overlay.dart';
 import 'components/microscope_overlay.dart';
 import 'components/movement_trail.dart';
+import 'components/pickup.dart';
 import 'components/player/player.dart';
 import 'components/player/player_controller.dart';
 import 'rooms/room_graph.dart';
 import 'systems/fever_controller.dart';
+import 'systems/object_pool.dart';
 import 'systems/swarmer_pool.dart';
 import 'systems/swim_controller.dart';
+import 'systems/upgrade_controller.dart';
 import 'systems/wave_controller.dart';
 import 'world/arena.dart';
 import 'world/background.dart';
@@ -61,6 +67,18 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
   List<RoomNode> get pendingChoices => _pendingChoices;
 
+  // Upgrady (receptory/cytokiny)
+  final UpgradeController upgrades = UpgradeController();
+  final Random _rng = Random();
+  List<UpgradeDef> _pendingUpgrades = [];
+  bool             _upgradePending  = false;
+
+  List<UpgradeDef> get pendingUpgrades => _pendingUpgrades;
+
+  // Pool na ATP pickupy
+  final ObjectPool<AtpPickup> _pickupPool =
+      ObjectPool<AtpPickup>(factory: AtpPickup.new, initialSize: 16);
+
   @override
   Color backgroundColor() => const Color(0xFF0D1F0D);
 
@@ -98,6 +116,8 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
     _player.onAbilityUsed = _fever.onAbility;
     _player.feverGetter   = () => _fever.snapshot;
+    _player.upgrades      = upgrades;
+    _player.onFeverRise   = _fever.riseBy;
 
     _swarmerPool = SwarmerPool(onPlayerContact: _onEnemyHitPlayer);
     _swarmerPool.prewarm(Balance.maxActiveEnemies, _player);
@@ -159,13 +179,32 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     }
     if (_currentNode?.children.isEmpty ?? false) {
       _triggerRunWon();
+      return;
     }
+    _offerUpgrades();
+  }
+
+  /// Po vyčištění místnosti nabídni výběr upgradu (1 z N).
+  void _offerUpgrades() {
+    final offer = upgrades.rollOffer(_rng, Balance.upgradeChoicesOffered);
+    if (offer.isEmpty) return; // všechno už vlastníme
+    _pendingUpgrades = offer;
+    _upgradePending  = true;
+    overlays.add('upgradeChoice');
+  }
+
+  void chooseUpgrade(UpgradeDef def) {
+    upgrades.acquire(def.id);
+    _pendingUpgrades = [];
+    _upgradePending  = false;
+    overlays.remove('upgradeChoice');
   }
 
   void _checkGateEntry() {
     if (_waves.phase != WavePhase.cleared) return;
     if (_transitioning) return;
     if (_pendingChoices.isNotEmpty) return;
+    if (_upgradePending) return; // nejdřív vybrat upgrade
     if (_runWon || _gameOver) return;
     if (!_isPlayerAtGate()) return;
 
@@ -224,12 +263,13 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     );
   }
 
-  void _doRoomReset(RoomNode next) {
-    _currentNode = next;
-    _roomNumber++;
-
-    // Vrať swarmery do poolu, odstraň zbytek (boss, projektily, částice)
+  /// Vrať poolované komponenty a odstraň zbytek (boss, projektily, částice).
+  void _clearRoomEntities() {
     _swarmerPool.releaseAll(_activeWorld);
+    for (final p in _activeWorld.children.whereType<AtpPickup>().toList()) {
+      p.removeFromParent();
+      _pickupPool.release(p);
+    }
     _activeWorld.children
         .where((c) =>
             c is! Player &&
@@ -241,6 +281,13 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
             c is! Swarmer)
         .toList()
         .forEach((c) => c.removeFromParent());
+  }
+
+  void _doRoomReset(RoomNode next) {
+    _currentNode = next;
+    _roomNumber++;
+
+    _clearRoomEntities();
 
     _player.position = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
     _trail.clear(); // ať teleport na střed nenakreslí pruh přes arénu
@@ -268,6 +315,17 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
   void _onEnemyHitPlayer() {
     _fever.onHit();
     triggerHitStop();
+  }
+
+  /// Drop ATP pickupu na místě smrti nepřítele.
+  void _spawnAtpDrop(Vector2 pos, EnemyArchetype archetype) {
+    if (archetype.atpDrop <= 0) return;
+    final pickup = _pickupPool.acquire();
+    pickup.resetForPool(pos, archetype.atpDrop, _player, (p) {
+      p.removeFromParent();
+      _pickupPool.release(p);
+    });
+    _activeWorld.add(pickup);
   }
 
   void triggerHitStop() => _hitStopTimer = Balance.hitStopDuration;
@@ -341,7 +399,11 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _arena.phase = _waves.phase;
 
     final activeEnemies = _activeWorld.children.whereType<Enemy>().length;
-    _fever.update(dt, activeEnemies: activeEnemies);
+    _fever.update(
+      dt,
+      activeEnemies: activeEnemies,
+      extraDecay:    upgrades.feverDecayBonus,
+    );
 
     if (_fever.snapshot.zone == FeverZone.hyper ||
         _fever.snapshot.zone == FeverZone.critical) {
@@ -369,6 +431,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
   void _wireNewEnemies() {
     for (final e in _activeWorld.children.query<Enemy>()) {
       e.onHitCallback ??= triggerHitStop;
+      e.onDrop        ??= _spawnAtpDrop;
     }
   }
 
@@ -385,25 +448,18 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _hitStopTimer  = 0;
     _wavesCleared  = 0;
     _roomNumber    = 0;
-    _pendingChoices = [];
+    _pendingChoices  = [];
+    _pendingUpgrades = [];
+    _upgradePending  = false;
+    upgrades.reset();
 
     overlays.remove('gameOver');
     overlays.remove('runWon');
     overlays.remove('transition');
     overlays.remove('roomChoice');
+    overlays.remove('upgradeChoice');
 
-    _swarmerPool.releaseAll(_activeWorld);
-    _activeWorld.children
-        .where((c) =>
-            c is! Player &&
-            c is! PlayerController &&
-            c is! MovementTrail &&
-            c is! ArenaComponent &&
-            c is! BackgroundLayer &&
-            c is! WaveController &&
-            c is! Swarmer)
-        .toList()
-        .forEach((c) => c.removeFromParent());
+    _clearRoomEntities();
 
     _player.position = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
     _player.reset();

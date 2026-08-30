@@ -11,7 +11,8 @@ class EnemyArchetype {
     required this.contactDamage,
     required this.feverRiseOnHit,
     required this.radius,
-    required this.xpDrop,
+    required this.atpDrop,
+    this.knockbackResist = 0.0,
   });
 
   final EnemyType type;
@@ -20,7 +21,8 @@ class EnemyArchetype {
   final double    contactDamage;
   final double    feverRiseOnHit;
   final double    radius;       // hitbox
-  final int       xpDrop;
+  final double    atpDrop;      // ATP dropnuté při smrti
+  final double    knockbackResist; // 0..1, podíl potlačeného knockbacku
 }
 
 // Výchozí archetypy (tuning přes balance.dart)
@@ -31,7 +33,18 @@ const swarmerArchetype = EnemyArchetype(
   contactDamage:   8.0,
   feverRiseOnHit:  0.3,
   radius:          14.0,
-  xpDrop:          5,
+  atpDrop:         5.0,
+);
+
+const tankArchetype = EnemyArchetype(
+  type:            EnemyType.tank,
+  maxHp:           120,
+  speed:           70.0,
+  contactDamage:   15.0,
+  feverRiseOnHit:  0.4,
+  radius:          26.0,
+  atpDrop:         20.0,
+  knockbackResist: 0.7,
 );
 
 const bossArchetype = EnemyArchetype(
@@ -41,5 +54,5 @@ const bossArchetype = EnemyArchetype(
   contactDamage:   15.0,
   feverRiseOnHit:  0.5,
   radius:          40.0,
-  xpDrop:          50,
+  atpDrop:         50.0,
 );

@@ -59,14 +59,17 @@ class FeverController {
   void onHit()    => _rise(Balance.feverRisePerHit);
   void onAbility() => _rise(Balance.feverRisePerAbility);
 
+  /// Přímé zvýšení teploty (pyrogen upgrade, speciální efekty).
+  void riseBy(double amount) => _rise(amount);
+
   void setRoomClear(bool clear) => _roomClear = clear;
 
-  void update(double dt, {int activeEnemies = 0}) {
+  void update(double dt, {int activeEnemies = 0, double extraDecay = 0}) {
     // pasivní stoupání podle počtu nepřátel
     _rise(Balance.feverRisePassivePerEnemy * activeEnemies * dt);
 
     // decay
-    double decay = Balance.feverDecayBaseline;
+    double decay = Balance.feverDecayBaseline + extraDecay;
     if (_roomClear) decay += Balance.feverDecayRoomClear;
     _tempC = (_tempC - decay * dt)
              .clamp(Balance.feverMin, Balance.feverMax);

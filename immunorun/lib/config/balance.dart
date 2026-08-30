@@ -150,7 +150,7 @@ abstract final class Balance {
 
   // ── ATP / Special ability ────────────────────────────────────────────────
   static const double atpMax             = 100.0;
-  static const double atpRegen           = 8.0;   // /s (bez dropů zatím)
+  static const double atpRegen           = 3.0;   // /s (hlavní zdroj = dropy z killů)
   static const double atpSpecialCost     = 35.0;
   static const double specialDamage      = 40.0;
   static const double specialSpeed       = 800.0;  // px/s
@@ -181,4 +181,33 @@ abstract final class Balance {
   static const double feverCritMulti            = 1.5;  // hyper zóna: krit ×dmg
   static const double feverRisePerInflammatoryHit = 0.15; // °C za inflammatory zásah
   static const double feverRisePerThermalHit      = 0.25; // °C za thermal zásah
+
+  // ── Pickupy (ATP dropy z killů) ───────────────────────────────────────────
+  static const double pickupRadius       = 9.0;    // px vizuál/kolize
+  static const double pickupMagnetRadius = 140.0;  // px, odsud drift k hráči
+  static const double pickupMagnetSpeed  = 420.0;  // px/s
+  static const double pickupLifetime     = 8.0;    // s do despawnu
+  static const Color  pickupColor        = Color(0xFFF5D76E); // zlatavá (ATP)
+
+  // ── Upgrady (receptory / cytokiny) ────────────────────────────────────────
+  static const int    upgradeChoicesOffered     = 3;    // karty v nabídce
+  static const double opsonizedDamageTakenMulti = 1.25; // cíl bere +25 % dmg
+  static const double opsonizedDuration         = 4.0;  // s
+  static const double slowedSpeedMulti          = 0.6;  // −40 % rychlost
+  static const double slowedDuration            = 2.0;  // s
+  static const double pyrogenDamageMulti        = 1.2;  // +20 % dmg…
+  static const double pyrogenFeverPerShot       = 0.03; // …ale +°C za výstřel
+  static const double tregDecayBonus            = 0.15; // /s decay horečky navíc
+  static const double mitochondrieCostMulti     = 0.7;  // ATP cost specialu −30 %
+  static const double cytotoxinDamageMulti      = 1.25; // +25 % base dmg projektilu
+  static const int    membranaExtraDashCharges  = 1;    // +1 max dash náboj
+  static const Color  opsonizedRingColor        = Color(0xFFF1C40F); // žlutý ring
+
+  // ── Tank (druhý archetyp) ─────────────────────────────────────────────────
+  static const double tankContactInterval = 0.8;  // s mezi kontaktními zásahy
+  static const int    tankStartDifficulty = 1;    // od které místnosti se objeví
+  static const int    tankMaxPerWave      = 3;
+  static const int    tankSwarmerWeight   = 2;    // 1 tank ubere N swarmer slotů
+  static const Color  tankColor           = Color(0xFF9B59B6); // ametystová
+  static const Color  tankBorderColor     = Color(0xFF6C3483);
 }
