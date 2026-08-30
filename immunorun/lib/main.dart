@@ -5,7 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'game/immuno_game.dart';
 import 'ui/hud/hud_overlay.dart';
 import 'ui/input/gesture_pad.dart';
+import 'ui/overlays/main_menu_overlay.dart';
+import 'ui/overlays/pause_overlay.dart';
 import 'ui/overlays/room_choice_overlay.dart';
+import 'ui/overlays/run_end_overlays.dart';
 import 'ui/overlays/upgrade_choice_overlay.dart';
 
 void main() {
@@ -61,122 +64,19 @@ class _GameScreenState extends State<_GameScreen> {
         focusNode:  _focusNode,
         autofocus:  true,
         overlayBuilderMap: {
-          'hud':        (context, game) => const HudOverlay(),
+          'mainMenu':   (context, game) => MainMenuOverlay(game: game),
+          'pause':      (context, game) => PauseOverlay(game: game),
+          'hud':        (context, game) => HudOverlay(onPause: game.pauseGame),
           'gesture':    (_, game) => GesturePadOverlay(
                 controller: game.playerController,
               ),
-          'gameOver':   (context, game) => _GameOverOverlay(game: game),
-          'runWon':     (context, game) => _RunWonOverlay(game: game),
+          'gameOver':   (context, game) => GameOverOverlay(game: game),
+          'runWon':     (context, game) => RunWonOverlay(game: game),
           'roomChoice': (context, game) => RoomChoiceOverlay(game: game),
           'upgradeChoice': (context, game) => UpgradeChoiceOverlay(game: game),
           'transition': (context, game) => const _TransitionOverlay(),
         },
         initialActiveOverlays: const [],
-      ),
-    );
-  }
-
-}
-
-class _GameOverOverlay extends StatelessWidget {
-  const _GameOverOverlay({required this.game});
-  final ImmunoGame game;
-
-  @override
-  Widget build(BuildContext context) {
-    final waves = game.wavesCleared;
-    return Center(
-      child: Container(
-        padding:    const EdgeInsets.symmetric(horizontal: 48, vertical: 36),
-        decoration: BoxDecoration(
-          color:        Colors.black87,
-          borderRadius: BorderRadius.circular(16),
-          border:       Border.all(color: Colors.red.shade700, width: 2),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'GAME OVER',
-              style: TextStyle(
-                color:      Colors.redAccent,
-                fontSize:   36,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 4,
-              ),
-            ),
-            const SizedBox(height: 12),
-            Text(
-              waves > 0 ? 'Přežito vln: $waves' : 'Padl jsi hned.',
-              style: const TextStyle(
-                color:    Colors.white70,
-                fontSize: 16,
-              ),
-            ),
-            const SizedBox(height: 28),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green.shade700,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-              ),
-              onPressed: game.resetGame,
-              child: const Text(
-                'ZKUSIT ZNOVU',
-                style: TextStyle(fontSize: 18, letterSpacing: 2),
-              ),
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-}
-
-class _RunWonOverlay extends StatelessWidget {
-  const _RunWonOverlay({required this.game});
-  final ImmunoGame game;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        padding:    const EdgeInsets.symmetric(horizontal: 48, vertical: 36),
-        decoration: BoxDecoration(
-          color:        Colors.black87,
-          borderRadius: BorderRadius.circular(16),
-          border:       Border.all(color: Colors.green.shade400, width: 2),
-        ),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            const Text(
-              'IMMUNITA DOSAŽENA',
-              style: TextStyle(
-                color:      Color(0xFF2ECC71),
-                fontSize:   30,
-                fontWeight: FontWeight.bold,
-                letterSpacing: 3,
-              ),
-            ),
-            const SizedBox(height: 12),
-            const Text(
-              'Patogen zničen. Host přežil.',
-              style: TextStyle(color: Colors.white70, fontSize: 16),
-            ),
-            const SizedBox(height: 28),
-            ElevatedButton(
-              style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green.shade700,
-                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 14),
-              ),
-              onPressed: game.resetGame,
-              child: const Text(
-                'NOVÝ RUN',
-                style: TextStyle(fontSize: 18, letterSpacing: 2),
-              ),
-            ),
-          ],
-        ),
       ),
     );
   }

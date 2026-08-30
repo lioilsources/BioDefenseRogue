@@ -74,6 +74,9 @@ class Player extends CircleComponent with CollisionCallbacks {
   /// Přímé zvýšení horečky (pyrogen za výstřel) — FeverController.riseBy
   void Function(double amount)? onFeverRise;
 
+  /// Voláno při startu dashe (SFX)
+  void Function()? onDash;
+
   int get _maxDashCharges =>
       Balance.dashMaxCharges + (upgrades?.extraDashCharges ?? 0);
 
@@ -208,6 +211,7 @@ class Player extends CircleComponent with CollisionCallbacks {
     _dashLockout       = Balance.dashInputLockout;
     _invulnerableTimer = max(_invulnerableTimer, iframes);
     _dashHits.clear();
+    onDash?.call();
   }
 
   void _updateDashMotion(double dt) {

@@ -203,6 +203,10 @@ abstract final class Balance {
   static const int    membranaExtraDashCharges  = 1;    // +1 max dash náboj
   static const Color  opsonizedRingColor        = Color(0xFFF1C40F); // žlutý ring
 
+  // ── Audio ─────────────────────────────────────────────────────────────────
+  static const double sfxMasterVolume = 0.5;  // 0..1
+  static const double sfxMinInterval  = 0.06; // s mezi přehráním téhož sfx
+
   // ── Tank (druhý archetyp) ─────────────────────────────────────────────────
   static const double tankContactInterval = 0.8;  // s mezi kontaktními zásahy
   static const int    tankStartDifficulty = 1;    // od které místnosti se objeví

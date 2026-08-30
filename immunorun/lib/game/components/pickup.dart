@@ -22,20 +22,23 @@ class AtpPickup extends CircleComponent {
   double  _phase  = 0; // pulzování
   Player? _player;
   void Function(AtpPickup)? _onDone;
+  void Function()?          _onCollected;
 
   void resetForPool(
     Vector2 pos,
     double amount,
     Player player,
-    void Function(AtpPickup) onDone,
-  ) {
-    position = pos;
-    scale    = Vector2.all(1);
-    _life    = Balance.pickupLifetime;
-    _amount  = amount;
-    _phase   = 0;
-    _player  = player;
-    _onDone  = onDone;
+    void Function(AtpPickup) onDone, {
+    void Function()? onCollected,
+  }) {
+    position     = pos;
+    scale        = Vector2.all(1);
+    _life        = Balance.pickupLifetime;
+    _amount      = amount;
+    _phase       = 0;
+    _player      = player;
+    _onDone      = onDone;
+    _onCollected = onCollected;
   }
 
   @override
@@ -66,6 +69,7 @@ class AtpPickup extends CircleComponent {
         baseColor: Balance.pickupColor,
         speedMul:  0.6,
       ));
+      _onCollected?.call();
       _finish();
       return;
     }
@@ -76,9 +80,10 @@ class AtpPickup extends CircleComponent {
   }
 
   void _finish() {
-    final cb = _onDone;
-    _onDone  = null;
-    _player  = null;
+    final cb     = _onDone;
+    _onDone      = null;
+    _onCollected = null;
+    _player      = null;
     cb != null ? cb(this) : removeFromParent();
   }
 }

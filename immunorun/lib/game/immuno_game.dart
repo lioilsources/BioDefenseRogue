@@ -3,9 +3,11 @@ import 'dart:math';
 import 'dart:ui' as ui;
 
 import 'package:flame/components.dart';
+import 'package:flame/events.dart';
 import 'package:flame/game.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/balance.dart';
@@ -22,6 +24,7 @@ import 'components/pickup.dart';
 import 'components/player/player.dart';
 import 'components/player/player_controller.dart';
 import 'rooms/room_graph.dart';
+import 'systems/audio_controller.dart';
 import 'systems/fever_controller.dart';
 import 'systems/object_pool.dart';
 import 'systems/swarmer_pool.dart';
@@ -31,7 +34,8 @@ import 'systems/wave_controller.dart';
 import 'world/arena.dart';
 import 'world/background.dart';
 
-class ImmunoGame extends FlameGame with HasCollisionDetection {
+class ImmunoGame extends FlameGame
+    with HasCollisionDetection, KeyboardEvents {
   ImmunoGame({required this.providerContainer});
 
   final ProviderContainer providerContainer;
@@ -79,6 +83,9 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
   final ObjectPool<AtpPickup> _pickupPool =
       ObjectPool<AtpPickup>(factory: AtpPickup.new, initialSize: 16);
 
+  // Audio (SFX)
+  final AudioController audio = AudioController();
+
   @override
   Color backgroundColor() => const Color(0xFF0D1F0D);
 
@@ -118,6 +125,7 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     _player.feverGetter   = () => _fever.snapshot;
     _player.upgrades      = upgrades;
     _player.onFeverRise   = _fever.riseBy;
+    _player.onDash        = () => audio.play(Sfx.dash);
 
     _swarmerPool = SwarmerPool(onPlayerContact: _onEnemyHitPlayer);
     _swarmerPool.prewarm(Balance.maxActiveEnemies, _player);
@@ -148,9 +156,67 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     await _tryLoadFluidShader();
     await _tryLoadFeverShader();
     await _tryLoadMicroscopeShader();
+    await audio.preload();
+
+    // Boot do hlavního menu — run startuje až startRun()
+    overlays.add('mainMenu');
+    pauseEngine();
+  }
+
+  // ─── Menu / pauza ─────────────────────────────────────────────────────────
+
+  /// Start runu z hlavního menu.
+  void startRun() {
+    overlays.remove('mainMenu');
     // Gesta až po inicializaci controlleru (ochrana před LateInitializationError)
     if (!kIsWeb && !_isDesktop) overlays.add('gesture');
     overlays.add('hud');
+    resumeEngine();
+  }
+
+  void pauseGame() {
+    if (_gameOver || _runWon) return;
+    if (overlays.isActive('pause') || overlays.isActive('mainMenu')) return;
+    overlays.add('pause');
+    pauseEngine();
+  }
+
+  void resumeGame() {
+    overlays.remove('pause');
+    resumeEngine();
+  }
+
+  /// Restart runu z pauzy.
+  void restartRun() {
+    overlays.remove('pause');
+    resetGame();
+  }
+
+  /// Návrat do hlavního menu (z pauzy nebo game over/run won).
+  void returnToMenu() {
+    overlays.remove('pause');
+    resetGame();
+    overlays.remove('hud');
+    overlays.remove('gesture');
+    overlays.add('mainMenu');
+    pauseEngine();
+  }
+
+  @override
+  KeyEventResult onKeyEvent(
+    KeyEvent event,
+    Set<LogicalKeyboardKey> keysPressed,
+  ) {
+    if (event is KeyDownEvent &&
+        event.logicalKey == LogicalKeyboardKey.escape) {
+      if (overlays.isActive('pause')) {
+        resumeGame();
+      } else {
+        pauseGame();
+      }
+      return KeyEventResult.handled;
+    }
+    return KeyEventResult.ignored;
   }
 
   static bool get _isDesktop =>
@@ -299,11 +365,12 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
   void _spawnBoss() {
     _activeWorld.add(
-      MiniBoss(
+      (MiniBoss(
         player:          _player,
         feverGetter:     () => _fever.snapshot,
         onPlayerContact: _onEnemyHitPlayer,
-      )..position = Vector2(
+      )..onPhaseShift = () => audio.play(Sfx.bossPhase))
+        ..position = Vector2(
           Balance.arenaWidth / 2 + Balance.bossOrbitRadius,
           Balance.arenaHeight / 2,
         ),
@@ -315,16 +382,23 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
   void _onEnemyHitPlayer() {
     _fever.onHit();
     triggerHitStop();
+    audio.play(Sfx.playerHurt);
   }
 
   /// Drop ATP pickupu na místě smrti nepřítele.
   void _spawnAtpDrop(Vector2 pos, EnemyArchetype archetype) {
     if (archetype.atpDrop <= 0) return;
     final pickup = _pickupPool.acquire();
-    pickup.resetForPool(pos, archetype.atpDrop, _player, (p) {
-      p.removeFromParent();
-      _pickupPool.release(p);
-    });
+    pickup.resetForPool(
+      pos,
+      archetype.atpDrop,
+      _player,
+      (p) {
+        p.removeFromParent();
+        _pickupPool.release(p);
+      },
+      onCollected: () => audio.play(Sfx.pickup),
+    );
     _activeWorld.add(pickup);
   }
 
@@ -430,9 +504,19 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
 
   void _wireNewEnemies() {
     for (final e in _activeWorld.children.query<Enemy>()) {
-      e.onHitCallback ??= triggerHitStop;
-      e.onDrop        ??= _spawnAtpDrop;
+      e.onHitCallback ??= _onEnemyDamaged;
+      e.onDrop        ??= _onEnemyDied;
     }
+  }
+
+  void _onEnemyDamaged() {
+    triggerHitStop();
+    audio.play(Sfx.hit);
+  }
+
+  void _onEnemyDied(Vector2 pos, EnemyArchetype archetype) {
+    audio.play(Sfx.death);
+    _spawnAtpDrop(pos, archetype);
   }
 
   // ─── Public state ─────────────────────────────────────────────────────────
@@ -458,6 +542,8 @@ class ImmunoGame extends FlameGame with HasCollisionDetection {
     overlays.remove('transition');
     overlays.remove('roomChoice');
     overlays.remove('upgradeChoice');
+    overlays.remove('pause');
+    resumeEngine(); // game over mohl přijít během pauzy
 
     _clearRoomEntities();
 

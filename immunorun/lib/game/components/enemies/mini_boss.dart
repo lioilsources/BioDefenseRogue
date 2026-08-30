@@ -26,6 +26,9 @@ class MiniBoss extends Enemy {
   double _fireCooldown = 0;
   double _contactTimer = 0;
 
+  /// Voláno při přechodu do fáze 2 (SFX, juice)
+  void Function()? onPhaseShift;
+
   static final _orbitCenter = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
 
   static final _phase1Paint = Paint()..color = const Color(0xFFFF8C00);
@@ -54,6 +57,7 @@ class MiniBoss extends Enemy {
     if (hpFrac <= Balance.bossPhase2HpFraction || fever >= Balance.bossFeverTrigger) {
       _phase = 2;
       paint  = _phase2Paint;
+      onPhaseShift?.call();
     }
   }
 

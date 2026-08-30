@@ -52,7 +52,10 @@ class AtpNotifier extends Notifier<double> {
 final atpProvider = NotifierProvider<AtpNotifier, double>(AtpNotifier.new);
 
 class HudOverlay extends ConsumerWidget {
-  const HudOverlay({super.key});
+  const HudOverlay({super.key, this.onPause});
+
+  /// Callback pauzy (tlačítko ⏸ vpravo nahoře vedle teploměru).
+  final VoidCallback? onPause;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -70,6 +73,16 @@ class HudOverlay extends ConsumerWidget {
           child: Stack(
             children: [
               Positioned(right: 16, top: 16, child: Thermometer(snapshot: fever)),
+              if (onPause != null)
+                Positioned(
+                  right: 52,
+                  top:   12,
+                  child: IconButton(
+                    icon: const Icon(Icons.pause_circle_outline,
+                        color: Colors.white54, size: 30),
+                    onPressed: onPause,
+                  ),
+                ),
               Positioned(left:  16, top: 16, child: _HpBar(normalized: hp)),
               Positioned(left:  16, top: 52, child: _AtpBar(normalized: atp)),
               Positioned(
