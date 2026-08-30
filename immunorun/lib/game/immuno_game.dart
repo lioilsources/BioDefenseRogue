@@ -200,6 +200,7 @@ class ImmunoGame extends FlameGame
   void pauseGame() {
     if (_gameOver || _runWon) return;
     if (overlays.isActive('pause') || overlays.isActive('mainMenu')) return;
+    if (_upgradePending || _pendingChoices.isNotEmpty) return; // probíhá volba
     overlays.add('pause');
     pauseEngine();
   }
@@ -281,6 +282,7 @@ class ImmunoGame extends FlameGame
     _pendingUpgrades = offer;
     _upgradePending  = true;
     overlays.add('upgradeChoice');
+    pauseEngine();
   }
 
   void chooseUpgrade(UpgradeDef def) {
@@ -288,6 +290,7 @@ class ImmunoGame extends FlameGame
     _pendingUpgrades = [];
     _upgradePending  = false;
     overlays.remove('upgradeChoice');
+    resumeEngine();
   }
 
   void _checkGateEntry() {
@@ -309,6 +312,7 @@ class ImmunoGame extends FlameGame
     } else {
       _pendingChoices = node.children;
       overlays.add('roomChoice');
+      pauseEngine();
     }
   }
 
@@ -331,6 +335,7 @@ class ImmunoGame extends FlameGame
   void chooseDoor(RoomNode node) {
     _pendingChoices = [];
     overlays.remove('roomChoice');
+    resumeEngine();
     _beginTransition(node);
   }
 
