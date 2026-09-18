@@ -70,6 +70,13 @@ izometrie. Tohle je sweet spot pro solo Flame projekt.
 - **Death = fever > 41,5 °C** sustained, NEBO host HP na nule. Dva fail vektory, hráč
   balancuje oba.
 
+> **Revize (viz `IMMUNE_ROGUELIKE_REVIEW.md` §A2 #2, §A3):** tento model (heal jen přes
+> **fagocytózu** = melee „sežrání") je biologicky správný — makrofág *pohltí*, nestřílí.
+> **Hratelný slice ho ale porušuje**: makrofág je implementován jako generický ranged shooter
+> → hráč se učí „imunitní buňka = střílečka". Přepsat primary na melee eat+heal (úkol Fáze 3,
+> `03-PLAN` M3.4). Zároveň se v živém boji zatím **neaplikují fever buffy** (resolver je jen
+> v testech, M3.1) a **status efekty jsou mrtvý kód** (M3.3).
+
 ---
 
 ## 5. Fever-combat smyčka (unikátní vrstva)
@@ -134,6 +141,12 @@ musíš zasáhnout správný cíl (učí MHC/missing-self).
 | **Trapped** | NET | imobilizace na čas |
 | **Lysed** | perforin/MAC | execute stav pod prahem HP |
 | **Cloaked** | MHC downregulace (virus) | neviditelný pro běžné cíle, jen NK ho vidí |
+
+> **Revize (viz `REVIEW` §A2 #10):** damage type `kinetic` (v `domain/damage.dart`) není
+> biologický — přejmenovat na `phagocytic`/`mechanical` (příp. `perforin` pro lytické).
+> Pozn.: **Lysed** — perforin hlavně doručuje granzymy (spouští apoptózu), MAC je pravá
+> osmotická lýza; oboje OK. Self-damage z nadměrného zánětu je **imunopatologie**, ne
+> autoimunita (viz `REVIEW` §A2 #7).
 
 ---
 

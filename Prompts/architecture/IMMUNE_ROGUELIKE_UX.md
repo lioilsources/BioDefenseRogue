@@ -96,6 +96,12 @@ horečka) + tlačítko „Nasadit". Skip-able pro veterány (drž → instant st
 4. **Sekundární zdroje** (ATP, antigen, inflammation) — menší, dole.
 5. **Minimap** — roh, jen na vyžádání/glance.
 
+> **Revize (viz `03-PLAN-phase-3-7.md` §1):** teploměr a **inflammation** jsou **dva odlišné
+> metry** — fever = *systémový* teplotní stav (death spiral > 41,5 °C), inflammation = *lokální/
+> build-driven* stack (imunopatologie / self-damage, tlačí fever nahoru; snižuje Treg/IL-10).
+> Hratelný slice má zatím jen fever; inflammation metr přidat ve Fázi 3 jako druhý HUD prvek
+> pod teploměrem.
+
 Desktop: stejné rozložení, ovládací prvky zmizí (klávesnice + myš / gamepad).
 
 ---
@@ -189,11 +195,17 @@ Smrt nesmí být frustrující prázdno. Je to **informace** a posun:
 
 1. **Death fade** → klid, žádný „GAME OVER" křik.
 2. **Run summary** → kolik biomů, peak horečka, dominantní taktika (auto-detekováno).
-3. **MUTATION REVEAL** → klíčová obrazovka. Ukáže, **co se patogeny naučily**:
-   > „Staphylococcus přežil tvé horké runy → získal **termotoleranci**.
-   >  Tvoje ROS bursty ho už tolik nepálí (**catalase**)."
-   Vizuálně: genom patogenu s nově rozsvícenými traity. Hráč chápe *proč* a *jak* se
-   příště přizpůsobit.
+3. **MUTATION REVEAL** → klíčová obrazovka. Ukáže, **která pre-existující varianta převládla**:
+   > „U *Staphylococca* byla termotolerantní menšina vždycky přítomná — tvé horké runy jí daly
+   >  převahu. A ROS-rezistentní (**catalase**) linie se vyselektovala, protožes na ni tlačil
+   >  pořád stejně. Zkus diverzifikovat."
+   Vizuálně: populace patogenu, kde rezistentní podíl **narostl** (ne „nový trait se rozsvítil").
+   Hráč chápe *proč* (selekce, ne učení) a *jak* se příště přizpůsobit.
+
+> **Revize (viz `REVIEW` §A2 #1):** vyhnout se formulaci „patogen se **naučil** / **získal**
+> vlastnost, protože přežil" — to je lamarckovské. Správně: „rezistentní menšina tu byla už
+> předtím, tvůj tlak jí dal převahu" (Luria–Delbrück). Tahle obrazovka je nejsilnější edukační
+> moment hry — musí učit **náhodnou variaci + selekci**, ne řízenou adaptaci.
 4. **Meta odměny** → memory tokeny, případně nový unlock.
 5. **Návrat do hubu** → s jasnou radou: „Zvaž vakcinaci proti této linii."
 
