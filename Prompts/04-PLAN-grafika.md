@@ -40,7 +40,7 @@ Všechno ostatní je kreslené kódem nebo Material ikonou:
 |---------|-----|----------|
 | Vlastní buňky (hráč, budoucí leukocyty) | studená azurová / tyrkysová | ladí s trailem `#4DE8E8` |
 | Bakterie (cocci, boss S. aureus) | zlatá / okrová | „aureus" = zlatý |
-| Houby / biofilm (tank) | ametystová | dnešní `tankColor #9B59B6` |
+| Biofilm – slizová matrix (tank = shluk *S. aureus* v biofilmu) | ametystová matrix, zlaté koky uvnitř | dnešní `tankColor #9B59B6`; houby dostanou vlastní tón až s biomem 3 (rozhodnuto 2026-10-15, viz `05-kniha`/`06-sync`) |
 | ATP, odměny | teplá zlatavá | `#F5D76E` |
 | Tkáň (pozadí) | tmavá zeleno-šedá, nízký kontrast | nesmí soupeřit s entitami; dnešní `#0D1F0D` |
 
@@ -65,7 +65,7 @@ Dnešní `macrophage.png` (1334 px pro 96px sprite) je zbytečně velký — ná
 |---|-------|------|--------------|----------|
 | A | Ilustrace upgradů: opsonin, histamin, pyrogen, treg, mitochondrie, membrana, cytotoxin | 7 | `assets/images/cards/upgrade_<id>.png` | 1 |
 | B | Ilustrace místností: combat, elite, treasure, boss | 4 | `assets/images/cards/room_<type>.png` | 1 |
-| C | Sprite tank (houba/biofilm) | 1 | `assets/images/pathogens/tank.png` | 2 |
+| C | Sprite tank (shluk *S. aureus* v ametystovém biofilmu) | 1 | `assets/images/pathogens/tank.png` | 2 |
 | D | Sprite boss (shluk S. aureus) + varianta 2. fáze | 2 | `assets/images/pathogens/boss*.png` | 2 |
 | E | Projektil hráče, projektil bosse, ATP pickup | 3 | `assets/images/fx/` | 3 |
 | F | Pláty pozadí (tkáň), 2–3 paralaxní vrstvy | 2–3 | `assets/images/bg/` | 3 |
@@ -86,7 +86,7 @@ Námět každé karty (co má být na obrázku):
 | Membránová fluidita | zvlněná lipidová dvojvrstva |
 | Cytotoxické granule | tmavé granule s perforinem prorážející membránu |
 | Boj | roj koků |
-| Elite | koky + houbový tank |
+| Elite | koky + tank (shluk koků v ametystové slizové matrix) |
 | Léčení | zdravá tkáň, zlatavé ATP |
 | Boss | velký shluk S. aureus |
 

@@ -4,14 +4,29 @@ Každá má navrženou odpověď; implementace se jí drží, dokud vlastník ne
 
 ## Před S1
 
-- **OQ-1 Biologie tanku.** Plán grafiky říká „houba / biofilm", `killedByLabelCz` říká jen
-  „tankovi", archetypy bossů v `architecture/` dávají houbu až do biomu 3 (*Aspergillus*) a
-  biofilm bakteriím *S. aureus* v biomu 1. Návrh: v biomu 1 je tank **shluk *S. aureus* s
-  biofilmem** (bakterie, ne houba), kapitola 3; houba přijde s biomem 3 jako `planned`. Plán grafiky
-  §1 a §2 (ametystová = houby) pak upravit, nebo tank přebarvit do okrové.
-- **OQ-2 Comba bez biologie.** Charge dash, juke, radiální nova. Návrh: `LoreKind.ability` jen pro
-  pohyb a special (membrána, degranulace); comba zůstávají mimo registr, dokud nedostanou výklad
-  (nova = degranulace žírné buňky je nabízející se, ale až s eosinofilem/žírnou buňkou jako postavou).
+- **OQ-1 Biologie tanku – ROZHODNUTO 2026-10-15.** Tank v biomu 1 je **shluk *Staphylococcus
+  aureus* v biofilmu** (bakterie, ne houba); houba přijde s biomem 3 (*Aspergillus*) jako `planned`.
+  Registr: `enemy.tank`, `nameCz` „Biofilm (shluk stafylokoků)", `realityCz`: biofilm je sliz
+  (extracelulární matrix), ve kterém bakterie drží pohromadě a obránci i antibiotika se k nim hůř
+  dostanou; proto tank snese víc a hůř se odstrčí (`knockbackResist`). Plán grafiky §1, §2 upraven:
+  ametystová = slizová matrix, zlaté koky uvnitř; houby dostanou vlastní tón až s biomem 3.
+- **OQ-2 Comba – ROZHODNUTO 2026-10-15: dostanou biologický výklad.** Mapování podle toho, co
+  combo mechanicky dělá (`balance.dart` §Combo), ne podle názvu:
+
+  | Combo | Mechanika ve hře | Záznam | Biologie | `realityCz` (honesty box) | Kapitola |
+  |---|---|---|---|---|---|
+  | Dash (flick) | rychlý posun, i-frames, 3 náboje | `ability.dash` | membránová fluidita, améboidní pohyb | buňka „neuhýbá" rychleji než bakterie; neporazitelnost je herní | 9 |
+  | Nabitý dash (dvojflick) | delší a rychlejší průjezd, poškozuje, co projede | `ability.chargeDash` | **panožky (pseudopodia) a aktinový skelet** – makrofág se „přelije" dopředu a obalí, čeho se dotkne | makrofág do bakterií nenaráží, obaluje je; „průjezdový damage" je zkratka pro pohlcení za pohybu | 9 (pohyb), 4 (pohlcení) |
+  | Juke (flick tam a zpět) | 1 náboj, neporazitelnost 0,45 s, pulz poškození v okruhu | `ability.oxidativeBurst` | **oxidativní vzplanutí (ROS)** – buňka kolem sebe uvolní reaktivní formy kyslíku | ROS poškozují i vlastní tkáň; nic jako neporazitelnost neexistuje, buňka se jen krátce „stáhne" | 4 |
+  | Nova (kruhové gesto) | 12 střel do všech stran, stojí ATP | `ability.lysozymeBurst` | **lysozym** – enzym, který štěpí stěnu bakterií; makrofág ho vylučuje do okolí (je i v slzách a slinách) | lysozym není střela, je to molekula v tekutině kolem buňky; „12 střel" je jen obrázek pro „všemi směry" | 4 |
+  | Special (drag) | vějíř 3 střel, stojí ATP | `ability.special` | sekreční granule (cytotoxické látky, NO) | makrofág nestřílí; vylučuje látky směrem k cíli | 4, 10 |
+
+  Poznámky: (a) `architecture/SYSTEMS.md` §3.1 dává ROS burst neutrofilu jako special, který stojí
+  život; to není rozpor – makrofágy ROS tvoří také, jen slaběji; až přijde neutrofil, bude mít
+  vlastní záznam `ability.oxidativeBurst.neutrophil` a kniha v kapitole 2 vysvětlí rozdíl.
+  (b) Všechna čtyři tvrzení o biologii (panožky/aktin, ROS, lysozym, sekrece) jsou učebnicová
+  (Janeway kap. 3, Hořejší kap. o fagocytóze) – Opus doplní `sourceRef` v S1; do té doby `TODO-FACT`.
+  (c) Lysozym v slzách a slinách je „Věděl/a jsi" kapitoly 4.
 - **OQ-3 Název zóny horečky v HUD.** Dnes HUD ukazuje jen číslo a barvu. Návrh: název zóny z
   registru jako tooltip při dlouhém stisku (stejná interakce jako deep-link do knihy), ne stálý text.
 

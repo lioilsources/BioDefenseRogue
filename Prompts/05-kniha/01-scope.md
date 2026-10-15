@@ -44,11 +44,12 @@ Nic navíc – kniha má 12 kapitol, ne 40.
 | Motiv ve hře | Kde ve hře | Stav | Kapitola |
 |---|---|---|---|
 | Hráč = makrofág (SEM sprite) | `components/player` | dnes | 2, 4 |
-| Roj koků (swarmer), tank (houba/biofilm), mini-boss *S. aureus* | `enemies/` | dnes | 3 |
+| Roj koků (swarmer), tank (shluk *S. aureus* v biofilmu), mini-boss *S. aureus* | `enemies/` | dnes | 3 |
 | Horečka 36,5–42 °C, zóny 38 / 40 / 41,5, smrt horečkou | `fever_controller.dart`, teploměr v HUD | dnes | 5 |
 | Upgrady: Opsonizace (IgG), Histamin, Pyrogen (IL-6), Treg (IL-10), Mitochondrie, Membránová fluidita, Cytotoxické granule | `domain/upgrade.dart` | dnes | 6, 7, 8, 9, 10 |
 | Status efekty: opsonized, slowed (inflamed, trapped, stunned připravené) | `domain/status_effects.dart` | dnes | 6, 8 |
 | ATP jako měna | `pickup.dart` | dnes | 9 |
+| Comba: nabitý dash (panožky), juke (oxidativní vzplanutí, ROS), nova (lysozymová salva) | `player.dart`, `gesture_pad.dart` | dnes | 4, 9 |
 | Typy poškození: kinetic, inflammatory, toxic, thermal | `domain/damage.dart` | dnes | 10 |
 | Místnosti tkáně: combat / elite / treasure / boss; epitel jako biom 1 | `room_type.dart`, `room_graph.dart` | dnes | 1 |
 | Paměťové buňky, vakcinace proti tomu, co tě zabilo | `domain/meta_progress.dart` | dnes | 12 |
@@ -76,10 +77,12 @@ v kapitole 12 („Co bude dál").
 - **2. Bílé krvinky: tým obránců** – makrofág (ty), neutrofil, NK buňka, B buňka, T buňka,
   dendritická buňka, žírná buňka. Každá má „povolání" a jednu větu. Mapa vrozené vs. získané imunity.
 - **3. Nepřátelé: bakterie, viry, houby** – koky a *Staphylococcus aureus* („zlatý" – proč zlatý,
-  biofilm), chřipkový virus (potřebuje tvoje buňky), *Aspergillus* (spory ve vzduchu). Proč jsou
-  ve hře tank a boss tak, jak jsou. *Věděl/a jsi: většina bakterií v těle je kamarád (mikrobiom).*
+  biofilm), chřipkový virus (potřebuje tvoje buňky), *Aspergillus* (spory ve vzduchu). Biofilm:
+  sliz, ve kterém se koky schovají před obránci (tank). Proč jsou ve hře tank a boss tak, jak jsou. *Věděl/a jsi: většina bakterií v těle je kamarád (mikrobiom).*
 - **4. Sežrat nepřítele: fagocytóza** – jak makrofág pohltí bakterii, co se děje uvnitř
-  (fagozom, lysozom), ROS. Proč hráč „střílí", když doopravdy žere. *Honesty box.*
+  (fagozom, lysozom), ROS. Co makrofág pouští i kolem sebe: ROS (oxidativní vzplanutí = juke) a
+  lysozym (nova). Proč hráč „střílí", když doopravdy žere. *Honesty box.* *Věděl/a jsi: lysozym máš
+  i v slzách a slinách.*
 
 **Část III – Jak to funguje**
 - **5. Horečka: kamarád, ne nepřítel** – kdo ji zapíná (pyrogeny, IL-6, hypotalamus), proč 38 °C
@@ -93,7 +96,7 @@ v kapitole 12 („Co bude dál").
 - **8. Protilátky a značkování (opsonizace)** – tvar Y, jak sedí na nepřítele jako klíč do zámku,
   IgG, IgA, IgM, IgE jednou větou. Proč ve hře označený nepřítel bere víc poškození.
 - **9. Energie buňky: ATP, mitochondrie, membrána** – ATP jako baterie, mitochondrie jako
-  elektrárna, membrána jako pružná stěna (dash). *Honesty box: ATP se nesbírá z mrtvých bakterií.*
+  elektrárna, membrána jako pružná stěna (dash), panožky a aktin jako „nohy" buňky (nabitý dash). *Honesty box: ATP se nesbírá z mrtvých bakterií.*
 - **10. Zabijácké buňky: granule, perforin, cytotoxiny** – NK a CD8 T buňky, jak se zabije
   infikovaná vlastní buňka a proč je to nutné. Typy poškození ve hře vs. skutečné mechanismy.
 
