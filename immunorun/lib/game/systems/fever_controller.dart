@@ -2,6 +2,9 @@
 // FeverController je update-loop kompatibilní (volá se s dt z FlameGame).
 
 import '../../config/balance.dart';
+import '../../domain/fever_zone.dart';
+
+export '../../domain/fever_zone.dart';
 
 class FeverSnapshot {
   const FeverSnapshot({
@@ -16,8 +19,6 @@ class FeverSnapshot {
   final FeverZone zone;
   final double    atkSpeedMulti;
 }
-
-enum FeverZone { normal, febrile, hyper, critical }
 
 class FeverController {
   FeverController() : _tempC = Balance.feverMin;
