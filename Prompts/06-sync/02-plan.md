@@ -1,6 +1,7 @@
 # IMMUNORUN – Synchronizace hry a knihy: implementační plán pro Opus (v0.1, 2026-10-15)
 
-Vstup: [01-scope.md](01-scope.md), [ADR/](ADR/), `../05-kniha/02-plan.md` (milníky K0–K7).
+Vstup: [01-scope.md](01-scope.md), [ADR/](ADR/), [03-mechaniky-z-biologie.md](03-mechaniky-z-biologie.md),
+`../05-kniha/02-plan.md` (milníky K0–K7).
 Tento plán **upřesňuje K1 (validace) a nahrazuje K5 (razítka)** a přidává to, co kniha sama
 nepokrývá: CI na PR, registr pojmů, placeholdery, proces.
 
@@ -83,10 +84,12 @@ Acceptance: PR s rozbitým testem je červený; tento PR sám je zelený; doba b
   - `upgrade.*` (7), `enemy.swarmer|tank|boss` (+ `enemy.boss.phase2`), `status.opsonized|slowed`
     (ostatní 3 jako `planned`), `damage.kinetic|inflammatory|toxic|thermal`,
     `fever.normo|febrile|hyper|critical`, `room.combat|elite|treasure|boss`,
-    `meta.memoryCells|vaccination`, `ability.phagocytosis|dash|special`, `resource.atp`,
+    `meta.memoryCells|vaccination`, `ability.phagocytosis|dash|chargeDash|juke|nova|special`,
+    `resource.atp`,
     `mechanic.microscope` (falešné barvy SEM).
   - `realityCz` tam, kde hra lže (horečka a rychlost útoku, střílející makrofág, ATP z mrtvol,
-    vakcinace jako +dmg, histamin jako zpomalení nepřítele, „tank = houba" dokud není rozhodnuto).
+    vakcinace jako +dmg, histamin jako zpomalení nepřítele, juke s neporazitelností, lysozym jako
+    střely). Tank je shluk *S. aureus* v biofilmu, ne houba (OQ-1 rozhodnuto).
   - `chapter`/`anchor` podle osnovy 05-kniha §4 (kapitoly ještě neexistují – kotvy se ověří v S2).
 - `UpgradeDef`: `nameCz`/`descCz` jako gettery přes `lore.byRef(id)`; `killedByLabelCz` z lore;
   HUD název zóny horečky z lore. Žádná kopie textu.
@@ -94,6 +97,9 @@ Acceptance: PR s rozbitým testem je červený; tento PR sám je zelený; doba b
   a aktivní `StatusEffect` má právě jeden záznam s `ref`; id unikátní; `nameCz` unikátní; každý
   `live` záznam má `chapter`; každý záznam s `realityCz` má `sourceRef`.
 - Dočasně `inGameCz` smí obsahovat čísla natvrdo (S2 je nahradí) – test to zatím nehlídá.
+- Pole `lie: none|small|large` u každého záznamu; `large` jen tam, kde to říká
+  `03-mechaniky-z-biologie.md` §1 (nebo nový nález – pak ho tam dopiš). Výstup S1 obsahuje seznam
+  `large` záznamů pro vlastníka k rozhodnutí podle §3 téhož dokumentu.
 Acceptance: hra vypadá stejně (karty, game-over, HUD beze změny textu); `grep` nenajde
 „Opsonizace (IgG)" mimo `lore.dart`; test úplnosti zelený a padá po přidání `EnemyType.x` bez záznamu.
 
@@ -205,6 +211,5 @@ test přechodu `planned → live` padá, když enum přibyde bez přepnutí.
 | Co | K čemu | Kdy |
 |---|---|---|
 | Branch protection na `main` vyžadující `ci` | S0 má smysl jen s ní | po S0 |
-| Rozhodnout biologii tanku (houba vs. biofilm *S. aureus*) – OQ-1 | `realityCz` a kapitola 3 | před S1 |
-| Rozhodnout, zda comba (charge dash, juke, nova) dostanou biologický výklad – OQ-2 | rozsah registru | před S1 |
+| ~~OQ-1 biologie tanku, OQ-2 comba~~ | rozhodnuto 2026-10-15, viz `open-questions.md` | hotovo |
 | Garant dostane `lore_report --render` místo surového Markdownu | recenze bez placeholderů | od S4 |

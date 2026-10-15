@@ -57,6 +57,10 @@ opsat ručně a ruční opis se rozejde.
    skryté. Když mechanika přistane v kódu, test vynutí přepnutí na `live` a dopsání textu.
 6. **Proces.** Definice hotového pro každé herní PR, které sahá na `domain/`: záznam v registru,
    kapitola nebo kotva, zelený sync test. Zapsáno v `CLAUDE.md` a v PR šabloně.
+7. **Opačný směr: biologie jako zdroj designu.** Kde by honesty box musel popřít hlavní dojem
+   z mechaniky, je levnější upravit mechaniku. Každý záznam nese `lie: none|small|large`; `large`
+   má návrh úpravy v [03-mechaniky-z-biologie.md](03-mechaniky-z-biologie.md) a nové mechaniky
+   začínají od `realityCz`, ne od gesta.
 
 ---
 
@@ -65,13 +69,14 @@ opsat ručně a ruční opis se rozejde.
 **Synchronizuje se (má záznam v registru):**
 - upgrady, nepřátelé a bossové (včetně fází), status efekty, typy poškození, zóny horečky,
   místnosti/biomy, meta mechaniky (paměťové buňky, vakcinace), zdroje (ATP), schopnosti hráče
-  s biologickým předobrazem (fagocytóza = primary, dash = membrána, special = degranulace),
+  s biologickým předobrazem (fagocytóza = primary, dash = membrána, nabitý dash = panožky,
+  juke = oxidativní vzplanutí ROS, nova = lysozymová salva, special = sekreční granule;
+  rozhodnuto 2026-10-15, mapování v `open-questions.md` OQ-2),
 - budoucí: leukocyty jako postavy, mutace a rezistence, Th polarizace, lymfatická uzlina, cytokinová
   bouře, sepse.
 
 **Nesynchronizuje se (bez záznamu, nebo `LoreKind.gameOnly`):**
 - čistě herní pojmy bez biologie: hit-stop, knockback, kamera, gesta, pooly, obtížnost vln,
-  comba (charge dash, juke, nova) – pokud nedostanou biologický výklad (OQ-2),
 - tuning hodnoty bez narativu (rychlost px/s, poloměr hitboxu).
 
 Pravidlo: **co má české jméno viditelné hráčem, je v registru.** Co hráč nikdy nepojmenované
@@ -97,6 +102,7 @@ class LoreEntry {
   final String?     anchor;      // 'opsonizace' – nadpis v kapitole
   final Object?     ref;         // UpgradeId.opsonin | EnemyType.tank | StatusEffect.opsonized … (pro test úplnosti)
   final String?     sourceRef;   // 'HB2015 s.112' – zdroj pro realityCz (05-kniha/sources.md)
+  final LieSize     lie;         // none | small | large – viz 03-mechaniky-z-biologie.md
 }
 ```
 
@@ -156,3 +162,7 @@ Nikdy opačně: kniha nic do hry neposílá, kvíz nic neodemyká (05-kniha ADR 
 5. Plánované mechaniky mají záznam `planned` a pahýl kapitoly; release je skrývá.
 6. Granularita razítek: per záznam (ne per kapitola); kapitola je „potkaná", když má aspoň jeden
    potkaný záznam.
+7. Tank v biomu 1 je shluk *Staphylococcus aureus* v biofilmu (bakterie); houba přijde až s biomem 3
+   (rozhodnuto vlastníkem 2026-10-15, OQ-1).
+8. Comba mají biologický výklad a záznam v registru: nabitý dash = panožky (aktin), juke =
+   oxidativní vzplanutí (ROS), nova = lysozymová salva (rozhodnuto vlastníkem 2026-10-15, OQ-2).
