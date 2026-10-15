@@ -5,9 +5,12 @@ vlastník nerozhodne jinak.
 
 ## Před K2
 
-- **OQ-1 Název knihy.** Pracovně „Kniha imunity". Alternativy: „Atlas obránce", „Příručka
-  makrofága", „Co se děje uvnitř". Návrh: *Kniha imunity* (tlačítko v menu „KNIHA"); název je jen
-  text v `assets/book/cs/`, změna je levná.
+- **OQ-1 Název knihy – pracovní název určen vlastníkem 2026-10-15: *Lexikon zdraví*.** Dřívější
+  návrh „Kniha imunity" a alternativy („Atlas obránce", „Příručka makrofága", „Co se děje uvnitř")
+  padají. Otevřené zůstává: popisek tlačítka v menu (návrh „LEXIKON") a pravopis – vlastník
+  napsal „Lexikon Zdravi"; navrhuji „Lexikon zdraví" (velké jen první písmeno, s diakritikou).
+  Název je jen text v `assets/book/cs/`, změna je levná; dokumenty v `05-kniha/` a `06-sync/`
+  zatím říkají „Kniha imunity" – přejmenují se, až bude název finální.
 - **OQ-6 Jedna, nebo dvě čtenářské úrovně?** Návrh: jedna (≈ 12 let) + boxy „Pro zvědavé" pro
   13–15. Dvě paralelní verze textu by zdvojnásobily práci garanta.
 

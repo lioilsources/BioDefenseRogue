@@ -48,3 +48,44 @@ Každá má navrženou odpověď; implementace se jí drží, dokud vlastník ne
   blokovalo (žádné `Cz` v id, jen v názvech polí).
 - **OQ-7 Report v appce.** `lore_report` běží jen z terminálu. Návrh: nepřidávat debug obrazovku do
   appky; stačí nástroj a CI artefakt.
+
+## Z implementace S1 (2026-10-15)
+
+Rozhodnuto podle návrhu a implementováno; vlastník může změnit.
+
+- **OQ-8 Id comb.** `02-plan.md` S1 uvádí `ability.juke|nova`, OQ-2 (závazné) `ability.oxidativeBurst|
+  lysozymeBurst`. Návrh a stav: platí id z OQ-2; v plánu S1 opravit při příští revizi.
+- **OQ-9 „Special" (vějíř 3 střel) ve hře už není.** ATP dnes utrácí jen nova (kruhové gesto / E);
+  `Balance.specialBurstCount` a `specialBurstSpread` nikdo nečte. Karta Mitochondrie („Speciální
+  útok stojí o 30 % méně ATP") tím fakticky mluví o nově. Stav: `ability.special` je `retired`.
+  Návrh: osiřelé konstanty odstranit v herním PR; v S2 (placeholdery) přepsat text karty na název
+  z registru (`ability.lysozymeBurst`).
+- **OQ-10 Pády a skloňování.** Game-over potřebuje 3. pád („imunizace proti tankovi"). Stav: pole
+  `dativeCz` u záznamů, které mohou zabít (`enemy.*`, `mechanic.fever`). Rozpor: tank je v registru
+  „Biofilm (shluk stafylokoků)", ale 3. pád je „tankovi" – nechán kvůli acceptance S1 (texty beze
+  změny). Návrh: v S2 změnit na „biofilmu". Dál zůstává mimo registr „+N paměťových buněk"
+  (2. pád množ.); návrh: přeformulovat na „Paměťové buňky: +N" místo dalšího pole pro pády.
+- **OQ-11 Zastřešující `mechanic.fever`.** Plán S1 má jen zóny `fever.*`; příčina smrti „fever"
+  (kritická zóna i HP drain ve vysoké horečce) potřebuje jeden záznam. Stav: přidán
+  `mechanic.fever` „Horečka" (kapitola 5, kotva `horecka`).
+- **OQ-12 `planned` záznam s existujícím enumem.** `StatusEffect.inflamed|trapped|stunned` a
+  `DamageType.toxic|thermal` v kódu existují, ale nemají gameplay. Pravidlo S5 („`planned` nesmí
+  mít `ref`, který v kódu existuje") by je zakázalo. Stav v S1: `planned` = ref existuje, ale bez
+  gameplay. U statusů to test ověřuje oběma směry (`statusBaseDuration == 0`); u typů poškození
+  doména neumí poznat, zda je nějaký útok používá, takže se nekontroluje. Návrh pro S5:
+  přeformulovat pravidlo na „gameplay-aktivní ref ⇒ `live`", s predikátem per enum.
+- **OQ-13 Id bosse.** S1 seznam říká `enemy.boss`, OQ-5 navrhuje `enemy.boss.staph`. Stav:
+  `enemy.boss` (+ `enemy.boss.phase2`), `nameCz` podle OQ-5 „Zlatý stafylokok (boss)".
+- **OQ-14 Název zóny v HUD.** HUD dnes název zóny nezobrazuje (jen číslo a barvu), takže v S1
+  nebylo co přepojit. Názvy zón jsou v registru připravené pro tooltip z OQ-3. Pozn.: „Vysoká
+  horečka" místo „hypertermie" – hypertermie je medicínsky jiný stav než horečka.
+- **OQ-15 Čísla v UI mimo registr.** `run_end_overlays.dart` má natvrdo „(+15 % dmg)" (=
+  `Balance.vaccinationDamageBonus`). Návrh: S2 placeholder.
+- **OQ-16 Zdroje.** Všechny `realityCz` mají zatím `sourceRef: 'TODO-FACT: <kandidátní zdroj>'`
+  (bez čísel stran – ty doplní K0 v `05-kniha/sources.md`). Podle 05-kniha ADR 0003 je to
+  blokátor release; S4 přidá test, že `sourceRef` existuje v `sources.md`.
+- **OQ-17 Hraniční hodnocení `lie`.** Jako `small` označeny, ale vlastník může zvýšit na `large`:
+  `enemy.swarmer` (stafylokoky nemají bičík, za obráncem se nehoní), `meta.memoryCells`
+  (paměť je specifická pro jednoho nepřítele, ne obecné +HP), `upgrade.cytotoxin` (granule má
+  NK/CD8 T, ne makrofág). Nový `large` nález: `enemy.boss.phase2` – zapsán do
+  `03-mechaniky-z-biologie.md` §1.
