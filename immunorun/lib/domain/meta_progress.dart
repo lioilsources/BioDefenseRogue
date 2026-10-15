@@ -5,6 +5,7 @@ import 'dart:math';
 
 import '../config/balance.dart';
 import 'enemy_archetype.dart';
+import 'lore.dart';
 
 class MetaProgress {
   const MetaProgress({
@@ -66,11 +67,10 @@ EnemyType? vaccinationTarget(String? killedBy) => switch (killedBy) {
       _         => null,
     };
 
-/// Český popisek zabijáka pro game-over hint.
-String? killedByLabelCz(String? killedBy) => switch (killedBy) {
-      'swarmer' => 'roji (cocci)',
-      'tank'    => 'tankovi',
-      'boss'    => 'bossovi',
-      'fever'   => 'horečce',
-      _         => null,
-    };
+/// Český popisek zabijáka pro game-over hint (3. pád z registru pojmů).
+String? killedByLabelCz(String? killedBy) {
+  final target = vaccinationTarget(killedBy);
+  if (target != null) return lore.byRef(target).dativeCz;
+  if (killedBy == 'fever') return lore.byId('mechanic.fever').dativeCz;
+  return null;
+}

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/lore.dart';
 import '../../domain/room_type.dart';
 import '../../game/immuno_game.dart';
 
@@ -51,12 +52,7 @@ class _DoorButton extends StatelessWidget {
   final RoomNode   node;
   final ImmunoGame game;
 
-  static String _label(RoomType t) => switch (t) {
-        RoomType.combat   => 'BOJ',
-        RoomType.elite    => 'ELITE',
-        RoomType.treasure => 'LÉČENÍ',
-        RoomType.boss     => 'BOSS',
-      };
+  static String _label(RoomType t) => lore.byRef(t).nameCz.toUpperCase();
 
   static IconData _icon(RoomType t) => switch (t) {
         RoomType.combat   => Icons.gps_fixed,

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../config/balance.dart';
+import '../../domain/lore.dart';
 import '../../game/systems/fever_controller.dart';
 import '../../game/systems/wave_controller.dart';
 import 'thermometer.dart';
@@ -216,7 +217,7 @@ class _AtpBar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'ATP  [E]',
+          '${lore.byId('resource.atp').nameCz}  [E]',
           style: TextStyle(
             color:    ready ? const Color(0xFF3498DB) : Colors.white38,
             fontSize: 11,
