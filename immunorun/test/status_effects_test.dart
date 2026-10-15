@@ -5,7 +5,7 @@ import 'package:immunorun/domain/status_effects.dart';
 void main() {
   group('Status efekty', () {
     test('bez statusů jsou multiplikátory 1.0', () {
-      expect(damageTakenMultiOf([]), 1.0);
+      expect(damageTakenMultiOf([]), 2.0); // ZÁMĚRNĚ ROZBITO (ověření CI)
       expect(speedMultiOf([]), 1.0);
     });
 
