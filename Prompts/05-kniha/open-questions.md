@@ -16,13 +16,13 @@ vlastník nerozhodne jinak.
 - **OQ-11 Front matter jako YAML.** K1 předpokládá „YAML-like blok“. Návrh: skutečný YAML přes
   balíček `yaml` (čistý Dart, od týmu Dartu). Vlastní parser kvízu by byl další formát k údržbě.
   Standard §2 a vzorová kapitola už YAML používají.
-- **OQ-12 Desetinná čárka.** Karty upgradu dnes ukazují `0.15 °C/s` s tečkou (text z S1, beze
+- **OQ-12 Desetinná čárka. (S2: hotovo)** Karty upgradu dnes ukazují `0.15 °C/s` s tečkou (text z S1, beze
   změny). Návrh: render placeholderů v S2 píše česky (`0,15`) a karty tím přejdou na čárku
   samy. Tuhle viditelnou změnu textu udělá S2 záměrně.
 - **OQ-13 `game_refs` → `lore`.** Plán K0 jmenuje pole `game_refs`, plán synchronizace
   (06-sync scope §4) `lore:` s id registru. Návrh: jen `lore`, protože registr už kryje enumy
   i pojmy bez enumu. Standard §2.
-- **OQ-14 Názvy pojmů v kapitolách.** Kapitola píše „karta Pyrogen (IL-6)“ natvrdo. Když se
+- **OQ-14 Názvy pojmů v kapitolách. (S2: hotovo, `{{lore.<id>}}`, 06-sync OQ-19)** Kapitola píše „karta Pyrogen (IL-6)“ natvrdo. Když se
   název v registru změní, kapitola zastará. Návrh pro S2: placeholder `{{lore.<id>}}` → `nameCz`
   a sync test, který natvrdo psaný název z registru v kapitole najde a ohlásí. Do té doby natvrdo.
 - **OQ-15 Praktický box u horečky: kdy k lékaři.** Varianta A (použita, opatrnější): bez čísel,
@@ -30,7 +30,7 @@ vlastník nerozhodne jinak.
   hranice (teplota, počet dní, věk) podle doporučení ČPS. B je užitečnější pro rodiče, ale
   čísla v dětském textu svádějí k tomu, aby dítě rozhodovalo samo. Návrh: A v kapitole, B na
   straně pro rodiče. Rozhodne garant.
-- **OQ-16 Název zóny „Zvýšená teplota“ v registru.** Febrilní zóna hry začíná na
+- **OQ-16 Název zóny „Zvýšená teplota“ v registru. (S2: přejmenováno na „Mírná horečka“)** Febrilní zóna hry začíná na
   `Balance.feverFebrilStart` (dnes 38 °C). V češtině ale lékaři „zvýšenou teplotou“ myslí
   37–38 °C a od 38 °C mluví o horečce. Kapitola 5 to tak píše. Návrh pro S2: přejmenovat
   `fever.febrile` na „Mírná horečka“ (HUD název zóny zatím nezobrazuje, 06-sync OQ-14, změna
