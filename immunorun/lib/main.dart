@@ -3,9 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'data/meta_repository.dart';
+import 'domain/lore.dart';
 import 'domain/meta_progress.dart';
 import 'game/immuno_game.dart';
 import 'ui/book/book_overlay.dart';
+import 'ui/book/book_toast.dart';
 import 'ui/hud/hud_overlay.dart';
 import 'ui/input/gesture_pad.dart';
 import 'ui/meta_providers.dart';
@@ -105,7 +107,10 @@ class _GameScreenState extends State<_GameScreen> {
         overlayBuilderMap: {
           'mainMenu':   (context, game) => MainMenuOverlay(game: game),
           'pause':      (context, game) => PauseOverlay(game: game),
-          'hud':        (context, game) => HudOverlay(onPause: game.pauseGame),
+          'hud':        (context, game) => HudOverlay(
+                onPause:     game.pauseGame,
+                onFeverInfo: (zone) => game.openBookAt(lore.byRef(zone)),
+              ),
           'gesture':    (_, game) => GesturePadOverlay(
                 controller: game.playerController,
               ),
@@ -115,6 +120,7 @@ class _GameScreenState extends State<_GameScreen> {
           'upgradeChoice': (context, game) => UpgradeChoiceOverlay(game: game),
           'transition': (context, game) => const _TransitionOverlay(),
           'book':       (context, game) => BookOverlay(game: game),
+          'bookToast':  (context, game) => BookToast(text: game.bookToastText),
         },
         initialActiveOverlays: const [],
       ),
