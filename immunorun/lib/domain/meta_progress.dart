@@ -14,6 +14,8 @@ class MetaProgress {
     this.wins             = 0,
     this.lastKilledByType,
     this.bookFontStep     = 0,
+    this.seenLore         = const {},
+    this.lastChapter,
   });
 
   final int     memoryCells;
@@ -23,6 +25,10 @@ class MetaProgress {
   final String? lastKilledByType;
   /// Velikost písma v knize: index do Balance.bookFontScales (0 = základní).
   final int     bookFontStep;
+  /// Pojmy potkané ve hře (id registru) → razítka v knize (06-sync S3).
+  final Set<String> seenLore;
+  /// Poslední otevřená kapitola knihy.
+  final String? lastChapter;
 
   static const empty = MetaProgress();
 
@@ -37,6 +43,8 @@ class MetaProgress {
     String?  lastKilledByType,
     bool     clearLastKilledBy = false,
     int?     bookFontStep,
+    Set<String>? seenLore,
+    String?  lastChapter,
   }) =>
       MetaProgress(
         memoryCells: memoryCells ?? this.memoryCells,
@@ -46,6 +54,8 @@ class MetaProgress {
             ? null
             : (lastKilledByType ?? this.lastKilledByType),
         bookFontStep: bookFontStep ?? this.bookFontStep,
+        seenLore:     seenLore ?? this.seenLore,
+        lastChapter:  lastChapter ?? this.lastChapter,
       );
 
   Map<String, Object?> toMap() => {
@@ -54,6 +64,8 @@ class MetaProgress {
         'wins':             wins,
         'lastKilledByType': lastKilledByType,
         'bookFontStep':     bookFontStep,
+        'seenLore':         seenLore.toList()..sort(),
+        'lastChapter':      lastChapter,
       };
 
   factory MetaProgress.fromMap(Map<String, Object?> map) => MetaProgress(
@@ -62,6 +74,8 @@ class MetaProgress {
         wins:             (map['wins'] as int?) ?? 0,
         lastKilledByType: map['lastKilledByType'] as String?,
         bookFontStep:     (map['bookFontStep'] as int?) ?? 0,
+        seenLore:         {...?(map['seenLore'] as List?)?.cast<String>()},
+        lastChapter:      map['lastChapter'] as String?,
       );
 }
 
@@ -74,10 +88,14 @@ EnemyType? vaccinationTarget(String? killedBy) => switch (killedBy) {
       _         => null,
     };
 
-/// Český popisek zabijáka pro game-over hint (3. pád z registru pojmů).
-String? killedByLabelCz(String? killedBy) {
+/// Záznam registru pro příčinu smrti (game-over hint, „Co mě zabilo?").
+LoreEntry? loreForKilledBy(String? killedBy, {LoreRegistry? registry}) {
+  final reg    = registry ?? lore;
   final target = vaccinationTarget(killedBy);
-  if (target != null) return lore.byRef(target).dativeCz;
-  if (killedBy == 'fever') return lore.byId('mechanic.fever').dativeCz;
+  if (target != null) return reg.byRef(target);
+  if (killedBy == 'fever') return reg.byId('mechanic.fever');
   return null;
 }
+
+/// Český popisek zabijáka pro game-over hint (3. pád z registru pojmů).
+String? killedByLabelCz(String? killedBy) => loreForKilledBy(killedBy)?.dativeCz;

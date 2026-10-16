@@ -1,5 +1,5 @@
 // GENEROVÁNO: dart run tool/gen_balance_map.dart — needitovat ručně.
-// Zdroj: lib/config/balance.dart (static const int/double), 174 konstant.
+// Zdroj: lib/config/balance.dart (static const int/double), 177 konstant.
 
 import 'balance.dart';
 
@@ -178,4 +178,7 @@ const Map<String, num> balanceLookup = {
   'bookImageAspect': Balance.bookImageAspect,
   'bookPageTurnMs': Balance.bookPageTurnMs,
   'bookAssetsBudgetBytes': Balance.bookAssetsBudgetBytes,
+  'bookToastSeconds': Balance.bookToastSeconds,
+  'bookToastTextSize': Balance.bookToastTextSize,
+  'bookStampSize': Balance.bookStampSize,
 };

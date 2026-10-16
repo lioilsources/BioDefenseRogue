@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../book/model/book_model.dart';
 import '../../config/balance.dart';
 import 'blocks/block_view.dart';
+import 'book_overlay.dart' show chapterSeen;
 import 'book_theme.dart';
 
 /// Seznam kapitol: obálka (hero, zatím placeholder) + číslo + název.
@@ -14,8 +15,12 @@ class ChapterList extends StatelessWidget {
     required this.chapters,
     required this.onOpen,
     required this.onClose,
+    this.seenLore = const {},
+    this.lastChapter,
   });
 
+  final Set<String>            seenLore;
+  final String?                lastChapter;
   final List<Chapter>          chapters;
   final ValueChanged<Chapter>  onOpen;
   final VoidCallback           onClose;
@@ -31,7 +36,12 @@ class ChapterList extends StatelessWidget {
             itemCount: chapters.length,
             separatorBuilder: (_, _) => const SizedBox(height: 16),
             itemBuilder: (context, i) =>
-                _ChapterCard(chapter: chapters[i], onTap: () => onOpen(chapters[i])),
+                _ChapterCard(
+                  chapter: chapters[i],
+                  seen:    chapterSeen(chapters[i], seenLore),
+                  last:    chapters[i].id == lastChapter,
+                  onTap:   () => onOpen(chapters[i]),
+                ),
           ),
         ),
       ],
@@ -77,10 +87,32 @@ class _Bar extends StatelessWidget {
   }
 }
 
+/// Razítko na obálce (jen informace, nic neodemyká – ADR 0002).
+class _Stamp extends StatelessWidget {
+  const _Stamp(this.text, this.palette);
+
+  final String     text;
+  final KidPalette palette;
+
+  @override
+  Widget build(BuildContext context) => Transform.rotate(
+        angle: -0.08,
+        child: BubbleText(text, role: KidRole.upper, palette: palette,
+            size: Balance.bookStampSize),
+      );
+}
+
 class _ChapterCard extends StatelessWidget {
-  const _ChapterCard({required this.chapter, required this.onTap});
+  const _ChapterCard({
+    required this.chapter,
+    required this.onTap,
+    this.seen = false,
+    this.last = false,
+  });
 
   final Chapter      chapter;
+  final bool         seen;
+  final bool         last;
   final VoidCallback onTap;
 
   @override
@@ -102,7 +134,15 @@ class _ChapterCard extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              BookImage(file: chapter.hero, alt: chapter.title, palette: pal),
+              Stack(
+                children: [
+                  BookImage(file: chapter.hero, alt: chapter.title, palette: pal),
+                  if (seen)
+                    const Positioned(top: 10, right: 10, child: _Stamp('potkáno', KidPalette.lemon)),
+                  if (last)
+                    Positioned(top: 10, left: 10, child: _Stamp('naposledy', pal)),
+                ],
+              ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(16, 0, 16, 14),
                 child: Row(

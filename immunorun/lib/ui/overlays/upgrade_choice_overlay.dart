@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/lore.dart';
 import '../../domain/upgrade.dart';
 import '../../game/immuno_game.dart';
 
@@ -80,6 +81,14 @@ class _UpgradeCard extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
+              Align(
+                alignment: Alignment.topRight,
+                child: IconButton(
+                  tooltip:   'Co to je? (Lexikon)',
+                  icon:      const Icon(Icons.info_outline, color: c, size: 22),
+                  onPressed: () => game.openBookAt(lore.byRef(def.id)),
+                ),
+              ),
               Icon(_icon(def.id), color: c, size: 38),
               const SizedBox(height: 10),
               Text(

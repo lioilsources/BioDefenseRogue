@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import '../../book/model/book_model.dart';
 import '../../config/balance.dart';
 import 'blocks/block_view.dart';
+import 'book_overlay.dart' show seenAnchors;
 import 'book_theme.dart';
 
 /// Čtečka kapitoly: lišta (zpět, název, velikost písma), stránky (swipe),
@@ -16,7 +17,10 @@ class ChapterReader extends StatefulWidget {
     required this.onFontStep,
     required this.onBack,
     this.initialPage = 0,
+    this.seenLore = const {},
   });
+
+  final Set<String>       seenLore;
 
   final Chapter           chapter;
   final int               fontStep;
@@ -63,6 +67,8 @@ class _ChapterReaderState extends State<ChapterReader> {
               page:    c.pages[i],
               palette: pal,
               scale:   scale,
+              seen:    seenAnchors(c, widget.seenLore)
+                  .contains(c.pages[i].anchor),
             ),
           ),
         ),
@@ -77,7 +83,11 @@ class _PageView extends StatelessWidget {
     required this.page,
     required this.palette,
     required this.scale,
+    this.seen = false,
   });
+
+  /// Pojem této stránky už hráč potkal ve hře.
+  final bool seen;
 
   final BookPage       page;
   final KidPalette palette;
@@ -93,6 +103,15 @@ class _PageView extends StatelessWidget {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (seen)
+                Align(
+                  alignment: Alignment.centerRight,
+                  child: Semantics(
+                    label: 'Potkáno ve hře',
+                    child: Icon(Icons.verified, color: KidPalette.lemon.mid,
+                        size: Balance.bookBoxTitleSize * 1.6 * scale),
+                  ),
+                ),
               for (final b in page.blocks)
                 BlockView(block: b, palette: palette, scale: scale),
             ],

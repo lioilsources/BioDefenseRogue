@@ -12,6 +12,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../config/balance.dart';
 import '../domain/enemy_archetype.dart';
+import '../domain/lore.dart';
 import '../domain/meta_progress.dart';
 import '../domain/upgrade.dart';
 import '../ui/hud/hud_overlay.dart' show feverProvider, playerHpProvider, waveProvider, atpProvider;
@@ -27,6 +28,7 @@ import 'components/player/player_controller.dart';
 import 'rooms/room_graph.dart';
 import 'systems/audio_controller.dart';
 import 'systems/fever_controller.dart';
+import 'systems/lore_encounters.dart';
 import 'systems/object_pool.dart';
 import 'systems/swarmer_pool.dart';
 import 'systems/swim_controller.dart';
@@ -51,6 +53,14 @@ class ImmunoGame extends FlameGame
 
   /// Voláno při každé změně mety (konec runu, nastavení knihy) — uložení.
   final void Function(MetaProgress meta)? onMetaChanged;
+
+  /// Setkání s pojmy → razítka v knize (06-sync S3). Žije celou session.
+  late final LoreEncounters encounters =
+      LoreEncounters(seen: initialMeta.seenLore);
+
+  /// Text toastu „Nová stránka v knize" (overlay 'bookToast').
+  String bookToastText = '';
+  async.Timer? _bookToastTimer;
 
   /// Buňky získané v posledním dohraném runu (pro game-over/run-won UI).
   int lastRunCellsEarned = 0;
@@ -231,6 +241,7 @@ class ImmunoGame extends FlameGame
 
   /// Kapitola, kterou má kniha otevřít (null = seznam kapitol).
   String? bookChapterRequest;
+  String? bookAnchorRequest;
   bool    _bookPausedEngine = false;
 
   bool get isBookOpen => overlays.isActive('book');
@@ -238,19 +249,51 @@ class ImmunoGame extends FlameGame
   /// Otevře knihu nad aktuální obrazovkou (menu, pauza, game over). Když hra
   /// běží, pauzne ji a po zavření ji zase pustí (vzor modální volby f217798).
   /// Pod knihou zůstává předchozí overlay, zavření se vrátí na něj.
-  void openBook({String? chapterId}) {
+  void openBook({String? chapterId, String? anchor}) {
     if (isBookOpen) return;
     bookChapterRequest = chapterId;
+    bookAnchorRequest  = anchor;
     _bookPausedEngine  = !paused;
     pauseEngine();
     overlays.add('book');
   }
+
+  /// Deep-link na pojem registru (kapitola + kotva).
+  void openBookAt(LoreEntry entry) =>
+      openBook(chapterId: entry.chapter, anchor: entry.anchor);
 
   void closeBook() {
     if (!isBookOpen) return;
     overlays.remove('book');
     if (_bookPausedEngine) resumeEngine();
     _bookPausedEngine = false;
+  }
+
+  /// Uloží potkané pojmy; při vyčištění místnosti ukáže toast (max 1× za
+  /// místnost, mimo boj, nejde na něj kliknout).
+  void _flushEncounters({required bool toast}) {
+    final fresh = encounters.takeFresh();
+    if (fresh.isEmpty) return;
+    meta = meta.copyWith(seenLore: encounters.seen);
+    onMetaChanged?.call(meta);
+    if (!toast) return;
+    final first = lore.byId(fresh.first).nameCz;
+    bookToastText = fresh.length == 1
+        ? 'Nová stránka v knize: $first'
+        : 'Nové stránky v knize: $first a další (${fresh.length - 1})';
+    overlays.add('bookToast');
+    _bookToastTimer?.cancel();
+    _bookToastTimer = async.Timer(
+      Duration(milliseconds: (Balance.bookToastSeconds * 1000).round()),
+      () => overlays.remove('bookToast'),
+    );
+  }
+
+  /// Poslední otevřená kapitola (kniha se příště otevře na ní).
+  void setLastChapter(String chapterId) {
+    if (meta.lastChapter == chapterId) return;
+    meta = meta.copyWith(lastChapter: chapterId);
+    onMetaChanged?.call(meta);
   }
 
   /// Velikost písma knihy se ukládá do mety (přežije restart appky).
@@ -286,6 +329,7 @@ class ImmunoGame extends FlameGame
   // ─── Room management ─────────────────────────────────────────────────────
 
   void _setupRoom(RoomNode node) {
+    encounters.reportRef(node.type);
     _waves.setRoom(node.type, difficulty: _roomNumber);
   }
 
@@ -299,6 +343,7 @@ class ImmunoGame extends FlameGame
     _wavesCleared = wave;
     _roomsCleared++;
     _fever.setRoomClear(true);
+    _flushEncounters(toast: true);
 
     if (_currentNode?.type == RoomType.treasure) {
       _player.heal(Balance.treasureHealAmount);
@@ -322,6 +367,7 @@ class ImmunoGame extends FlameGame
 
   void chooseUpgrade(UpgradeDef def) {
     upgrades.acquire(def.id);
+    encounters.reportRef(def.id);
     _pendingUpgrades = [];
     _upgradePending  = false;
     overlays.remove('upgradeChoice');
@@ -433,7 +479,10 @@ class ImmunoGame extends FlameGame
         player:          _player,
         feverGetter:     () => _fever.snapshot,
         onPlayerContact: () => _onEnemyHitPlayerFrom('boss'),
-      )..onPhaseShift = () => audio.play(Sfx.bossPhase))
+      )..onPhaseShift = () {
+          audio.play(Sfx.bossPhase);
+          encounters.report('enemy.boss.phase2');
+        })
         ..position = Vector2(
           Balance.arenaWidth / 2 + Balance.bossOrbitRadius,
           Balance.arenaHeight / 2,
@@ -459,18 +508,23 @@ class ImmunoGame extends FlameGame
   void _applyMeta() {
     _player.maxHp        = Balance.playerMaxHp + meta.bonusStartHp;
     _player.vaccinatedVs = vaccinationTarget(meta.lastKilledByType);
+    if (_player.vaccinatedVs != null) encounters.report('meta.vaccination');
   }
 
   /// Konec runu — připiš paměťové buňky, zaznamenej zabijáka, ulož.
   void _finishRun({required bool won, String? killedBy}) {
     lastRunCellsEarned = _roomsCleared * Balance.memoryCellsPerRoom +
         (won ? Balance.memoryCellsWinBonus : 0);
+    if (!won) encounters.reportKilledBy(killedBy);
+    if (lastRunCellsEarned > 0) encounters.report('meta.memoryCells');
+    encounters.takeFresh(); // na konci runu bez toastu, jen uložit
     meta = meta.copyWith(
       memoryCells:       meta.memoryCells + lastRunCellsEarned,
       totalRuns:         meta.totalRuns + 1,
       wins:              meta.wins + (won ? 1 : 0),
       lastKilledByType:  killedBy,
       clearLastKilledBy: killedBy == null,
+      seenLore:          encounters.seen,
     );
     onMetaChanged?.call(meta);
   }
@@ -574,6 +628,7 @@ class ImmunoGame extends FlameGame
       activeEnemies: activeEnemies,
       extraDecay:    upgrades.feverDecayBonus,
     );
+    encounters.reportFeverZone(_fever.snapshot.zone);
 
     if (_fever.snapshot.zone == FeverZone.hyper ||
         _fever.snapshot.zone == FeverZone.critical) {
@@ -601,6 +656,8 @@ class ImmunoGame extends FlameGame
 
   void _wireNewEnemies() {
     for (final e in _activeWorld.children.query<Enemy>()) {
+      if (e.onHitCallback == null) encounters.reportRef(e.archetype.type);
+      e.onStatusApplied ??= encounters.reportRef;
       e.onHitCallback ??= _onEnemyDamaged;
       e.onDrop        ??= _onEnemyDied;
     }
@@ -642,6 +699,8 @@ class ImmunoGame extends FlameGame
     overlays.remove('roomChoice');
     overlays.remove('upgradeChoice');
     overlays.remove('pause');
+    overlays.remove('bookToast');
+    _bookToastTimer?.cancel();
     resumeEngine(); // game over mohl přijít během pauzy
 
     _clearRoomEntities();
