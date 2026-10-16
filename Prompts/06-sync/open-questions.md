@@ -108,3 +108,14 @@ Rozhodnuto podle návrhu a implementováno; vlastník může změnit.
   všech 13 souborů, podmínka „mimo release" se zruší.
 - **OQ-21 Desetinná čárka na kartách.** Jediná viditelná změna textu karet v S2:
   „0.15 °C/s" → „0,15 °C/s" (05-kniha OQ-12).
+
+## Z implementace S4 (2026-10-16)
+
+- **OQ-22 `lore_report` přes `flutter test`, ne `dart run`.** Registr sahá na `balance.dart`,
+  které importuje `dart:ui` (barvy), a čistý Dart VM ho nemá. Stav: `tool/lore_report.dart` je
+  testový soubor spouštěný `flutter test tool/lore_report.dart` (výstup `build/lore_report.md`).
+  Alternativa na později: vyčlenit barvy z `Balance` do `balance_colors.dart`, pak by šlo
+  `dart run`.
+- **OQ-23 `sourceRef` v registru ve formátu klíčů.** Volný text („Janeway (opsonizace)“) přepsán
+  na `TODO-FACT: JANEWAY – opsonizace`; test hlídá, že klíč existuje v `sources.md`.
+
