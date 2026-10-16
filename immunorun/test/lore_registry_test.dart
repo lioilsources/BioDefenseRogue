@@ -1,6 +1,7 @@
 import 'package:flutter_test/flutter_test.dart';
 import 'package:immunorun/domain/enemy_archetype.dart';
 import 'package:immunorun/domain/lore.dart';
+import 'package:immunorun/domain/lore_text.dart';
 import 'package:immunorun/domain/meta_progress.dart';
 import 'package:immunorun/domain/room_type.dart';
 import 'package:immunorun/domain/status_effects.dart';
@@ -68,7 +69,7 @@ void main() {
       for (final u in allUpgrades) {
         final e = lore.byRef(u.id);
         expect(u.nameCz, e.nameCz);
-        expect(u.descCz, e.inGameCz);
+        expect(u.descCz, e.inGameText);
       }
       expect(allUpgrades.map((u) => u.id), UpgradeId.values);
     });
@@ -175,6 +176,21 @@ void main() {
             ref: StatusEffect.stunned),
       ]);
       expect(errors, _hasError('má být planned'));
+    });
+
+    test('číslo natvrdo v inGameCz', () {
+      expect(_check([_with(inGameCz: 'Bere +25 % poškození.')]),
+          _hasError('číslo natvrdo'));
+    });
+
+    test('placeholder na neexistující konstantu nebo pojem', () {
+      expect(_check([_with(inGameCz: 'Bere {{balance.neniTam|pct}}.')]),
+          _hasError('neznámá konstanta Balance.neniTam'));
+      expect(_check([_with(inGameCz: 'Viz {{lore.upgrade.neni}}.')]),
+          _hasError('neznámý pojem upgrade.neni'));
+      expect(_check([_with(realityCz: 'Doopravdy {{balance.x|zzz}}.',
+              lie: LieSize.small, sourceRef: 'X')]),
+          _hasError('neznámá konstanta Balance.x'));
     });
 
     test('status s gameplay vedený jako planned', () {
