@@ -25,10 +25,14 @@ void main() {
         wins:             1,
         lastKilledByType: 'fever',
         bookFontStep:     1,
+        seenLore:         {'enemy.swarmer'},
+        lastChapter:      '03-nepratele',
       );
       await repo.save(meta);
       final loaded = await repo.load();
       expect(loaded.bookFontStep, 1);
+      expect(loaded.seenLore, {'enemy.swarmer'});
+      expect(loaded.lastChapter, '03-nepratele');
       expect(loaded.memoryCells, 7);
       expect(loaded.totalRuns, 3);
       expect(loaded.wins, 1);

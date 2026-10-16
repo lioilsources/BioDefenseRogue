@@ -12,9 +12,13 @@ void main() {
         wins:             1,
         lastKilledByType: 'tank',
         bookFontStep:     2,
+        seenLore:         {'enemy.tank', 'fever.febrile'},
+        lastChapter:      '05-horecka',
       );
       final restored = MetaProgress.fromMap(original.toMap());
       expect(restored.bookFontStep, 2);
+      expect(restored.seenLore, {'enemy.tank', 'fever.febrile'});
+      expect(restored.lastChapter, '05-horecka');
       expect(restored.memoryCells, 12);
       expect(restored.totalRuns, 5);
       expect(restored.wins, 1);
@@ -25,6 +29,8 @@ void main() {
       final old = MetaProgress.fromMap({'memoryCells': 4, 'totalRuns': 2});
       expect(old.memoryCells, 4);
       expect(old.bookFontStep, 0);
+      expect(old.seenLore, isEmpty);
+      expect(old.lastChapter, isNull);
     });
 
     test('copyWith bookFontStep zachová zbytek mety', () {
