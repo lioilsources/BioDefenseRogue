@@ -14,11 +14,13 @@ void main() {
         bookFontStep:     2,
         seenLore:         {'enemy.tank', 'fever.febrile'},
         lastChapter:      '05-horecka',
+        quizDone:         {'05-horecka'},
       );
       final restored = MetaProgress.fromMap(original.toMap());
       expect(restored.bookFontStep, 2);
       expect(restored.seenLore, {'enemy.tank', 'fever.febrile'});
       expect(restored.lastChapter, '05-horecka');
+      expect(restored.quizDone, {'05-horecka'});
       expect(restored.memoryCells, 12);
       expect(restored.totalRuns, 5);
       expect(restored.wins, 1);
