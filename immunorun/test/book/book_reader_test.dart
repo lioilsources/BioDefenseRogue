@@ -86,6 +86,22 @@ void main() {
         reason: '{{lore.upgrade.pyrogen}} → název z registru');
   });
 
+  testWidgets('otočení stránky hlásí zvuk (K6)', (tester) async {
+    var turns = 0;
+    tester.view.physicalSize     = const Size(1080, 2340);
+    tester.view.devicePixelRatio = 3;
+    addTearDown(tester.view.reset);
+    await tester.pumpWidget(MaterialApp(
+      home: BookScreen(
+        book: book, initialChapter: '05-horecka', fontStep: 0,
+        onFontStep: (_) {}, onClose: () {}, onPageTurn: () => turns++,
+      ),
+    ));
+    await tester.drag(find.byType(PageView), const Offset(-250, 0));
+    await tester.pumpAndSettle();
+    expect(turns, 1);
+  });
+
   testWidgets('chybějící obrázek → placeholder s popiskem', (tester) async {
     await pump(tester, initialChapter: '05-horecka');
     for (var i = 0; i < 2; i++) {
