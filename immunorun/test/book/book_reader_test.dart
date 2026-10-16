@@ -51,6 +51,9 @@ void main() {
     await pump(tester);
     expect(_bubble('Lexikon zdraví'), findsOneWidget);
     final title = book.chapter('05-horecka')!.title;
+    await tester.scrollUntilVisible(_bubble(title), 300);
+    await tester.ensureVisible(_bubble(title));
+    await tester.pumpAndSettle();
     expect(_bubble(title), findsOneWidget);
 
     await tester.tap(_bubble(title));
