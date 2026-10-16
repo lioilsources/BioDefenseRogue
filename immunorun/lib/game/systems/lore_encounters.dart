@@ -8,6 +8,18 @@ import '../../domain/fever_zone.dart';
 import '../../domain/lore.dart';
 import '../../domain/meta_progress.dart';
 
+/// Druhy pojmů, jejichž první setkání hra hlásí (lore_report, S4).
+const Set<LoreKind> loreEncounterKinds = {
+  LoreKind.enemy, LoreKind.upgrade, LoreKind.status, LoreKind.room,
+  LoreKind.feverZone, LoreKind.meta,
+};
+
+/// Jednotlivé pojmy hlášené mimo [loreEncounterKinds].
+const Set<String> loreEncounterIds = {'mechanic.fever'};
+
+bool hasEncounter(LoreEntry e) =>
+    loreEncounterKinds.contains(e.kind) || loreEncounterIds.contains(e.id);
+
 class LoreEncounters {
   LoreEncounters({Iterable<String> seen = const [], LoreRegistry? registry})
       : _seen = {...seen},
