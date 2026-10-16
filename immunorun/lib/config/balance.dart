@@ -221,4 +221,20 @@ abstract final class Balance {
   static const int    tankSwarmerWeight   = 2;    // 1 tank ubere N swarmer slotů
   static const Color  tankColor           = Color(0xFF9B59B6); // ametystová
   static const Color  tankBorderColor     = Color(0xFF6C3483);
+
+  // ── Kniha: redakční limity (05-kniha/03-redakcni-standard.md §9) ──────────
+  // Hlavní text = odstavce a ### mimo boxy; placeholder {{…}} = 1 slovo.
+  static const int bookWordsPerPageMax      = 80;
+  static const int bookChapterWordsMin      = 250;
+  static const int bookChapterWordsMax      = 450;
+  static const int bookBoxWordsMax          = 60;
+  static const int bookPagesMin             = 4;
+  static const int bookPagesMax             = 7;
+  static const int bookSentenceWordsMax     = 20;  // jen varování
+  static const int bookParagraphsPerPageMax = 4;
+  static const int bookTitleCharsMax        = 40;
+  static const int bookQuizQuestions        = 3;
+  static const int bookQuizAnswers          = 3;
+  static const int bookQuizWhyWordsMax      = 25;
+  static const int bookZvedaveMax           = 2;   // boxů „Pro zvědavé" v kapitole
 }
