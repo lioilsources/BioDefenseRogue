@@ -42,11 +42,11 @@ jobs:
       - name: Test
         run: flutter test
 
-      # Gen-check: generované soubory musí odpovídat zdroji (regenerace bez diffu).
-      # Naplní S2 (tool/gen_balance_map.dart → lib/config/balance_map.g.dart).
+      # Gen-check: generované soubory musí odpovídat zdroji (regenerace bez diffu);
+      # hlídá i pubspec.lock po pub get.
       - name: Gen-check
         run: |
-          echo "Zatím žádné generované soubory (přibudou v S2)."
+          dart run tool/gen_balance_map.dart
           git diff --exit-code
 
       # Velikost assetů: zatím jen výpis; limit (assets/book ≤ 12 MB) přidá K4.
