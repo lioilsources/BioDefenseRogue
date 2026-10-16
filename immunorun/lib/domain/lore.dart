@@ -115,7 +115,8 @@ class LoreEntry {
   /// Hodnota enumu v kódu (test úplnosti nad enumy).
   final Enum? ref;
 
-  /// Zdroj pro realityCz (05-kniha/sources.md), nebo 'TODO-FACT: …'.
+  /// Zdroj pro realityCz: 'src: KLÍČ místo' nebo 'TODO-FACT: KLÍČ – co ověřit';
+  /// klíč existuje v Prompts/05-kniha/sources.md (test, S4).
   final String? sourceRef;
 
   /// 3. pád pro věty typu „proti komu" (game-over: „imunizace proti …").
@@ -254,7 +255,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.protilatky,
     anchor:    'opsonizace',
-    sourceRef: '$loreTodoFact: Janeway (protilátky, opsonizace)',
+    sourceRef: '$loreTodoFact: JANEWAY – protilátky, opsonizace',
   ),
   LoreEntry(
     id:        'upgrade.histamin',
@@ -268,7 +269,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.large,
     chapter:   BookChapter.zanet,
     anchor:    'histamin',
-    sourceRef: '$loreTodoFact: Hořejší (žírné buňky, zánět)',
+    sourceRef: '$loreTodoFact: HOREJSI – žírné buňky, zánět',
   ),
   LoreEntry(
     id:        'upgrade.pyrogen',
@@ -282,7 +283,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.horecka,
     anchor:    'pyrogeny',
-    sourceRef: '$loreTodoFact: Janeway (cytokiny, IL-6, horečka)',
+    sourceRef: '$loreTodoFact: JANEWAY – cytokiny, IL-6, horečka',
   ),
   LoreEntry(
     id:        'upgrade.treg',
@@ -295,7 +296,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.cytokiny,
     anchor:    'treg',
-    sourceRef: '$loreTodoFact: Hořejší (regulační T buňky, IL-10)',
+    sourceRef: '$loreTodoFact: HOREJSI – regulační T buňky, IL-10',
   ),
   LoreEntry(
     id:        'upgrade.mitochondrie',
@@ -309,7 +310,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.energie,
     anchor:    'mitochondrie',
-    sourceRef: '$loreTodoFact: Alberts / učebnice biologie (mitochondrie, ATP)',
+    sourceRef: '$loreTodoFact: ALBERTS – mitochondrie, ATP',
   ),
   LoreEntry(
     id:        'upgrade.membrana',
@@ -322,7 +323,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.energie,
     anchor:    'membrana',
-    sourceRef: '$loreTodoFact: Alberts (membrána, pohyb buňky)',
+    sourceRef: '$loreTodoFact: ALBERTS – membrána, pohyb buňky',
   ),
   LoreEntry(
     id:        'upgrade.cytotoxin',
@@ -336,7 +337,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.zabijaci,
     anchor:    'granule',
-    sourceRef: '$loreTodoFact: Janeway (NK buňky, CD8 T, perforin)',
+    sourceRef: '$loreTodoFact: JANEWAY – NK buňky, CD8 T, perforin',
   ),
 
   // ── Nepřátelé ─────────────────────────────────────────────────────────────
@@ -352,7 +353,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.nepratele,
     anchor:    'koky',
-    sourceRef: '$loreTodoFact: mikrobiologie (stafylokoky, pohyblivost)',
+    sourceRef: '$loreTodoFact: MIKRO – stafylokoky, pohyblivost',
   ),
   LoreEntry(
     id:        'enemy.tank',
@@ -368,7 +369,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.nepratele,
     anchor:    'biofilm',
-    sourceRef: '$loreTodoFact: mikrobiologie (biofilm S. aureus)',
+    sourceRef: '$loreTodoFact: MIKRO – biofilm S. aureus',
   ),
   LoreEntry(
     id:        'enemy.boss',
@@ -383,7 +384,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.nepratele,
     anchor:    'stafylokok',
-    sourceRef: '$loreTodoFact: mikrobiologie (toxiny S. aureus, leukocidiny)',
+    sourceRef: '$loreTodoFact: MIKRO – toxiny S. aureus, leukocidiny',
   ),
   LoreEntry(
     id:        'enemy.boss.phase2',
@@ -397,7 +398,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.large,
     chapter:   BookChapter.nepratele,
     anchor:    'stafylokok',
-    sourceRef: '$loreTodoFact: mikrobiologie (agr, quorum sensing S. aureus)',
+    sourceRef: '$loreTodoFact: MIKRO – agr, quorum sensing S. aureus',
   ),
 
   // ── Status efekty ─────────────────────────────────────────────────────────
@@ -412,7 +413,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.protilatky,
     anchor:    'opsonizace',
-    sourceRef: '$loreTodoFact: Janeway (opsonizace)',
+    sourceRef: '$loreTodoFact: JANEWAY – opsonizace',
   ),
   LoreEntry(
     id:        'status.slowed',
@@ -425,7 +426,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.zanet,
     anchor:    'histamin',
-    sourceRef: '$loreTodoFact: Hořejší (zánět, edém)',
+    sourceRef: '$loreTodoFact: HOREJSI – zánět, edém',
   ),
   LoreEntry(
     id:        'status.inflamed',
@@ -468,7 +469,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.zabijaci,
     anchor:    'typy-poskozeni',
-    sourceRef: '$loreTodoFact: Janeway (mechanismy zabíjení fagocytů)',
+    sourceRef: '$loreTodoFact: JANEWAY – mechanismy zabíjení fagocytů',
   ),
   LoreEntry(
     id:        'damage.inflammatory',
@@ -530,7 +531,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.large,
     chapter:   BookChapter.horecka,
     anchor:    'proc-horecka-pomaha',
-    sourceRef: '$loreTodoFact: Janeway / Hořejší (horečka)',
+    sourceRef: '$loreTodoFact: JANEWAY / HOREJSI – horečka',
   ),
   LoreEntry(
     id:        'fever.hyper',
@@ -543,7 +544,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.horecka,
     anchor:    'kdy-je-horecka-nebezpecna',
-    sourceRef: '$loreTodoFact: SZÚ / pediatrie (vysoká horečka)',
+    sourceRef: '$loreTodoFact: SZU / PEDIATRIE – vysoká horečka',
   ),
   LoreEntry(
     id:        'fever.critical',
@@ -606,7 +607,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.pamet,
     anchor:    'pametove-bunky',
-    sourceRef: '$loreTodoFact: Janeway (imunologická paměť)',
+    sourceRef: '$loreTodoFact: JANEWAY – imunologická paměť',
   ),
   LoreEntry(
     id:        'meta.vaccination',
@@ -618,7 +619,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.large,
     chapter:   BookChapter.pamet,
     anchor:    'ockovani',
-    sourceRef: '$loreTodoFact: SZÚ / WHO (jak funguje očkování)',
+    sourceRef: '$loreTodoFact: SZU / WHO – jak funguje očkování',
   ),
 
   // ── Schopnosti hráče (OQ-2) ───────────────────────────────────────────────
@@ -631,7 +632,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.large,
     chapter:   BookChapter.fagocytoza,
     anchor:    'fagocytoza',
-    sourceRef: '$loreTodoFact: Janeway / Hořejší (fagocytóza)',
+    sourceRef: '$loreTodoFact: JANEWAY / HOREJSI – fagocytóza',
   ),
   LoreEntry(
     id:        'ability.dash',
@@ -643,7 +644,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.energie,
     anchor:    'membrana',
-    sourceRef: '$loreTodoFact: Alberts (améboidní pohyb)',
+    sourceRef: '$loreTodoFact: ALBERTS – améboidní pohyb',
   ),
   LoreEntry(
     id:        'ability.chargeDash',
@@ -656,7 +657,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.energie,
     anchor:    'panozky',
-    sourceRef: '$loreTodoFact: Alberts / Janeway (pseudopodia, aktin)',
+    sourceRef: '$loreTodoFact: ALBERTS / JANEWAY – pseudopodia, aktin',
   ),
   LoreEntry(
     id:        'ability.oxidativeBurst',
@@ -669,7 +670,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.large,
     chapter:   BookChapter.fagocytoza,
     anchor:    'ros',
-    sourceRef: '$loreTodoFact: Janeway (oxidativní vzplanutí)',
+    sourceRef: '$loreTodoFact: JANEWAY – oxidativní vzplanutí',
   ),
   LoreEntry(
     id:        'ability.lysozymeBurst',
@@ -681,7 +682,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.fagocytoza,
     anchor:    'lysozym',
-    sourceRef: '$loreTodoFact: Janeway (lysozym)',
+    sourceRef: '$loreTodoFact: JANEWAY – lysozym',
   ),
   LoreEntry(
     id:        'ability.special',
@@ -694,7 +695,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.fagocytoza,
     anchor:    'sekrece',
-    sourceRef: '$loreTodoFact: Janeway (sekrece makrofágů, NO)',
+    sourceRef: '$loreTodoFact: JANEWAY – sekrece makrofágů, NO',
   ),
 
   // ── Zdroje ────────────────────────────────────────────────────────────────
@@ -709,7 +710,7 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.large,
     chapter:   BookChapter.energie,
     anchor:    'atp',
-    sourceRef: '$loreTodoFact: Alberts (ATP, buněčné dýchání)',
+    sourceRef: '$loreTodoFact: ALBERTS – ATP, buněčné dýchání',
   ),
 
   // ── Svět ──────────────────────────────────────────────────────────────────
@@ -724,6 +725,6 @@ const List<LoreEntry> allLore = [
     lie:       LieSize.small,
     chapter:   BookChapter.mikroskop,
     anchor:    'falesne-barvy',
-    sourceRef: '$loreTodoFact: mikroskopie (SEM, příprava vzorku)',
+    sourceRef: '$loreTodoFact: SEM – SEM, příprava vzorku',
   ),
 ];
