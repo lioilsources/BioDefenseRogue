@@ -6,6 +6,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:immunorun/book/parser/book_loader.dart';
 import 'package:immunorun/config/balance.dart';
+import 'package:immunorun/domain/fever_zone.dart';
+import 'package:immunorun/domain/lore.dart';
 import 'package:immunorun/domain/meta_progress.dart';
 import 'package:immunorun/game/immuno_game.dart';
 import 'package:immunorun/ui/book/book_overlay.dart';
@@ -125,6 +127,51 @@ void main() {
     expect(list.closed, [1]);
   });
 
+  group('razítka a deep-linky (S3)', () {
+    Future<List<String>> pumpS3(WidgetTester tester, {
+      String? chapter, String? anchor, Set<String> seen = const {},
+      String? last,
+    }) async {
+      final opened = <String>[];
+      tester.view.physicalSize     = const Size(1080, 2340);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(MaterialApp(
+        home: BookScreen(
+          key: UniqueKey(), book: book, fontStep: 0,
+          onFontStep: (_) {}, onClose: () {},
+          initialChapter: chapter, initialAnchor: anchor,
+          seenLore: seen, lastChapter: last, onChapterOpened: opened.add,
+        ),
+      ));
+      await tester.pumpAndSettle();
+      return opened;
+    }
+
+    testWidgets('razítko potkáno jen u kapitoly s potkaným pojmem', (tester) async {
+      await pumpS3(tester);
+      expect(_bubble('potkáno'), findsNothing);
+      await pumpS3(tester, seen: {'fever.febrile'}, last: '05-horecka');
+      expect(_bubble('potkáno'), findsOneWidget);
+      expect(_bubble('naposledy'), findsOneWidget);
+    });
+
+    testWidgets('deep-link na kotvu otevře její stránku a zapíše kapitolu', (tester) async {
+      final opened = await pumpS3(tester,
+          chapter: '05-horecka', anchor: 'kdy-je-horecka-nebezpecna',
+          seen: {'fever.hyper'});
+      expect(_bubble('Kdy je horečka nebezpečná'), findsOneWidget);
+      expect(find.bySemanticsLabel('Stránka 5 z 6'), findsOneWidget);
+      expect(find.bySemanticsLabel('Potkáno ve hře'), findsOneWidget);
+      expect(opened, ['05-horecka']);
+    });
+
+    testWidgets('neznámá kotva → první stránka', (tester) async {
+      await pumpS3(tester, chapter: '05-horecka', anchor: 'neni');
+      expect(find.bySemanticsLabel('Stránka 1 z 6'), findsOneWidget);
+    });
+  });
+
   group('hra: openBook / closeBook', () {
     ImmunoGame game({void Function(MetaProgress)? onMetaChanged}) {
       final g = ImmunoGame(
@@ -160,6 +207,22 @@ void main() {
       g.openBook();
       g.pauseGame();
       expect(g.overlays.isActive('pause'), isFalse);
+    });
+
+    test('deep-link na pojem nese kapitolu i kotvu', () {
+      final g = game()..pauseEngine();
+      g.openBookAt(lore.byRef(FeverZone.hyper));
+      expect(g.bookChapterRequest, '05-horecka');
+      expect(g.bookAnchorRequest, 'kdy-je-horecka-nebezpecna');
+    });
+
+    test('poslední kapitola a výběr upgradu se uloží', () {
+      final saved = <MetaProgress>[];
+      final g = game(onMetaChanged: saved.add);
+      g.setLastChapter('03-nepratele');
+      expect(saved.last.lastChapter, '03-nepratele');
+      g.setLastChapter('03-nepratele');
+      expect(saved, hasLength(1), reason: 'beze změny se neukládá');
     });
 
     test('velikost písma se uloží do mety', () {

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/lore.dart';
 import '../../domain/lore_text.dart';
 import '../../domain/meta_progress.dart';
 import '../../game/immuno_game.dart';
+import '../book/book_theme.dart';
 
 /// Game over — smrt hráče nebo kritická horečka.
 class GameOverOverlay extends StatelessWidget {
@@ -43,6 +45,15 @@ class GameOverOverlay extends StatelessWidget {
             const SizedBox(height: 8),
             _MetaSummary(game: game),
             const SizedBox(height: 28),
+            if (loreForKilledBy(game.meta.lastKilledByType) case final cause?)
+              Padding(
+                padding: const EdgeInsets.only(bottom: 10),
+                child: _EndButton(
+                  label:     'CO MĚ ZABILO?',
+                  color:     Colors.teal.shade700,
+                  onPressed: () => game.openBookAt(cause),
+                ),
+              ),
             _EndButton(
               label:     'ZKUSIT ZNOVU',
               color:     Colors.green.shade700,
@@ -65,6 +76,8 @@ class GameOverOverlay extends StatelessWidget {
 class RunWonOverlay extends StatelessWidget {
   const RunWonOverlay({super.key, required this.game});
   final ImmunoGame game;
+
+  static LoreEntry get _memory => lore.byId('meta.memoryCells');
 
   @override
   Widget build(BuildContext context) {
@@ -96,6 +109,12 @@ class RunWonOverlay extends StatelessWidget {
             const SizedBox(height: 8),
             _MetaSummary(game: game),
             const SizedBox(height: 28),
+            _EndButton(
+              label:     '$bookButtonCz: ${_memory.nameCz.toUpperCase()}',
+              color:     Colors.teal.shade700,
+              onPressed: () => game.openBookAt(_memory),
+            ),
+            const SizedBox(height: 10),
             _EndButton(
               label:     'NOVÝ RUN',
               color:     Colors.green.shade700,
@@ -169,7 +188,7 @@ class _EndButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return SizedBox(
-      width: 220,
+      width: 260,
       child: ElevatedButton(
         style: ElevatedButton.styleFrom(
           backgroundColor: color,

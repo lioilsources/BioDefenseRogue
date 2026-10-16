@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../book/model/book_model.dart';
 import '../../book/parser/book_loader.dart';
 import '../../config/balance.dart';
+import '../../domain/lore.dart';
 import '../../game/immuno_game.dart';
 import '../meta_providers.dart';
 import 'book_providers.dart';
@@ -21,10 +22,15 @@ class BookOverlay extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final book     = ref.watch(bookProvider);
     final fontStep = ref.watch(metaProvider.select((m) => m.bookFontStep));
+    final meta     = ref.watch(metaProvider);
     return book.when(
       data: (b) => BookScreen(
         book:           b,
         initialChapter: game.bookChapterRequest,
+        initialAnchor:  game.bookAnchorRequest,
+        seenLore:       meta.seenLore,
+        lastChapter:    meta.lastChapter,
+        onChapterOpened: game.setLastChapter,
         fontStep:       fontStep,
         onFontStep:     game.setBookFontStep,
         onClose:        game.closeBook,
@@ -49,6 +55,10 @@ class BookScreen extends StatefulWidget {
     required this.onFontStep,
     required this.onClose,
     this.initialChapter,
+    this.initialAnchor,
+    this.seenLore = const {},
+    this.lastChapter,
+    this.onChapterOpened,
   });
 
   final Book              book;
@@ -59,6 +69,14 @@ class BookScreen extends StatefulWidget {
   /// Deep-link: otevři rovnou kapitolu; „zpět" pak knihu zavře
   /// (návrat tam, odkud dítě přišlo).
   final String? initialChapter;
+
+  /// Kotva v kapitole: čtečka otevře stránku, na které je.
+  final String? initialAnchor;
+
+  /// Pojmy potkané ve hře → razítko na obálce a značka u nadpisu.
+  final Set<String> seenLore;
+  final String?     lastChapter;
+  final ValueChanged<String>? onChapterOpened;
 
   @override
   State<BookScreen> createState() => _BookScreenState();
@@ -74,6 +92,17 @@ class _BookScreenState extends State<BookScreen> {
     final id = widget.initialChapter;
     _open   = id == null ? null : widget.book.chapter(id);
     _direct = _open != null;
+    if (_open != null) _opened(_open!);
+  }
+
+  void _opened(Chapter c) {
+    final cb = widget.onChapterOpened;
+    if (cb != null) WidgetsBinding.instance.addPostFrameCallback((_) => cb(c.id));
+  }
+
+  void _openFromList(Chapter c) {
+    setState(() => _open = c);
+    _opened(c);
   }
 
   @override
@@ -84,13 +113,19 @@ class _BookScreenState extends State<BookScreen> {
         child: open == null
             ? ChapterList(
                 chapters: widget.book.chapters,
-                onOpen:   (c) => setState(() => _open = c),
-                onClose:  widget.onClose,
+                onOpen:      _openFromList,
+                onClose:     widget.onClose,
+                seenLore:    widget.seenLore,
+                lastChapter: widget.lastChapter,
               )
             : ChapterReader(
                 key:        ValueKey(open.id),
                 chapter:    open,
                 fontStep:   widget.fontStep,
+                seenLore:   widget.seenLore,
+                initialPage: _direct && open.id == widget.initialChapter
+                    ? pageOfAnchor(open, widget.initialAnchor)
+                    : 0,
                 onFontStep: widget.onFontStep,
                 onBack: _direct
                     ? widget.onClose
@@ -98,6 +133,33 @@ class _BookScreenState extends State<BookScreen> {
               ),
       ),
     );
+  }
+}
+
+/// Index stránky s kotvou (0, když kotva chybí nebo není zadaná).
+int pageOfAnchor(Chapter c, String? anchor) {
+  if (anchor == null) return 0;
+  for (final (i, p) in c.pages.indexed) {
+    if (p.blocks.any((b) => b is HeadingBlock && b.anchor == anchor)) return i;
+  }
+  return 0;
+}
+
+/// Kotvy potkaných pojmů kapitoly (značka u nadpisu).
+Set<String> seenAnchors(Chapter c, Set<String> seenLore) => {
+      for (final id in c.lore)
+        if (seenLore.contains(id)) ?_anchorOf(id),
+    };
+
+/// Kapitola má razítko „potkáno", když hráč potkal aspoň jeden její pojem.
+bool chapterSeen(Chapter c, Set<String> seenLore) =>
+    c.lore.any(seenLore.contains);
+
+String? _anchorOf(String id) {
+  try {
+    return lore.byId(id).anchor;
+  } on ArgumentError {
+    return null;
   }
 }
 
