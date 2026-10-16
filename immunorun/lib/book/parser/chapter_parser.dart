@@ -206,7 +206,7 @@ class _BodyParser {
   /// Slovníček: stránky se nedělí `---`, každé `##` je nové heslo.
   final bool glossary;
 
-  final pages = <Page>[];
+  final pages = <BookPage>[];
   var _current = <Block>[];
 
   void parse(String body) {
@@ -221,7 +221,7 @@ class _BodyParser {
   }
 
   void _flush() {
-    if (_current.isNotEmpty) pages.add(Page(List.unmodifiable(_current)));
+    if (_current.isNotEmpty) pages.add(BookPage(List.unmodifiable(_current)));
     _current = <Block>[];
   }
 

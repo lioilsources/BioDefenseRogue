@@ -116,8 +116,8 @@ final class BoxBlock extends Block {
 
 // ── Kapitola ───────────────────────────────────────────────────────────────
 
-class Page {
-  const Page(this.blocks);
+class BookPage {
+  const BookPage(this.blocks);
 
   final List<Block> blocks;
 
@@ -169,7 +169,7 @@ class Chapter {
   final String             hero;
   final List<String>       lore;    // id záznamů registru (domain/lore.dart)
   final List<QuizQuestion> quiz;
-  final List<Page>         pages;
+  final List<BookPage>         pages;
   final ChapterStatus      status;
   final String?            audio;   // narace, fáze 2 (ADR 0005)
 
