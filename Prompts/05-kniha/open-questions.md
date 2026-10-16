@@ -79,6 +79,17 @@ v `garant-todo-fact.md`):
   4, 6–12 některá hesla z kap. 2 a 8 (makrofág, B buňka, antigen) netučnily. Návrh: v K7 projít
   a označit první výskyt v každé kapitole, aby bublina slovníčku fungovala všude.
 
+## Z K4 a K6 (2026-10-16)
+
+- **OQ-27 Ambient jako AAC, ne OGG.** Plán chce `book_ambient.ogg`, ale audioplayers (backend
+  flame_audio) OGG na iOS nepřehraje. Stav: `book_ambient.m4a` (AAC 64 kb/s, 32 s, 245 kB).
+  Zdroj podle návrhu OQ-4: vlastní procedurální pad v `tool/gen_sfx.dart` (CC0), frekvence
+  s celým počtem period ve smyčce. AAC má na začátku krátké ticho kodéru, smyčka tak může
+  nepatrně „cvaknout“. Ověřit na telefonu; případně přejít na WAV 11 kHz (~700 kB).
+- **OQ-28 Termín generování obrázků (K4).** Session Director (správa SPARKu) 2026-10-16:
+  v pátek a v sobotu drží okno 07–13 benchmark, po 13:00 je okno LLM. Dávka (76 jobů) je
+  domluvená na **neděli 18. 10. od 07:05**. Pak výběr variant vlastníkem a `gen.py install`.
+
 ## Před K4
 
 - **OQ-2 Modely v ComfyUI vlastníka a jejich licence.** Plán grafiky §3.1 uvádí flux-schnell
