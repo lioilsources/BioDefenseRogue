@@ -1,4 +1,4 @@
-# IMMUNORUN – Kniha imunity: scope a analýza (v0.1, 2026-10-15)
+# IMMUNORUN – Lexikon zdraví: scope a analýza (v0.1, 2026-10-15)
 
 > Výuková „kniha" o imunologii vestavěná do hry. Populárně naučná, ale odborně správná.
 > Publikum: 10–15 let (5.–9. třída ZŠ). Companion k `02-plan.md` (zadání pro Opus) a `ADR/`.
@@ -11,7 +11,7 @@ Hráč IMMUNORUN hraje makrofága, honí koky, jezdí na horečce, sbírá „Op
 Každý z těch pojmů je skutečná imunologie, ale hra ho ukáže jen jako ikonu a číslo. Kniha je místo,
 kam si dítě zajde, když ho napadne „co to vlastně je?" – a dostane odpověď, která je pravdivá,
 krátká, hezky vysazená (CuteKidFonts) a ilustrovaná (ComfyUI). Kniha nic neodemyká a nic nevyžaduje;
-hra na ni jen ukazuje („Co mě zabilo?", ⓘ u karty upgradu). Pracovní název: **Kniha imunity**
+hra na ni jen ukazuje („Co mě zabilo?", ⓘ u karty upgradu). Název: **Lexikon zdraví**
 (alternativy v `open-questions.md`, OQ-1).
 
 ---
