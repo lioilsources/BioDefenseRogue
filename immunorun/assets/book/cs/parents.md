@@ -1,5 +1,3 @@
-# Pro rodiče a učitele
-
 ## Co je Lexikon zdraví {#co-je-lexikon}
 
 Lexikon zdraví je kniha uvnitř hry IMMUNORUN. Vysvětluje dětem od 10 do 15 let, co se v těle

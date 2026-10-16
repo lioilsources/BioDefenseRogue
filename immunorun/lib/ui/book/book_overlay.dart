@@ -12,6 +12,8 @@ import '../meta_providers.dart';
 import 'book_providers.dart';
 import 'chapter_list.dart';
 import 'chapter_reader.dart';
+import 'glossary_popup.dart';
+import 'parents_view.dart';
 
 /// Overlay 'book': propojí hru (otevření, zavření, meta) s BookScreen.
 class BookOverlay extends ConsumerWidget {
@@ -36,6 +38,8 @@ class BookOverlay extends ConsumerWidget {
         onFontStep:     game.setBookFontStep,
         onClose:        game.closeBook,
         onPageTurn:     () => game.audio.play(Sfx.pageTurn),
+        quizDone:       meta.quizDone,
+        onQuizDone:     game.markQuizDone,
       ),
       loading: () => const _Backdrop(child: SizedBox.expand()),
       error:   (e, _) => _Backdrop(
@@ -62,6 +66,8 @@ class BookScreen extends StatefulWidget {
     this.lastChapter,
     this.onChapterOpened,
     this.onPageTurn,
+    this.quizDone = const {},
+    this.onQuizDone,
   });
 
   final Book              book;
@@ -81,6 +87,8 @@ class BookScreen extends StatefulWidget {
   final String?     lastChapter;
   final ValueChanged<String>? onChapterOpened;
   final VoidCallback?         onPageTurn;
+  final Set<String>           quizDone;
+  final ValueChanged<String>? onQuizDone;
 
   @override
   State<BookScreen> createState() => _BookScreenState();
@@ -88,7 +96,8 @@ class BookScreen extends StatefulWidget {
 
 class _BookScreenState extends State<BookScreen> {
   Chapter? _open;
-  bool     _direct = false;
+  bool     _direct  = false;
+  bool     _parents = false;
 
   @override
   void initState() {
@@ -113,14 +122,25 @@ class _BookScreenState extends State<BookScreen> {
   Widget build(BuildContext context) {
     final open = _open;
     return _Backdrop(
-      child: SafeArea(
-        child: open == null
+      child: BookScope(
+        glossary: widget.book.glossary,
+        child: SafeArea(
+        child: _parents
+            ? ParentsView(
+                sections: widget.book.parents,
+                onBack:   () => setState(() => _parents = false),
+              )
+            : open == null
             ? ChapterList(
                 chapters: widget.book.chapters,
                 onOpen:      _openFromList,
                 onClose:     widget.onClose,
                 seenLore:    widget.seenLore,
                 lastChapter: widget.lastChapter,
+                quizDone:    widget.quizDone,
+                onParents:   widget.book.parents.isEmpty
+                    ? null
+                    : () => setState(() => _parents = true),
               )
             : ChapterReader(
                 key:        ValueKey(open.id),
@@ -128,6 +148,8 @@ class _BookScreenState extends State<BookScreen> {
                 fontStep:   widget.fontStep,
                 seenLore:   widget.seenLore,
                 onPageTurn: widget.onPageTurn,
+                quizDone:   widget.quizDone.contains(open.id),
+                onQuizDone: () => widget.onQuizDone?.call(open.id),
                 initialPage: _direct && open.id == widget.initialChapter
                     ? pageOfAnchor(open, widget.initialAnchor)
                     : 0,
@@ -136,6 +158,7 @@ class _BookScreenState extends State<BookScreen> {
                     ? widget.onClose
                     : () => setState(() => _open = null),
               ),
+        ),
       ),
     );
   }

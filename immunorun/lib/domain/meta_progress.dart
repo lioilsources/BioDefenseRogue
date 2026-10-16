@@ -16,6 +16,7 @@ class MetaProgress {
     this.bookFontStep     = 0,
     this.seenLore         = const {},
     this.lastChapter,
+    this.quizDone         = const {},
   });
 
   final int     memoryCells;
@@ -29,6 +30,8 @@ class MetaProgress {
   final Set<String> seenLore;
   /// Poslední otevřená kapitola knihy.
   final String? lastChapter;
+  /// Kapitoly s dokončeným kvízem → razítko „kvíz hotov" (jen kosmetika, ADR 0002).
+  final Set<String> quizDone;
 
   static const empty = MetaProgress();
 
@@ -45,6 +48,7 @@ class MetaProgress {
     int?     bookFontStep,
     Set<String>? seenLore,
     String?  lastChapter,
+    Set<String>? quizDone,
   }) =>
       MetaProgress(
         memoryCells: memoryCells ?? this.memoryCells,
@@ -56,6 +60,7 @@ class MetaProgress {
         bookFontStep: bookFontStep ?? this.bookFontStep,
         seenLore:     seenLore ?? this.seenLore,
         lastChapter:  lastChapter ?? this.lastChapter,
+        quizDone:     quizDone ?? this.quizDone,
       );
 
   Map<String, Object?> toMap() => {
@@ -66,6 +71,7 @@ class MetaProgress {
         'bookFontStep':     bookFontStep,
         'seenLore':         seenLore.toList()..sort(),
         'lastChapter':      lastChapter,
+        'quizDone':         quizDone.toList()..sort(),
       };
 
   factory MetaProgress.fromMap(Map<String, Object?> map) => MetaProgress(
@@ -76,6 +82,7 @@ class MetaProgress {
         bookFontStep:     (map['bookFontStep'] as int?) ?? 0,
         seenLore:         {...?(map['seenLore'] as List?)?.cast<String>()},
         lastChapter:      map['lastChapter'] as String?,
+        quizDone:         {...?(map['quizDone'] as List?)?.cast<String>()},
       );
 }
 
