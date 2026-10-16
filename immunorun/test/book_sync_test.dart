@@ -96,7 +96,8 @@ void main() {
     });
 
     test('mimo release se chybějící kapitoly přeskočí, v release ne', () {
-      final missing = BookChapter.all.length - book.chapters.length;
+      final ids = book.chapters.map((c) => c.id).toSet();
+      final missing = BookChapter.all.where((id) => !ids.contains(id)).length;
       final errs = validateBookSync(book.chapters, release: true)
           .where((i) => i.message == 'kapitola chybí');
       expect(errs, hasLength(missing));
@@ -165,8 +166,14 @@ void main() {
       expect(_sync([_chapter()], release: true,
               known: const [_ch, BookChapter.horecka]),
           _has('${BookChapter.horecka}: kapitola chybí'));
-      expect(_sync([_chapter(status: ChapterStatus.planned)], release: true),
-          _has('planned kapitola v release'));
+      expect(_sync([_chapter(status: ChapterStatus.planned,
+              lore: const [])], release: true, entries: const []),
+          isEmpty, reason: 'pahýl fáze 2 v release smí být, čtečka ho skryje');
+    });
+
+    test('planned kapitola s live záznamem', () {
+      expect(_sync([_chapter(status: ChapterStatus.planned)]),
+          _has('live záznam „mechanic.a" v planned kapitole'));
     });
 
     test('release: live záznam s neexistující kapitolou', () {

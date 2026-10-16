@@ -10,7 +10,8 @@
 // - název karty upgradu se v kapitole nepíše natvrdo, jen {{lore.<id>}}
 //   (jen názvy se závorkou, např. „Pyrogen (IL-6)"; jednoslovné názvy jako
 //   „Histamin" jsou zároveň běžná slova textu),
-// - release: žádná chybějící kapitola a žádná planned kapitola.
+// - planned kapitola (pahýl fáze 2) smí uvádět jen planned záznamy,
+// - release: žádná chybějící live kapitola (planned pahýly čtečka skrývá).
 // Kapitola, která ještě neexistuje (K3), se mimo release jen přeskočí.
 
 import '../../config/balance_map.g.dart';
@@ -36,9 +37,6 @@ List<BookIssue> validateBookSync(
 
   // ── Kapitola → registr ──
   for (final c in chapters) {
-    if (release && c.status == ChapterStatus.planned) {
-      err(c.id, 'planned kapitola v release');
-    }
     final hasHonesty =
         c.allBlocks.any((b) => b is BoxBlock && b.kind == BoxKind.doopravdy);
 
@@ -52,6 +50,9 @@ List<BookIssue> validateBookSync(
       }
       if (e.chapter != c.id) {
         err(c.id, 'lore: „$id" patří do kapitoly „${e.chapter}"');
+      }
+      if (c.status == ChapterStatus.planned && e.status == LoreStatus.live) {
+        err(c.id, 'lore: live záznam „$id" v planned kapitole');
       }
       if (e.realityCz != null && !hasHonesty) {
         err(c.id, 'lore: „$id" má realityCz, kapitole chybí box [!doopravdy]');
