@@ -15,6 +15,7 @@ class SharedPrefsMetaRepository implements MetaRepository {
   static const _kRuns     = 'meta.totalRuns';
   static const _kWins     = 'meta.wins';
   static const _kKilledBy = 'meta.lastKilledByType';
+  static const _kFontStep = 'meta.bookFontStep';
 
   @override
   Future<MetaProgress> load() async {
@@ -24,6 +25,7 @@ class SharedPrefsMetaRepository implements MetaRepository {
       totalRuns:        prefs.getInt(_kRuns) ?? 0,
       wins:             prefs.getInt(_kWins) ?? 0,
       lastKilledByType: prefs.getString(_kKilledBy),
+      bookFontStep:     prefs.getInt(_kFontStep) ?? 0,
     );
   }
 
@@ -33,6 +35,7 @@ class SharedPrefsMetaRepository implements MetaRepository {
     await prefs.setInt(_kCells, progress.memoryCells);
     await prefs.setInt(_kRuns, progress.totalRuns);
     await prefs.setInt(_kWins, progress.wins);
+    await prefs.setInt(_kFontStep, progress.bookFontStep);
     final killedBy = progress.lastKilledByType;
     if (killedBy == null) {
       await prefs.remove(_kKilledBy);

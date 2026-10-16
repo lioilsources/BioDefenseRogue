@@ -169,6 +169,15 @@ packages:
       url: "https://pub.dev"
     source: hosted
     version: "1.0.9"
+  cute_kid_fonts:
+    dependency: "direct main"
+    description:
+      path: "."
+      ref: "v0.2.1"
+      resolved-ref: "84c129d6a9f9d984dcd93ada1ba704440f094e4a"
+      url: "https://github.com/lioilsources/CuteKidFonts.git"
+    source: git
+    version: "0.2.1"
   fake_async:
     dependency: transitive
     description:

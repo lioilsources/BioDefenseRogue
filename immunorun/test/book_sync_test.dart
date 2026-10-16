@@ -56,7 +56,7 @@ Chapter _chapter({
             why: quizWhy),
       ],
       pages: [
-        Page([
+        BookPage([
           const HeadingBlock(level: 2, text: 'Otok', anchor: 'otok'),
           ParagraphBlock([TextRun(text)]),
           if (honesty)
