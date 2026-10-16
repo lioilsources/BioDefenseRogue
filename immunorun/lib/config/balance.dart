@@ -257,4 +257,5 @@ abstract final class Balance {
   static const int    bookImageCacheWidth = 768;   // hero; schéma 512 (K4)
   static const double bookImageAspect     = 16 / 10;
   static const int    bookPageTurnMs      = 280;
+  static const int    bookAssetsBudgetBytes = 12 * 1024 * 1024; // assets/book ≤ 12 MB (F7, K4)
 }
