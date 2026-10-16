@@ -1,4 +1,4 @@
-# IMMUNORUN – Kniha imunity: implementační plán pro Opus (v0.1, 2026-10-15)
+# IMMUNORUN – Lexikon zdraví: implementační plán pro Opus (v0.1, 2026-10-15)
 
 Vstup: [01-scope.md](01-scope.md) (rozhodnutí v sekci 11), [ADR/](ADR/). Tento dokument je zadání
 pro implementaci. Platí pořadí milníků; každý má acceptance kritéria a končí commitem se zeleným
