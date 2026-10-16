@@ -18,9 +18,11 @@ class ChapterReader extends StatefulWidget {
     required this.onBack,
     this.initialPage = 0,
     this.seenLore = const {},
+    this.onPageTurn,
   });
 
   final Set<String>       seenLore;
+  final VoidCallback?     onPageTurn;
 
   final Chapter           chapter;
   final int               fontStep;
@@ -62,7 +64,10 @@ class _ChapterReaderState extends State<ChapterReader> {
           child: PageView.builder(
             controller:    _pages,
             itemCount:     c.pages.length,
-            onPageChanged: (i) => setState(() => _page = i),
+            onPageChanged: (i) {
+              setState(() => _page = i);
+              widget.onPageTurn?.call();
+            },
             itemBuilder:   (context, i) => _PageView(
               page:    c.pages[i],
               palette: pal,
