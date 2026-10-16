@@ -151,10 +151,9 @@ List<BookIssue> validateChapter(
   if (c.hero != '${c.id}-hero.webp') {
     err('hero „${c.hero}" neodpovídá jménu ${c.id}-hero.webp');
   }
-  _checkImageExists(c.hero, ctx, err);
-
-  // ── Kvíz (pahýl planned kapitoly kvíz nemá) ──
+  // ── Kvíz a obálka (pahýl planned kapitoly nemá kvíz ani obrázek, čtečka ho skrývá) ──
   final live = c.status == ChapterStatus.live;
+  if (live) _checkImageExists(c.hero, ctx, err);
   if (live && c.quiz.length != lim.quizQuestions) {
     err('kvíz má ${c.quiz.length} otázek (má mít ${lim.quizQuestions})');
   }
