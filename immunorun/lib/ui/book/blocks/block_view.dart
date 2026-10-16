@@ -1,10 +1,12 @@
 import 'package:cute_kid_fonts/cute_kid_fonts.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 
 import '../../../book/model/book_model.dart';
 import '../../../config/balance.dart';
 import '../../../domain/lore_text.dart';
 import '../book_theme.dart';
+import '../glossary_popup.dart';
 
 /// Dosadí placeholdery; když render selže (to hlídá BookSync test), ukáže
 /// raději syrový text než prázdné místo.
@@ -88,22 +90,58 @@ class BlockView extends StatelessWidget {
       .style(KidRole.body, palette: palette, size: Balance.bookBodySize * scale);
 }
 
-/// Odstavec: text, hesla (zvýrazněná, slovníček na tap přijde v K7),
-/// kurzíva pro latinské názvy.
-class InlineText extends StatelessWidget {
+/// Odstavec: text, hesla (tap → bublina slovníčku, F9), kurzíva pro
+/// latinské názvy.
+class InlineText extends StatefulWidget {
   const InlineText({
     super.key,
     required this.inlines,
     required this.palette,
     required this.scale,
+    this.interactive = true,
   });
 
   final List<Inline> inlines;
   final KidPalette   palette;
   final double       scale;
 
+  /// false = hesla bez tapu (uvnitř bubliny slovníčku).
+  final bool interactive;
+
+  @override
+  State<InlineText> createState() => _InlineTextState();
+}
+
+class _InlineTextState extends State<InlineText> {
+  final _taps = <TapGestureRecognizer>[];
+
+  @override
+  void dispose() {
+    for (final t in _taps) {
+      t.dispose();
+    }
+    super.dispose();
+  }
+
+  TapGestureRecognizer? _tapFor(TermRun term) {
+    if (!widget.interactive) return null;
+    final g = BookScope.maybeOf(context)?.glossary[term.termId];
+    if (g == null) return null;
+    final r = TapGestureRecognizer()
+      ..onTap = () => showGlossaryBubble(context, g, widget.palette);
+    _taps.add(r);
+    return r;
+  }
+
   @override
   Widget build(BuildContext context) {
+    for (final t in _taps) {
+      t.dispose();
+    }
+    _taps.clear();
+    final inlines = widget.inlines;
+    final palette = widget.palette;
+    final scale   = widget.scale;
     final theme = KidTheme.of(context);
     final plain = inlines.map((i) => i.text).join();
     final body  = theme.style(KidRole.body,
@@ -121,6 +159,8 @@ class InlineText extends StatelessWidget {
                 ),
               TermRun()     => TextSpan(
                   text:  renderBookText(i.text),
+                  recognizer: _tapFor(i),
+                  semanticsLabel: '${renderBookText(i.text)}, heslo slovníčku',
                   style: TextStyle(
                     color:           palette.mid,
                     fontWeight:      FontWeight.w700,

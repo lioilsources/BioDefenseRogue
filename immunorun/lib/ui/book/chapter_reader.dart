@@ -6,9 +6,10 @@ import '../../config/balance.dart';
 import 'blocks/block_view.dart';
 import 'book_overlay.dart' show seenAnchors;
 import 'book_theme.dart';
+import 'quiz_widget.dart';
 
 /// Čtečka kapitoly: lišta (zpět, název, velikost písma), stránky (swipe),
-/// tečky. Kvíz jako poslední stránka přijde v K7.
+/// tečky. Kvíz je poslední stránka (K7).
 class ChapterReader extends StatefulWidget {
   const ChapterReader({
     super.key,
@@ -19,10 +20,14 @@ class ChapterReader extends StatefulWidget {
     this.initialPage = 0,
     this.seenLore = const {},
     this.onPageTurn,
+    this.quizDone = false,
+    this.onQuizDone,
   });
 
   final Set<String>       seenLore;
   final VoidCallback?     onPageTurn;
+  final bool              quizDone;
+  final VoidCallback?     onQuizDone;
 
   final Chapter           chapter;
   final int               fontStep;
@@ -50,6 +55,7 @@ class _ChapterReaderState extends State<ChapterReader> {
     final c     = widget.chapter;
     final pal   = paletteForPart(c.part);
     final scale = bookFontScale(widget.fontStep);
+    final count = c.pages.length + (c.quiz.isEmpty ? 0 : 1);
 
     return Column(
       children: [
@@ -63,12 +69,17 @@ class _ChapterReaderState extends State<ChapterReader> {
         Expanded(
           child: PageView.builder(
             controller:    _pages,
-            itemCount:     c.pages.length,
+            itemCount:     count,
             onPageChanged: (i) {
               setState(() => _page = i);
               widget.onPageTurn?.call();
             },
-            itemBuilder:   (context, i) => _PageView(
+            itemBuilder:   (context, i) => i == c.pages.length
+                ? _Scroll(child: QuizView(
+                    questions: c.quiz, palette: pal, scale: scale,
+                    done: widget.quizDone, onDone: widget.onQuizDone,
+                  ))
+                : _PageView(
               page:    c.pages[i],
               palette: pal,
               scale:   scale,
@@ -77,10 +88,28 @@ class _ChapterReaderState extends State<ChapterReader> {
             ),
           ),
         ),
-        _Dots(count: c.pages.length, current: _page, palette: pal),
+        _Dots(count: count, current: _page, palette: pal),
       ],
     );
   }
+}
+
+/// Sloupec stránky: šířka pro tablet, scroll pro velké písmo.
+class _Scroll extends StatelessWidget {
+  const _Scroll({required this.child});
+
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => Center(
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(maxWidth: Balance.bookMaxContentWidth),
+          child: SingleChildScrollView(
+            padding: const EdgeInsets.all(Balance.bookPagePadding),
+            child: child,
+          ),
+        ),
+      );
 }
 
 class _PageView extends StatelessWidget {
@@ -100,11 +129,7 @@ class _PageView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: ConstrainedBox(
-        constraints: const BoxConstraints(maxWidth: Balance.bookMaxContentWidth),
-        child: SingleChildScrollView(
-          padding: const EdgeInsets.all(Balance.bookPagePadding),
+    return _Scroll(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -121,8 +146,6 @@ class _PageView extends StatelessWidget {
                 BlockView(block: b, palette: palette, scale: scale),
             ],
           ),
-        ),
-      ),
     );
   }
 }
