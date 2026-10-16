@@ -84,14 +84,27 @@ def http(method, url, body=None, raw=False):
     return payload if raw else json.loads(payload)
 
 
+# flux-schnell NIM bere jen strany 768–1344 po 64 px (1024×640 vrací 422): generuje se nejbližší
+# povolený rozměr se stejným poměrem stran a po stažení se ořízne a zmenší na e["size"].
+NIM_SIDES = range(768, 1345, 64)
+
+
+def gen_size(w, h):
+    if w in NIM_SIDES and h in NIM_SIDES:
+        return w, h
+    return min(((a, b) for a in NIM_SIDES for b in NIM_SIDES),
+               key=lambda s: (abs(s[0] / s[1] - w / h), -s[0] * s[1]))
+
+
 def run_job(m, e, seed):
     out = raw_path(e, seed)
     if out.exists():
         return f"{out.name}: už stažen"
     base = m["backend"]["url"]
     w, h = e["size"]
+    gw, gh = gen_size(w, h)
     job = http("POST", f"{base}/v1/infer", {
-        "prompt": prompt_of(m, e), "width": w, "height": h,
+        "prompt": prompt_of(m, e), "width": gw, "height": gh,
         "seed": seed, "steps": m["backend"]["steps"],
     })
     deadline = time.time() + POLL_TIMEOUT_S
@@ -100,6 +113,8 @@ def run_job(m, e, seed):
         if st.get("status") == "done":
             out.parent.mkdir(parents=True, exist_ok=True)
             out.write_bytes(http("GET", f'{base}/jobs/{job["id"]}/result', raw=True))
+            if (gw, gh) != (w, h):
+                ImageOps.fit(Image.open(out).convert("RGB"), (w, h), Image.LANCZOS).save(out, "JPEG", quality=95)
             return f"{out.name}: hotovo"
         if st.get("status") == "error":
             return f"{out.name}: CHYBA {st}"
