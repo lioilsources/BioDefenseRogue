@@ -155,6 +155,12 @@ void main() {
       expect(_errors(_valid, ctx: _ctxWith(imageFiles: {})),
           _has('„$_id-hero.webp" neexistuje'));
     });
+    test('planned pahýl obálku mít nemusí, live ano', () {
+      final planned = _swap('part: 3', 'status: planned\npart: 3');
+      final ctx = _ctxWith(imageFiles: {});
+      expect(_errors(planned, ctx: ctx), isNot(_has('neexistuje')));
+      expect(_errors(_valid, ctx: ctx), _has('neexistuje'));
+    });
     test('release vyžaduje obrázky i bez výpisu složky', () {
       expect(_errors(_valid, ctx: _ctxWith(release: true)),
           _has('neexistuje'));

@@ -7,7 +7,7 @@ import 'blocks/block_view.dart';
 import 'book_overlay.dart' show chapterSeen;
 import 'book_theme.dart';
 
-/// Seznam kapitol: obálka (hero, zatím placeholder) + číslo + název.
+/// Seznam kapitol: obálka (hero) + číslo + název.
 /// Nic není zamčené (05-kniha ADR 0002).
 class ChapterList extends StatelessWidget {
   const ChapterList({

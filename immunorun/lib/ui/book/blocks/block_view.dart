@@ -221,7 +221,7 @@ class BookBox extends StatelessWidget {
   }
 }
 
-/// Obrázek z assets/book/images/; dokud není (K4), plochý placeholder
+/// Obrázek z assets/book/images/; když chybí (pahýl fáze 2), plochý placeholder
 /// v paletě kapitoly s popiskem.
 class BookImage extends StatelessWidget {
   const BookImage({

@@ -72,6 +72,7 @@ flutter:
     - assets/images/pathogens/
     - assets/audio/
     - assets/book/cs/
+    - assets/book/images/
 
   shaders:
     - assets/shaders/fluid.frag
