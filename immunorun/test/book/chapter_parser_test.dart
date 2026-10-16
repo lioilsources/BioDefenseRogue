@@ -94,6 +94,15 @@ void main() {
     });
   });
 
+  test('strana pro rodiče: sekce s kotvami a odrážky', () {
+    final r = parseParents(
+        File('assets/book/cs/parents.md').readAsStringSync());
+    expect(r.errors, isEmpty, reason: r.errors.join('\n'));
+    expect(r.sections.first.anchor, 'co-je-lexikon');
+    expect(r.sections.expand((s) => s.blocks).whereType<ListBlock>(),
+        isNotEmpty);
+  });
+
   group('zdroje v komentářích', () {
     test('ověřený zdroj', () {
       final n = parseSourceNote(' src: JANEWAY kap. 3, s. 85 ')!;
