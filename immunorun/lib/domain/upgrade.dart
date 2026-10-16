@@ -3,6 +3,7 @@
 // texty v lore.dart.
 
 import 'lore.dart';
+import 'lore_text.dart';
 
 enum UpgradeId {
   opsonin,
@@ -21,7 +22,7 @@ class UpgradeDef {
 
   // Název a popis karty čte z registru pojmů (lore.dart) — jediný zdroj textu.
   String get nameCz => lore.byRef(id).nameCz;
-  String get descCz => lore.byRef(id).inGameCz;
+  String get descCz => lore.byRef(id).inGameText;
 }
 
 final List<UpgradeDef> allUpgrades = [
