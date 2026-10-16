@@ -40,7 +40,7 @@ class ImmunoGame extends FlameGame
   ImmunoGame({
     required this.providerContainer,
     this.initialMeta = MetaProgress.empty,
-    this.onRunEnded,
+    this.onMetaChanged,
   }) : meta = initialMeta;
 
   final ProviderContainer providerContainer;
@@ -49,8 +49,8 @@ class ImmunoGame extends FlameGame
   final MetaProgress initialMeta;
   MetaProgress meta;
 
-  /// Voláno po konci runu (smrt/výhra) s aktualizovanou metou — uložení.
-  final void Function(MetaProgress meta)? onRunEnded;
+  /// Voláno při každé změně mety (konec runu, nastavení knihy) — uložení.
+  final void Function(MetaProgress meta)? onMetaChanged;
 
   /// Buňky získané v posledním dohraném runu (pro game-over/run-won UI).
   int lastRunCellsEarned = 0;
@@ -200,6 +200,7 @@ class ImmunoGame extends FlameGame
   void pauseGame() {
     if (_gameOver || _runWon) return;
     if (overlays.isActive('pause') || overlays.isActive('mainMenu')) return;
+    if (isBookOpen) return;
     if (_upgradePending || _pendingChoices.isNotEmpty) return; // probíhá volba
     overlays.add('pause');
     pauseEngine();
@@ -226,6 +227,38 @@ class ImmunoGame extends FlameGame
     pauseEngine();
   }
 
+  // ─── Kniha (Lexikon zdraví) ───────────────────────────────────────────────
+
+  /// Kapitola, kterou má kniha otevřít (null = seznam kapitol).
+  String? bookChapterRequest;
+  bool    _bookPausedEngine = false;
+
+  bool get isBookOpen => overlays.isActive('book');
+
+  /// Otevře knihu nad aktuální obrazovkou (menu, pauza, game over). Když hra
+  /// běží, pauzne ji a po zavření ji zase pustí (vzor modální volby f217798).
+  /// Pod knihou zůstává předchozí overlay, zavření se vrátí na něj.
+  void openBook({String? chapterId}) {
+    if (isBookOpen) return;
+    bookChapterRequest = chapterId;
+    _bookPausedEngine  = !paused;
+    pauseEngine();
+    overlays.add('book');
+  }
+
+  void closeBook() {
+    if (!isBookOpen) return;
+    overlays.remove('book');
+    if (_bookPausedEngine) resumeEngine();
+    _bookPausedEngine = false;
+  }
+
+  /// Velikost písma knihy se ukládá do mety (přežije restart appky).
+  void setBookFontStep(int step) {
+    meta = meta.copyWith(bookFontStep: step);
+    onMetaChanged?.call(meta);
+  }
+
   @override
   KeyEventResult onKeyEvent(
     KeyEvent event,
@@ -233,7 +266,9 @@ class ImmunoGame extends FlameGame
   ) {
     if (event is KeyDownEvent &&
         event.logicalKey == LogicalKeyboardKey.escape) {
-      if (overlays.isActive('pause')) {
+      if (isBookOpen) {
+        closeBook();
+      } else if (overlays.isActive('pause')) {
         resumeGame();
       } else {
         pauseGame();
@@ -437,7 +472,7 @@ class ImmunoGame extends FlameGame
       lastKilledByType:  killedBy,
       clearLastKilledBy: killedBy == null,
     );
-    onRunEnded?.call(meta);
+    onMetaChanged?.call(meta);
   }
 
   /// Drop ATP pickupu na místě smrti nepřítele.

@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../game/immuno_game.dart';
+import '../book/book_theme.dart';
 
 /// Pauza — Esc nebo tlačítko v HUD.
 class PauseOverlay extends StatelessWidget {
@@ -37,6 +38,12 @@ class PauseOverlay extends StatelessWidget {
                 label:     'POKRAČOVAT',
                 color:     Colors.green.shade700,
                 onPressed: game.resumeGame,
+              ),
+              const SizedBox(height: 12),
+              _PauseButton(
+                label:     bookButtonCz,
+                color:     Colors.teal.shade700,
+                onPressed: game.openBook,
               ),
               const SizedBox(height: 12),
               _PauseButton(
