@@ -149,9 +149,16 @@ void main() {
     }
 
     testWidgets('razítko potkáno jen u kapitoly s potkaným pojmem', (tester) async {
+      final title = book.chapter('05-horecka')!.title;
+      Future<void> toCard() async {
+        await tester.scrollUntilVisible(_bubble(title), 300);
+        await tester.pumpAndSettle();
+      }
       await pumpS3(tester);
+      await toCard();
       expect(_bubble('potkáno'), findsNothing);
       await pumpS3(tester, seen: {'fever.febrile'}, last: '05-horecka');
+      await toCard();
       expect(_bubble('potkáno'), findsOneWidget);
       expect(_bubble('naposledy'), findsOneWidget);
     });
