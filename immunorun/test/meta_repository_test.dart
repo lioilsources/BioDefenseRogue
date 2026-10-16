@@ -24,9 +24,11 @@ void main() {
         totalRuns:        3,
         wins:             1,
         lastKilledByType: 'fever',
+        bookFontStep:     1,
       );
       await repo.save(meta);
       final loaded = await repo.load();
+      expect(loaded.bookFontStep, 1);
       expect(loaded.memoryCells, 7);
       expect(loaded.totalRuns, 3);
       expect(loaded.wins, 1);

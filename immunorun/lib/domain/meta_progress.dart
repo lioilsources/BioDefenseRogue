@@ -13,6 +13,7 @@ class MetaProgress {
     this.totalRuns        = 0,
     this.wins             = 0,
     this.lastKilledByType,
+    this.bookFontStep     = 0,
   });
 
   final int     memoryCells;
@@ -20,6 +21,8 @@ class MetaProgress {
   final int     wins;
   /// 'swarmer' | 'tank' | 'boss' | 'fever' | null (bez smrti / výhra)
   final String? lastKilledByType;
+  /// Velikost písma v knize: index do Balance.bookFontScales (0 = základní).
+  final int     bookFontStep;
 
   static const empty = MetaProgress();
 
@@ -33,6 +36,7 @@ class MetaProgress {
     int?     wins,
     String?  lastKilledByType,
     bool     clearLastKilledBy = false,
+    int?     bookFontStep,
   }) =>
       MetaProgress(
         memoryCells: memoryCells ?? this.memoryCells,
@@ -41,6 +45,7 @@ class MetaProgress {
         lastKilledByType: clearLastKilledBy
             ? null
             : (lastKilledByType ?? this.lastKilledByType),
+        bookFontStep: bookFontStep ?? this.bookFontStep,
       );
 
   Map<String, Object?> toMap() => {
@@ -48,6 +53,7 @@ class MetaProgress {
         'totalRuns':        totalRuns,
         'wins':             wins,
         'lastKilledByType': lastKilledByType,
+        'bookFontStep':     bookFontStep,
       };
 
   factory MetaProgress.fromMap(Map<String, Object?> map) => MetaProgress(
@@ -55,6 +61,7 @@ class MetaProgress {
         totalRuns:        (map['totalRuns'] as int?) ?? 0,
         wins:             (map['wins'] as int?) ?? 0,
         lastKilledByType: map['lastKilledByType'] as String?,
+        bookFontStep:     (map['bookFontStep'] as int?) ?? 0,
       );
 }
 
