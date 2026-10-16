@@ -29,6 +29,8 @@ enum LoreKind {
   ability,
   resource,
   mechanic,
+  hero,
+  biome,
 }
 
 enum LoreStatus { live, planned, retired }
@@ -49,6 +51,8 @@ const Map<LoreKind, String> loreIdPrefix = {
   LoreKind.ability:   'ability.',
   LoreKind.resource:  'resource.',
   LoreKind.mechanic:  'mechanic.',
+  LoreKind.hero:      'hero.',
+  LoreKind.biome:     'biome.',
 };
 
 /// Prefix sourceRef pro tvrzení, které ještě nemá ověřený zdroj
@@ -71,11 +75,19 @@ abstract final class BookChapter {
   static const zabijaci    = '10-zabijacke-bunky';
   static const uzlina      = '11-lymfaticka-uzlina';
   static const pamet       = '12-pamet-a-ockovani';
+  // Fáze 2: pahýly se status: planned, v knize skryté (06-sync S5)
+  static const evoluce     = '13-evoluce-nepratel';
+  static const selhani     = '14-kdyz-obrana-selze';
 
   static const all = [
     mikroskop, teloHrad, krvinky, nepratele, fagocytoza, horecka, zanet,
     cytokiny, protilatky, energie, zabijaci, uzlina, pamet,
   ];
+
+  static const planned = [evoluce, selhani];
+
+  /// Všechny kapitoly, na které smí registr a validace odkazovat.
+  static const known = [...all, ...planned];
 }
 
 class LoreEntry {
@@ -159,15 +171,20 @@ final List<Enum> loreRequiredRefs = [
 /// Ref existuje v kódu, ale nemá zatím gameplay → záznam musí být `planned`
 /// (a naopak: jakmile gameplay dostane, záznam musí být `live`).
 /// null = doména to neumí poznat (např. DamageType) → nekontroluje se.
-bool? loreRefIsPlanned(Enum ref) =>
-    ref is StatusEffect ? statusBaseDuration(ref) == 0 : null;
+bool? loreRefIsPlanned(Enum ref) => switch (ref) {
+      StatusEffect() => statusBaseDuration(ref) == 0,
+      // Hodnota těchto enumů existuje jen tehdy, když má gameplay (S5):
+      // planned záznam s takovým ref se musí přepnout na live.
+      EnemyType() || UpgradeId() || RoomType() || FeverZone() => false,
+      _ => null,
+    };
 
 /// Vrátí seznam porušení pravidel registru (prázdný = v pořádku).
 List<String> validateLore(
   Iterable<LoreEntry> entries, {
   Iterable<Enum>? requiredRefs,
   bool? Function(Enum ref) isPlannedRef = loreRefIsPlanned,
-  Iterable<String> knownChapters = BookChapter.all,
+  Iterable<String> knownChapters = BookChapter.known,
   Map<String, num> lookup = balanceLookup,
 }) {
   final registry = LoreRegistry(entries.toList());
@@ -726,5 +743,189 @@ const List<LoreEntry> allLore = [
     chapter:   BookChapter.mikroskop,
     anchor:    'falesne-barvy',
     sourceRef: '$loreTodoFact: SEM – SEM, příprava vzorku',
+  ),
+
+  // ── Roadmapa (06-sync S5): planned, bez ref; ref + live až s kódem ─────────
+  // Postavy (architecture/SYSTEMS §3)
+  LoreEntry(
+    id:        'hero.neutrophil',
+    kind:      LoreKind.hero,
+    status:    LoreStatus.planned,
+    nameCz:    'Neutrofil (postava)',
+    inGameCz:  'Plánováno: rychlý obránce, který první přiběhne a umí vyhodit síť z DNA.',
+    chapter:   BookChapter.krvinky,
+    anchor:    'neutrofil',
+  ),
+  LoreEntry(
+    id:        'hero.macrophage',
+    kind:      LoreKind.hero,
+    status:    LoreStatus.planned,
+    nameCz:    'Makrofág (postava)',
+    inGameCz:  'Plánováno: makrofág jako jedna z více hratelných postav.',
+    chapter:   BookChapter.krvinky,
+    anchor:    'makrofag',
+  ),
+  LoreEntry(
+    id:        'hero.nk',
+    kind:      LoreKind.hero,
+    status:    LoreStatus.planned,
+    nameCz:    'NK buňka (postava)',
+    inGameCz:  'Plánováno: přirozený zabiják, který hledá nakažené buňky.',
+    chapter:   BookChapter.krvinky,
+    anchor:    'dalsi-clenove',
+  ),
+  LoreEntry(
+    id:        'hero.bcell',
+    kind:      LoreKind.hero,
+    status:    LoreStatus.planned,
+    nameCz:    'B buňka (postava)',
+    inGameCz:  'Plánováno: střílí protilátky místo pohlcování.',
+    chapter:   BookChapter.krvinky,
+    anchor:    'dalsi-clenove',
+  ),
+  LoreEntry(
+    id:        'hero.cd8',
+    kind:      LoreKind.hero,
+    status:    LoreStatus.planned,
+    nameCz:    'Cytotoxická T buňka (postava)',
+    inGameCz:  'Plánováno: zabíjí nakažené buňky granulemi.',
+    chapter:   BookChapter.zabijaci,
+    anchor:    'zabijaci',
+  ),
+  LoreEntry(
+    id:        'hero.eosinophil',
+    kind:      LoreKind.hero,
+    status:    LoreStatus.planned,
+    nameCz:    'Eozinofil (postava)',
+    inGameCz:  'Plánováno: obránce proti velkým parazitům.',
+    chapter:   BookChapter.krvinky,
+  ),
+  // Biomy (PLAN §2)
+  LoreEntry(
+    id:        'biome.epithelium',
+    kind:      LoreKind.biome,
+    status:    LoreStatus.planned,
+    nameCz:    'Epitel (biom)',
+    inGameCz:  'Plánováno: první biom, kůže a sliznice; dnes místnosti bez jména biomu.',
+    chapter:   BookChapter.teloHrad,
+    anchor:    'epitel',
+  ),
+  LoreEntry(
+    id:        'biome.blood',
+    kind:      LoreKind.biome,
+    status:    LoreStatus.planned,
+    nameCz:    'Krev (biom)',
+    inGameCz:  'Plánováno: biom krevního řečiště.',
+    chapter:   BookChapter.teloHrad,
+  ),
+  LoreEntry(
+    id:        'biome.lung',
+    kind:      LoreKind.biome,
+    status:    LoreStatus.planned,
+    nameCz:    'Plíce (biom)',
+    inGameCz:  'Plánováno: biom plic, domov chřipky a plísní.',
+    chapter:   BookChapter.teloHrad,
+  ),
+  LoreEntry(
+    id:        'biome.marrow',
+    kind:      LoreKind.biome,
+    status:    LoreStatus.planned,
+    nameCz:    'Kostní dřeň (biom)',
+    inGameCz:  'Plánováno: biom, kde se rodí krvinky.',
+    chapter:   BookChapter.krvinky,
+  ),
+  // Bossové (SYSTEMS §2); stafylokok = enemy.boss (OQ-13)
+  LoreEntry(
+    id:        'enemy.boss.flu',
+    kind:      LoreKind.enemy,
+    status:    LoreStatus.planned,
+    nameCz:    'Chřipkový virus (boss)',
+    inGameCz:  'Plánováno: mění svůj vzhled (antigenní drift).',
+    chapter:   BookChapter.nepratele,
+    anchor:    'viry',
+  ),
+  LoreEntry(
+    id:        'enemy.boss.aspergillus',
+    kind:      LoreKind.enemy,
+    status:    LoreStatus.planned,
+    nameCz:    'Plíseň Aspergillus (boss)',
+    inGameCz:  'Plánováno: spory ve vzduchu, nebezpečná pro oslabené tělo.',
+    chapter:   BookChapter.nepratele,
+    anchor:    'houby',
+  ),
+  LoreEntry(
+    id:        'enemy.boss.apex',
+    kind:      LoreKind.enemy,
+    status:    LoreStatus.planned,
+    nameCz:    'Apex Strain (boss)',
+    inGameCz:  'Plánováno: sepse, když se infekce rozlije do celého těla.',
+    chapter:   BookChapter.selhani,
+  ),
+  // Mechaniky (SYSTEMS §5–6, PLAN §7)
+  LoreEntry(
+    id:        'mechanic.mutation',
+    kind:      LoreKind.mechanic,
+    status:    LoreStatus.planned,
+    nameCz:    'Mutace',
+    inGameCz:  'Plánováno: nepřátelé se mezi runy mění.',
+    chapter:   BookChapter.evoluce,
+  ),
+  LoreEntry(
+    id:        'mechanic.resistance',
+    kind:      LoreKind.mechanic,
+    status:    LoreStatus.planned,
+    nameCz:    'Rezistence',
+    inGameCz:  'Plánováno: bakterie se naučí odolávat útokům, které často dostávají.',
+    chapter:   BookChapter.evoluce,
+  ),
+  LoreEntry(
+    id:        'mechanic.sos',
+    kind:      LoreKind.mechanic,
+    status:    LoreStatus.planned,
+    nameCz:    'SOS odpověď',
+    inGameCz:  'Plánováno: bakterie v nouzi mutuje rychleji.',
+    chapter:   BookChapter.evoluce,
+  ),
+  LoreEntry(
+    id:        'mechanic.thPolarization',
+    kind:      LoreKind.mechanic,
+    status:    LoreStatus.planned,
+    nameCz:    'Polarizace pomocných T buněk',
+    inGameCz:  'Plánováno: volba typu odpovědi v lymfatické uzlině.',
+    chapter:   BookChapter.uzlina,
+  ),
+  LoreEntry(
+    id:        'mechanic.antigenPresentation',
+    kind:      LoreKind.mechanic,
+    status:    LoreStatus.planned,
+    nameCz:    'Prezentace antigenu',
+    inGameCz:  'Plánováno: ukázat kus nepřítele T buňkám a získat antigen.',
+    chapter:   BookChapter.uzlina,
+    anchor:    'prezentace-antigenu',
+  ),
+  LoreEntry(
+    id:        'mechanic.clonalSelection',
+    kind:      LoreKind.mechanic,
+    status:    LoreStatus.planned,
+    nameCz:    'Klonální selekce',
+    inGameCz:  'Plánováno: namnožení obránců, kteří nepřítele poznali.',
+    chapter:   BookChapter.uzlina,
+    anchor:    'klonalni-selekce',
+  ),
+  LoreEntry(
+    id:        'mechanic.cytokineStorm',
+    kind:      LoreKind.mechanic,
+    status:    LoreStatus.planned,
+    nameCz:    'Cytokinová bouře',
+    inGameCz:  'Plánováno: přehnaná odpověď, která škodí tělu.',
+    chapter:   BookChapter.selhani,
+  ),
+  LoreEntry(
+    id:        'mechanic.sepsis',
+    kind:      LoreKind.mechanic,
+    status:    LoreStatus.planned,
+    nameCz:    'Sepse',
+    inGameCz:  'Plánováno: infekce v celém těle; vede k bossovi Apex Strain.',
+    chapter:   BookChapter.selhani,
   ),
 ];
