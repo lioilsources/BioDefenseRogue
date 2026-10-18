@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/lore.dart';
 import '../../game/immuno_game.dart';
+import '../book/book_theme.dart';
 import '../meta_providers.dart';
 
 /// Hlavní menu — overlay, ne route (viz UX doc §12).
@@ -60,6 +61,12 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
               label:     'SPUSTIT RUN',
               color:     Colors.green.shade700,
               onPressed: game.startRun,
+            ),
+            const SizedBox(height: 14),
+            _MenuButton(
+              label:     bookButtonCz,
+              color:     Colors.teal.shade700,
+              onPressed: game.openBook,
             ),
             const SizedBox(height: 14),
             _MenuButton(

@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'data/meta_repository.dart';
 import 'domain/meta_progress.dart';
 import 'game/immuno_game.dart';
+import 'ui/book/book_overlay.dart';
 import 'ui/hud/hud_overlay.dart';
 import 'ui/input/gesture_pad.dart';
 import 'ui/meta_providers.dart';
@@ -64,7 +65,7 @@ class _GameScreenState extends State<_GameScreen> {
     return meta;
   }
 
-  void _onRunEnded(MetaProgress meta) {
+  void _onMetaChanged(MetaProgress meta) {
     _container.read(metaProvider.notifier).set(meta);
     _metaRepo.save(meta); // fire-and-forget; případná chyba nezastaví hru
   }
@@ -87,7 +88,7 @@ class _GameScreenState extends State<_GameScreen> {
         final game = _game ??= ImmunoGame(
           providerContainer: _container,
           initialMeta:       snapshot.data!,
-          onRunEnded:        _onRunEnded,
+          onMetaChanged:     _onMetaChanged,
         );
         return _buildGame(game);
       },
@@ -113,6 +114,7 @@ class _GameScreenState extends State<_GameScreen> {
           'roomChoice': (context, game) => RoomChoiceOverlay(game: game),
           'upgradeChoice': (context, game) => UpgradeChoiceOverlay(game: game),
           'transition': (context, game) => const _TransitionOverlay(),
+          'book':       (context, game) => BookOverlay(game: game),
         },
         initialActiveOverlays: const [],
       ),

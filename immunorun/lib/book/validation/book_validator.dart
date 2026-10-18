@@ -109,7 +109,7 @@ String boxText(BoxBlock box) => [
     ].join(' ');
 
 /// Hlavní text stránky: odstavce a ### mimo boxy.
-String mainText(Page page) => [
+String mainText(BookPage page) => [
       for (final b in page.blocks)
         if (b is ParagraphBlock)
           b.plainText

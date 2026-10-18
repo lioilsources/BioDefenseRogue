@@ -237,4 +237,24 @@ abstract final class Balance {
   static const int bookQuizAnswers          = 3;
   static const int bookQuizWhyWordsMax      = 25;
   static const int bookZvedaveMax           = 2;   // boxů „Pro zvědavé" v kapitole
+
+  // ── Kniha: čtečka (K2) ────────────────────────────────────────────────────
+  static const List<double> bookFontScales = [1.0, 1.2, 1.4]; // A / A / A
+  static const double bookBodySize        = 18.0;  // sp, min. 16 (přístupnost)
+  static const double bookHeadingSize     = 30.0;
+  static const double bookListTitleSize   = 22.0;
+  static const double bookBoxTitleSize    = 15.0;
+  static const double bookBarTitleSize    = 16.0;
+  static const double bookCoverTitleSize  = 26.0;
+  static const double bookMaxContentWidth = 560.0; // px, tablet: sloupec uprostřed
+  static const double bookPagePadding     = 20.0;
+  static const double bookTapTargetMin    = 44.0;  // px
+  static const double bookDotSize         = 8.0;
+  static const double bookBoxRadius       = 14.0;
+  static const double bookBackdropAlpha   = 0.94;  // kniha „svítí" nad hrou
+  static const double bookBoxFillAlpha    = 0.30;
+  static const double bookPlaceholderAlpha = 0.35;
+  static const int    bookImageCacheWidth = 768;   // hero; schéma 512 (K4)
+  static const double bookImageAspect     = 16 / 10;
+  static const int    bookPageTurnMs      = 280;
 }

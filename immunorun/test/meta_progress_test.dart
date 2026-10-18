@@ -11,12 +11,28 @@ void main() {
         totalRuns:        5,
         wins:             1,
         lastKilledByType: 'tank',
+        bookFontStep:     2,
       );
       final restored = MetaProgress.fromMap(original.toMap());
+      expect(restored.bookFontStep, 2);
       expect(restored.memoryCells, 12);
       expect(restored.totalRuns, 5);
       expect(restored.wins, 1);
       expect(restored.lastKilledByType, 'tank');
+    });
+
+    test('migrace: stará meta bez bookFontStep dostane výchozí 0', () {
+      final old = MetaProgress.fromMap({'memoryCells': 4, 'totalRuns': 2});
+      expect(old.memoryCells, 4);
+      expect(old.bookFontStep, 0);
+    });
+
+    test('copyWith bookFontStep zachová zbytek mety', () {
+      const meta = MetaProgress(memoryCells: 9, lastKilledByType: 'fever');
+      final big  = meta.copyWith(bookFontStep: 1);
+      expect(big.bookFontStep, 1);
+      expect(big.memoryCells, 9);
+      expect(big.lastKilledByType, 'fever');
     });
 
     test('bonus HP je capnutý', () {

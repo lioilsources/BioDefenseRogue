@@ -1,5 +1,5 @@
 // GENEROVÁNO: dart run tool/gen_balance_map.dart — needitovat ručně.
-// Zdroj: lib/config/balance.dart (static const int/double), 156 konstant.
+// Zdroj: lib/config/balance.dart (static const int/double), 173 konstant.
 
 import 'balance.dart';
 
@@ -160,4 +160,21 @@ const Map<String, num> balanceLookup = {
   'bookQuizAnswers': Balance.bookQuizAnswers,
   'bookQuizWhyWordsMax': Balance.bookQuizWhyWordsMax,
   'bookZvedaveMax': Balance.bookZvedaveMax,
+  'bookBodySize': Balance.bookBodySize,
+  'bookHeadingSize': Balance.bookHeadingSize,
+  'bookListTitleSize': Balance.bookListTitleSize,
+  'bookBoxTitleSize': Balance.bookBoxTitleSize,
+  'bookBarTitleSize': Balance.bookBarTitleSize,
+  'bookCoverTitleSize': Balance.bookCoverTitleSize,
+  'bookMaxContentWidth': Balance.bookMaxContentWidth,
+  'bookPagePadding': Balance.bookPagePadding,
+  'bookTapTargetMin': Balance.bookTapTargetMin,
+  'bookDotSize': Balance.bookDotSize,
+  'bookBoxRadius': Balance.bookBoxRadius,
+  'bookBackdropAlpha': Balance.bookBackdropAlpha,
+  'bookBoxFillAlpha': Balance.bookBoxFillAlpha,
+  'bookPlaceholderAlpha': Balance.bookPlaceholderAlpha,
+  'bookImageCacheWidth': Balance.bookImageCacheWidth,
+  'bookImageAspect': Balance.bookImageAspect,
+  'bookPageTurnMs': Balance.bookPageTurnMs,
 };
