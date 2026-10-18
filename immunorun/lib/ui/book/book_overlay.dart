@@ -7,6 +7,7 @@ import '../../book/parser/book_loader.dart';
 import '../../config/balance.dart';
 import '../../domain/lore.dart';
 import '../../game/immuno_game.dart';
+import '../../game/systems/audio_controller.dart';
 import '../meta_providers.dart';
 import 'book_providers.dart';
 import 'chapter_list.dart';
@@ -34,6 +35,7 @@ class BookOverlay extends ConsumerWidget {
         fontStep:       fontStep,
         onFontStep:     game.setBookFontStep,
         onClose:        game.closeBook,
+        onPageTurn:     () => game.audio.play(Sfx.pageTurn),
       ),
       loading: () => const _Backdrop(child: SizedBox.expand()),
       error:   (e, _) => _Backdrop(
@@ -59,6 +61,7 @@ class BookScreen extends StatefulWidget {
     this.seenLore = const {},
     this.lastChapter,
     this.onChapterOpened,
+    this.onPageTurn,
   });
 
   final Book              book;
@@ -77,6 +80,7 @@ class BookScreen extends StatefulWidget {
   final Set<String> seenLore;
   final String?     lastChapter;
   final ValueChanged<String>? onChapterOpened;
+  final VoidCallback?         onPageTurn;
 
   @override
   State<BookScreen> createState() => _BookScreenState();
@@ -123,6 +127,7 @@ class _BookScreenState extends State<BookScreen> {
                 chapter:    open,
                 fontStep:   widget.fontStep,
                 seenLore:   widget.seenLore,
+                onPageTurn: widget.onPageTurn,
                 initialPage: _direct && open.id == widget.initialChapter
                     ? pageOfAnchor(open, widget.initialAnchor)
                     : 0,

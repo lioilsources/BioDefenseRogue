@@ -256,6 +256,8 @@ class ImmunoGame extends FlameGame
     _bookPausedEngine  = !paused;
     pauseEngine();
     overlays.add('book');
+    audio.play(Sfx.bookOpen);
+    audio.startAmbient();
   }
 
   /// Deep-link na pojem registru (kapitola + kotva).
@@ -265,6 +267,8 @@ class ImmunoGame extends FlameGame
   void closeBook() {
     if (!isBookOpen) return;
     overlays.remove('book');
+    audio.play(Sfx.bookClose);
+    audio.stopAmbient();
     if (_bookPausedEngine) resumeEngine();
     _bookPausedEngine = false;
   }

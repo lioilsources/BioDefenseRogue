@@ -261,4 +261,10 @@ abstract final class Balance {
   static const double bookToastSeconds    = 2.0;   // „Nová stránka v knize"
   static const double bookToastTextSize   = 15.0;
   static const double bookStampSize       = 12.0;  // razítko „POTKÁNO"
+
+  // ── Kniha: zvuk (K6, ADR 0005) ────────────────────────────────────────────
+  static const double bookAmbientVolume   = 0.35;  // 0..1, pod sfxMasterVolume
+  static const int    bookAmbientFadeMs   = 600;   // fade-in i fade-out
+  static const int    bookAmbientFadeSteps = 12;
+  static const bool   bookNarrationEnabled = false; // narace = fáze 2 (OQ-3)
 }
