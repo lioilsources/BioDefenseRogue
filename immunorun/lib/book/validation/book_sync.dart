@@ -17,6 +17,7 @@ import '../../config/balance_map.g.dart';
 import '../../domain/lore.dart';
 import '../../domain/lore_text.dart';
 import '../model/book_model.dart';
+import '../parser/chapter_parser.dart' show parseSourceNote;
 import 'book_validator.dart';
 
 List<BookIssue> validateBookSync(
@@ -92,6 +93,24 @@ List<BookIssue> validateBookSync(
     }
   }
   return issues;
+}
+
+/// sourceRef registru musí mít klíč ze `sources.md` (06-sync S4).
+List<String> loreSourceErrors(Iterable<LoreEntry> entries, Set<String> keys) {
+  final errors = <String>[];
+  for (final e in entries) {
+    final ref = e.sourceRef;
+    if (ref == null) continue;
+    final note = parseSourceNote(ref);
+    if (note == null || note.keys.isEmpty) {
+      errors.add('${e.id}: sourceRef bez klíče zdroje „$ref"');
+      continue;
+    }
+    for (final k in note.keys) {
+      if (!keys.contains(k)) errors.add('${e.id}: neznámý klíč zdroje „$k"');
+    }
+  }
+  return errors;
 }
 
 /// Všechny texty kapitoly, které čtenář uvidí (bez komentářů se zdroji).
