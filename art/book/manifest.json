@@ -1,0 +1,499 @@
+{
+  "_comment": "Lexikon zdraví – obrázky knihy (05-kniha ADR 0004, plán K4). Prompt = styles[style] + ', ' + subject. Generuje art/book/gen.py; výběr varianty zapisuje 'selected' (seed). Žádný text v obrázku.",
+  "backend": {
+    "url": "http://192.168.88.66:8091/nim/flux-schnell",
+    "model": "flux-schnell (NIM)",
+    "license": "Apache-2.0",
+    "license_verified": false,
+    "steps": 4,
+    "windows": [
+      [
+        7,
+        13
+      ],
+      [
+        19,
+        25
+      ]
+    ]
+  },
+  "models_allowed": {
+    "flux-schnell (NIM)": "Apache-2.0"
+  },
+  "styles": {
+    "micro": "black and white scanning electron microscope image, monochrome grayscale, rough organic surface with fine granular texture, soft directional side lighting, shallow depth of field, deep black background, highly detailed scientific photography",
+    "schema": "flat pastel children's book illustration, simple rounded friendly shapes, soft even shading, gentle colors, plain light cream background, clean composition with generous empty space, no letters, no words, no numbers"
+  },
+  "ramps": {
+    "host": [
+      "#021a1f",
+      "#0e7c86",
+      "#4de8e8",
+      "#eaffff"
+    ],
+    "bacteria": [
+      "#1a0f00",
+      "#8a5a0a",
+      "#f1c40f",
+      "#fff6cf"
+    ],
+    "fungus": [
+      "#12061a",
+      "#6c3483",
+      "#9b59b6",
+      "#f0dcff"
+    ]
+  },
+  "images": [
+    {
+      "id": "00-mikroskop-hero",
+      "chapter": "00-mikroskop",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "host",
+      "subject": "a macrophage cell reaching out long thin extensions towards a small cluster of round bacteria",
+      "seeds": [
+        2000,
+        2001,
+        2002,
+        2003
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "01-telo-jako-hrad-hero",
+      "chapter": "01-telo-jako-hrad",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "host",
+      "subject": "the surface of an epithelium made of flat tightly packed paving cells, a few small round bacteria resting near the edge",
+      "seeds": [
+        2010,
+        2011,
+        2012,
+        2013
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "02-bile-krvinky-hero",
+      "chapter": "02-bile-krvinky",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "host",
+      "subject": "several different white blood cells side by side, one large ruffled cell, one small smooth round cell, one cell with a lobed bumpy surface",
+      "seeds": [
+        2020,
+        2021,
+        2022,
+        2023
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "03-nepratele-hero",
+      "chapter": "03-nepratele",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "bacteria",
+      "subject": "a dense cluster of round staphylococcus bacteria embedded in a thick slimy biofilm layer",
+      "seeds": [
+        2030,
+        2031,
+        2032,
+        2033
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "04-fagocytoza-hero",
+      "chapter": "04-fagocytoza",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "host",
+      "subject": "a macrophage wrapping its extensions around a rod shaped bacterium",
+      "seeds": [
+        2040,
+        2041,
+        2042,
+        2043
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "04-fagocytoza-schema-1",
+      "chapter": "04-fagocytoza",
+      "register": "schema",
+      "style": "schema",
+      "ramp": null,
+      "subject": "three stages side by side: a soft blob cell flowing around a small capsule shaped germ, then the germ enclosed in a bubble inside the cell, then the bubble merging with a smaller bubble",
+      "seeds": [
+        2050,
+        2051,
+        2052,
+        2053
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "resize:512",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "05-horecka-hero",
+      "chapter": "05-horecka",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "bacteria",
+      "subject": "a white blood cell surrounded by many small round bacteria",
+      "seeds": [
+        2060,
+        2061,
+        2062,
+        2063
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "05-horecka-schema-1",
+      "chapter": "05-horecka",
+      "register": "schema",
+      "style": "schema",
+      "ramp": null,
+      "subject": "a friendly round cell sending small glowing dots through a winding red tube towards a simple brain shape that holds a round dial turned higher",
+      "seeds": [
+        2070,
+        2071,
+        2072,
+        2073
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "resize:512",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "06-zanet-a-histamin-hero",
+      "chapter": "06-zanet-a-histamin",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "host",
+      "subject": "a mast cell packed with many small round granules",
+      "seeds": [
+        2080,
+        2081,
+        2082,
+        2083
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "07-cytokiny-hero",
+      "chapter": "07-cytokiny",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "host",
+      "subject": "several cells connected by thin delicate extensions",
+      "seeds": [
+        2090,
+        2091,
+        2092,
+        2093
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "07-cytokiny-schema-1",
+      "chapter": "07-cytokiny",
+      "register": "schema",
+      "style": "schema",
+      "ramp": null,
+      "subject": "one round cell releasing a wave of small colorful dots and a second cell moving along the dots towards the first one",
+      "seeds": [
+        2100,
+        2101,
+        2102,
+        2103
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "resize:512",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "08-protilatky-hero",
+      "chapter": "08-protilatky",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "bacteria",
+      "subject": "a lymphocyte with a bumpy surface next to a round bacterium",
+      "seeds": [
+        2110,
+        2111,
+        2112,
+        2113
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "08-protilatky-schema-1",
+      "chapter": "08-protilatky",
+      "register": "schema",
+      "style": "schema",
+      "ramp": null,
+      "subject": "a round germ covered with many small Y shaped tags and a soft blob cell reaching towards it",
+      "seeds": [
+        2120,
+        2121,
+        2122,
+        2123
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "resize:512",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "09-energie-bunky-hero",
+      "chapter": "09-energie-bunky",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "host",
+      "subject": "a macrophage with long extensions spreading over a flat surface",
+      "seeds": [
+        2130,
+        2131,
+        2132,
+        2133
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "10-zabijacke-bunky-hero",
+      "chapter": "10-zabijacke-bunky",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "host",
+      "subject": "a small killer cell pressed tightly against a larger round cell",
+      "seeds": [
+        2140,
+        2141,
+        2142,
+        2143
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "11-lymfaticka-uzlina-hero",
+      "chapter": "11-lymfaticka-uzlina",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "fungus",
+      "subject": "a dendritic cell with many long thin branching extensions",
+      "seeds": [
+        2150,
+        2151,
+        2152,
+        2153
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "11-lymfaticka-uzlina-schema-1",
+      "chapter": "11-lymfaticka-uzlina",
+      "register": "schema",
+      "style": "schema",
+      "ramp": null,
+      "subject": "a bean shaped node with winding paths inside, a large cell with branches handing a small shape to a smaller round cell",
+      "seeds": [
+        2160,
+        2161,
+        2162,
+        2163
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "resize:512",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "12-pamet-a-ockovani-hero",
+      "chapter": "12-pamet-a-ockovani",
+      "register": "mikrofoto",
+      "style": "micro",
+      "ramp": "fungus",
+      "subject": "a single calm round lymphocyte with a smooth surface",
+      "seeds": [
+        2170,
+        2171,
+        2172,
+        2173
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "gradmap",
+        "resize:768",
+        "webp:80"
+      ],
+      "selected": null
+    },
+    {
+      "id": "12-pamet-a-ockovani-schema-1",
+      "chapter": "12-pamet-a-ockovani",
+      "register": "schema",
+      "style": "schema",
+      "ramp": null,
+      "subject": "two rolling hill shaped waves side by side, the left one low and wide, the right one tall and narrow, small round friendly cells standing on top of each wave",
+      "seeds": [
+        2180,
+        2181,
+        2182,
+        2183
+      ],
+      "size": [
+        1024,
+        640
+      ],
+      "post": [
+        "resize:512",
+        "webp:80"
+      ],
+      "selected": null
+    }
+  ]
+}
