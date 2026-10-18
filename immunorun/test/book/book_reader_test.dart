@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:cute_kid_fonts/cute_kid_fonts.dart';
+import 'package:flutter/gestures.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -74,7 +75,7 @@ void main() {
     await tester.drag(find.byType(PageView), const Offset(-250, 0));
     await tester.pumpAndSettle();
     expect(_bubble('Normální teplota'), findsOneWidget);
-    expect(find.bySemanticsLabel('Stránka 2 z 6'), findsOneWidget);
+    expect(find.bySemanticsLabel('Stránka 2 z 7'), findsOneWidget);
 
     for (var i = 0; i < 2; i++) {
       await tester.drag(find.byType(PageView), const Offset(-250, 0));
@@ -184,14 +185,115 @@ void main() {
           chapter: '05-horecka', anchor: 'kdy-je-horecka-nebezpecna',
           seen: {'fever.hyper'});
       expect(_bubble('Kdy je horečka nebezpečná'), findsOneWidget);
-      expect(find.bySemanticsLabel('Stránka 5 z 6'), findsOneWidget);
+      expect(find.bySemanticsLabel('Stránka 5 z 7'), findsOneWidget);
       expect(find.bySemanticsLabel('Potkáno ve hře'), findsOneWidget);
       expect(opened, ['05-horecka']);
     });
 
     testWidgets('neznámá kotva → první stránka', (tester) async {
       await pumpS3(tester, chapter: '05-horecka', anchor: 'neni');
-      expect(find.bySemanticsLabel('Stránka 1 z 6'), findsOneWidget);
+      expect(find.bySemanticsLabel('Stránka 1 z 7'), findsOneWidget);
+    });
+  });
+
+  group('kvíz, slovníček, rodiče (K7)', () {
+    Future<({List<String> quiz})> pumpK7(WidgetTester tester, {
+      String? chapter, Set<String> quizDone = const {},
+    }) async {
+      final quiz = <String>[];
+      tester.view.physicalSize     = const Size(1080, 2340);
+      tester.view.devicePixelRatio = 3;
+      addTearDown(tester.view.reset);
+      await tester.pumpWidget(MaterialApp(
+        home: BookScreen(
+          key: UniqueKey(), book: book, fontStep: 0,
+          onFontStep: (_) {}, onClose: () {}, initialChapter: chapter,
+          quizDone: quizDone, onQuizDone: quiz.add,
+        ),
+      ));
+      await tester.pumpAndSettle();
+      return (quiz: quiz);
+    }
+
+    Future<void> toLastPage(WidgetTester tester) async {
+      for (var i = 0; i < 6; i++) {
+        await tester.drag(find.byType(PageView), const Offset(-250, 0));
+        await tester.pumpAndSettle();
+      }
+    }
+
+    testWidgets('kvíz: odpověď s vysvětlením, po třech otázkách razítko', (tester) async {
+      final r = await pumpK7(tester, chapter: '05-horecka');
+      await toLastPage(tester);
+      expect(_bubble('Kvíz'), findsOneWidget);
+      expect(find.bySemanticsLabel('Stránka 7 z 7'), findsOneWidget);
+
+      final quiz = book.chapter('05-horecka')!.quiz;
+      for (final q in quiz) {
+        final wrong = q.answers.firstWhere((a) => !a.correct);
+        final answer = find.text(wrong.text).first;
+        await tester.ensureVisible(answer);
+        await tester.pumpAndSettle();
+        await tester.tap(answer);
+        await tester.pumpAndSettle();
+        expect(find.textContaining(q.why), findsOneWidget);
+      }
+      expect(find.textContaining('Ne tak docela.'), findsNWidgets(3));
+      expect(r.quiz, ['05-horecka'], reason: 'onQuizDone právě jednou');
+      await tester.ensureVisible(_bubble('kvíz hotov'));
+      await tester.pumpAndSettle();
+      expect(_bubble('kvíz hotov'), findsOneWidget);
+    });
+
+    testWidgets('kvíz: první volba platí', (tester) async {
+      await pumpK7(tester, chapter: '05-horecka');
+      await toLastPage(tester);
+      final q = book.chapter('05-horecka')!.quiz.first;
+      final right = q.answers.firstWhere((a) => a.correct);
+      final wrong = q.answers.firstWhere((a) => !a.correct);
+      await tester.tap(find.text(right.text));
+      await tester.pumpAndSettle();
+      await tester.tap(find.text(wrong.text));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Správně!'), findsOneWidget);
+      expect(find.textContaining('Ne tak docela.'), findsNothing);
+    });
+
+    testWidgets('heslo: tap → bublina s definicí, tap mimo zavře', (tester) async {
+      await pumpK7(tester, chapter: '05-horecka');
+      await tester.drag(find.byType(PageView), const Offset(-250, 0));
+      await tester.pumpAndSettle();
+      final term = book.glossary['hypotalamus']!;
+      final finder = _rich('hypotalamus');
+      // Tap na slovo „hypotalamus" v odstavci (TextSpan s recognizerem).
+      final rich = tester.widget<RichText>(finder.first);
+      var hit = false;
+      rich.text.visitChildren((span) {
+        if (span is TextSpan && span.text == 'hypotalamus') {
+          (span.recognizer as TapGestureRecognizer).onTap!();
+          hit = true;
+          return false;
+        }
+        return true;
+      });
+      expect(hit, isTrue);
+      await tester.pumpAndSettle();
+      expect(_bubble(term.name), findsOneWidget);
+      await tester.tapAt(const Offset(5, 5));
+      await tester.pumpAndSettle();
+      expect(_bubble(term.name), findsNothing);
+    });
+
+    testWidgets('strana pro rodiče ze seznamu kapitol', (tester) async {
+      await pumpK7(tester);
+      final btn = _bubble('Pro rodiče a učitele');
+      await tester.scrollUntilVisible(btn, 400);
+      await tester.tap(btn);
+      await tester.pumpAndSettle();
+      expect(_bubble('Co je Lexikon zdraví'), findsOneWidget);
+      await tester.tap(find.byTooltip('Zpět'));
+      await tester.pumpAndSettle();
+      expect(_bubble('Lexikon zdraví'), findsOneWidget);
     });
   });
 
@@ -246,6 +348,15 @@ void main() {
       expect(saved.last.lastChapter, '03-nepratele');
       g.setLastChapter('03-nepratele');
       expect(saved, hasLength(1), reason: 'beze změny se neukládá');
+    });
+
+    test('dokončený kvíz se uloží jednou', () {
+      final saved = <MetaProgress>[];
+      final g = game(onMetaChanged: saved.add)
+        ..markQuizDone('05-horecka')
+        ..markQuizDone('05-horecka');
+      expect(g.meta.quizDone, {'05-horecka'});
+      expect(saved, hasLength(1));
     });
 
     test('velikost písma se uloží do mety', () {

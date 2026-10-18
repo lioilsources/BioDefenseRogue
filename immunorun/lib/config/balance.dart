@@ -267,4 +267,9 @@ abstract final class Balance {
   static const int    bookAmbientFadeMs   = 600;   // fade-in i fade-out
   static const int    bookAmbientFadeSteps = 12;
   static const bool   bookNarrationEnabled = false; // narace = fáze 2 (OQ-3)
+
+  // ── Kniha: kvíz a slovníček (K7) ─────────────────────────────────────────
+  static const double bookGlossaryBarrierAlpha = 0.5;
+  static const double bookQuizAnswerRadius     = 12.0;
+  static const double bookQuizAnswerFillAlpha  = 0.25;
 }

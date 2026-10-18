@@ -17,8 +17,12 @@ class ChapterList extends StatelessWidget {
     required this.onClose,
     this.seenLore = const {},
     this.lastChapter,
+    this.quizDone = const {},
+    this.onParents,
   });
 
+  final Set<String>            quizDone;
+  final VoidCallback?          onParents;
   final Set<String>            seenLore;
   final String?                lastChapter;
   final List<Chapter>          chapters;
@@ -33,13 +37,23 @@ class ChapterList extends StatelessWidget {
         Expanded(
           child: ListView.separated(
             padding: const EdgeInsets.all(Balance.bookPagePadding),
-            itemCount: chapters.length,
+            itemCount: chapters.length + (onParents == null ? 0 : 1),
             separatorBuilder: (_, _) => const SizedBox(height: 16),
-            itemBuilder: (context, i) =>
-                _ChapterCard(
+            itemBuilder: (context, i) => i == chapters.length
+                ? Center(
+                    child: TextButton(
+                      onPressed: onParents,
+                      child: BubbleText('Pro rodiče a učitele',
+                          role: KidRole.upper,
+                          palette: KidTheme.of(context).palette,
+                          size: Balance.bookBarTitleSize),
+                    ),
+                  )
+                : _ChapterCard(
                   chapter: chapters[i],
                   seen:    chapterSeen(chapters[i], seenLore),
                   last:    chapters[i].id == lastChapter,
+                  quiz:    quizDone.contains(chapters[i].id),
                   onTap:   () => onOpen(chapters[i]),
                 ),
           ),
@@ -108,11 +122,13 @@ class _ChapterCard extends StatelessWidget {
     required this.onTap,
     this.seen = false,
     this.last = false,
+    this.quiz = false,
   });
 
   final Chapter      chapter;
   final bool         seen;
   final bool         last;
+  final bool         quiz;
   final VoidCallback onTap;
 
   @override
@@ -141,6 +157,9 @@ class _ChapterCard extends StatelessWidget {
                     const Positioned(top: 10, right: 10, child: _Stamp('potkáno', KidPalette.lemon)),
                   if (last)
                     Positioned(top: 10, left: 10, child: _Stamp('naposledy', pal)),
+                  if (quiz)
+                    const Positioned(bottom: 10, right: 10,
+                        child: _Stamp('kvíz hotov', KidPalette.mint)),
                 ],
               ),
               Padding(

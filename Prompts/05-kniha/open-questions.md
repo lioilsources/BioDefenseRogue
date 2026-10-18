@@ -90,6 +90,17 @@ v `garant-todo-fact.md`):
   v pátek a v sobotu drží okno 07–13 benchmark, po 13:00 je okno LLM. Dávka (76 jobů) je
   domluvená na **neděli 18. 10. od 07:05**. Pak výběr variant vlastníkem a `gen.py install`.
 
+## Z K7 (2026-10-16)
+
+- **OQ-29 Odkazy ze strany pro rodiče.** Plán chce otevření v prohlížeči po potvrzení. Stav:
+  adresy (szu.cz, mzcr.cz, who.int) jsou ve čtečce jen text. Otevření potřebuje balíček
+  `url_launcher` (nová závislost a oprávnění v iOS/Android) – návrh: přidat před vydáním spolu
+  s dialogem „Otevřít v prohlížeči?“.
+- **OQ-30 Polish.** Hero paralax z plánu K7 vynechán (na placeholderech nemá smysl); přechody
+  stránek jsou výchozí PageView. Vrátit se k tomu po K4 s reálnými obrázky.
+- **OQ-31 Razítko „kvíz hotov“.** Udělí se po zodpovězení všech tří otázek bez ohledu na
+  správnost (bez skóre, OQ-5). Uloženo v `MetaProgress.quizDone`, ukazuje se na obálce kapitoly.
+
 ## Před K4
 
 - **OQ-2 Modely v ComfyUI vlastníka a jejich licence.** Plán grafiky §3.1 uvádí flux-schnell

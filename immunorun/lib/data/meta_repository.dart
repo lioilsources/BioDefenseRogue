@@ -18,6 +18,7 @@ class SharedPrefsMetaRepository implements MetaRepository {
   static const _kFontStep = 'meta.bookFontStep';
   static const _kSeenLore = 'meta.seenLore';
   static const _kLastChap = 'meta.lastChapter';
+  static const _kQuizDone = 'meta.quizDone';
 
   @override
   Future<MetaProgress> load() async {
@@ -30,6 +31,7 @@ class SharedPrefsMetaRepository implements MetaRepository {
       bookFontStep:     prefs.getInt(_kFontStep) ?? 0,
       seenLore:         {...?prefs.getStringList(_kSeenLore)},
       lastChapter:      prefs.getString(_kLastChap),
+      quizDone:         {...?prefs.getStringList(_kQuizDone)},
     );
   }
 
@@ -41,6 +43,7 @@ class SharedPrefsMetaRepository implements MetaRepository {
     await prefs.setInt(_kWins, progress.wins);
     await prefs.setInt(_kFontStep, progress.bookFontStep);
     await prefs.setStringList(_kSeenLore, progress.seenLore.toList()..sort());
+    await prefs.setStringList(_kQuizDone, progress.quizDone.toList()..sort());
     final last = progress.lastChapter;
     if (last == null) {
       await prefs.remove(_kLastChap);

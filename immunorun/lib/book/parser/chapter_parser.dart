@@ -119,6 +119,15 @@ GlossaryParseResult parseGlossary(String source) {
   return GlossaryParseResult(terms, errors);
 }
 
+/// Strana pro rodiče: `## Sekce {#kotva}` + odstavce a odrážky (bez front
+/// matter; jediné místo s odkazy ven, 01-scope §7).
+({List<BookPage> sections, List<String> errors}) parseParents(String source) {
+  final errors = <String>[];
+  final body = _BodyParser(errors, glossary: true, allowLists: true)
+    ..parse(source);
+  return (sections: body.pages, errors: errors);
+}
+
 /// Id hesla z textu: malá písmena, bez diakritiky, mezery → '-'.
 String termSlug(String text) {
   final buf = StringBuffer();
@@ -199,9 +208,12 @@ final _commentRe = RegExp(r'<!--(.*?)-->', dotAll: true);
 final _boxTagRe  = RegExp(r'^\[!([a-z]+)\]\s*');
 
 class _BodyParser {
-  _BodyParser(this.errors, {this.glossary = false});
+  _BodyParser(this.errors, {this.glossary = false, this.allowLists = false});
 
   final List<String> errors;
+
+  /// Odrážky mimo box (jen strana pro rodiče).
+  final bool allowLists;
 
   /// Slovníček: stránky se nedělí `---`, každé `##` je nové heslo.
   final bool glossary;
@@ -249,6 +261,11 @@ class _BodyParser {
       case 'blockquote':
         final box = _box(node);
         if (box != null) _current.add(box);
+      case 'ul' when allowLists:
+        _current.add(ListBlock([
+          for (final li in node.children ?? const <md.Node>[])
+            if (li is md.Element) _inlines(li.children ?? const []),
+        ]));
       case 'ul':
         errors.add('odrážky mimo box [!prakticky]');
       default:

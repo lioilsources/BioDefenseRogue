@@ -55,7 +55,7 @@ void main() {
   }, skip: _skip);
 
   for (final (page, name) in [(0, 'p1'), (2, 'p3_zvedave'), (3, 'p4_doopravdy'),
-                              (4, 'p5_prakticky')]) {
+                              (4, 'p5_prakticky'), (6, 'p7_kviz')]) {
     testWidgets('kapitola 5, $name', (tester) async {
       await scene(tester, chapter: '05-horecka', page: page);
       await expectLater(find.byType(BookScreen),

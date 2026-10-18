@@ -300,6 +300,13 @@ class ImmunoGame extends FlameGame
     onMetaChanged?.call(meta);
   }
 
+  /// Dokončený kvíz kapitoly → razítko. Žádný vliv na hru (ADR 0002).
+  void markQuizDone(String chapterId) {
+    if (meta.quizDone.contains(chapterId)) return;
+    meta = meta.copyWith(quizDone: {...meta.quizDone, chapterId});
+    onMetaChanged?.call(meta);
+  }
+
   /// Velikost písma knihy se ukládá do mety (přežije restart appky).
   void setBookFontStep(int step) {
     meta = meta.copyWith(bookFontStep: step);
