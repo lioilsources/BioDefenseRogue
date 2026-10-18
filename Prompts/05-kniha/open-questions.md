@@ -42,6 +42,16 @@ vlastník nerozhodne jinak.
   pořadí změní, odkaz zastará. Návrh pro K1: odkaz `[[07-cytokiny]]` → čtečka vysází název
   a test ověří, že kapitola existuje. Do té doby natvrdo.
 
+- **OQ-19 Existence obrázků před K4.** K1 má hlídat, že odkazovaný obrázek existuje, ale obrázky
+  přijdou až v K4 (do té doby placeholder ve čtečce, K2). Návrh: validátor kontroluje existenci,
+  jakmile existuje složka `assets/book/images/`, a v `BOOK_RELEASE` vždy. Jména souborů
+  (`<id>-hero.webp`, `<id>-schema-<n>.webp`) a popisky hlídá vždy. Po K4 se podmínka
+  „když složka existuje“ změní na „vždy“.
+- **OQ-20 Lock soubor a lokální Flutter.** Lokální SDK (3.44.4) při `pub get` snižuje verze v
+  `pubspec.lock` (meta 1.19 → 1.18 atd.). Návrh: lock udržovat podle CI (stable); nové balíčky
+  (`markdown`, `yaml` v K1) přidány do locku ručně bez změny ostatních verzí, CI gen-check
+  (`git diff --exit-code` po `pub get`) ověří, že je lock konzistentní.
+
 ## Před K4
 
 - **OQ-2 Modely v ComfyUI vlastníka a jejich licence.** Plán grafiky §3.1 uvádí flux-schnell
