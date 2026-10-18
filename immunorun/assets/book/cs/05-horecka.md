@@ -64,7 +64,7 @@ O horečce mluví lékaři od 38 °C. Mezi 37 a 38 °C říkají „zvýšená t
 
 ## Kdo horečku zapíná {#pyrogeny}
 
-Ve hře horečku zvedá boj a karta Pyrogen (IL-6). Doopravdy ji zapínají sami obránci. Když makrofág
+Ve hře horečku zvedá boj a karta {{lore.upgrade.pyrogen}}. Doopravdy ji zapínají sami obránci. Když makrofág
 narazí na bakterie, pošle do krve zprávu. Té zprávě se říká **pyrogen**, česky „to, co přináší
 oheň“. Jeden z pyrogenů se jmenuje interleukin 6, zkráceně IL-6.
 <!-- TODO-FACT: JANEWAY – IL-6 (spolu s IL-1 a TNF) jako pyrogen, produkce makrofágy -->
@@ -99,7 +99,7 @@ nemocí horečka pomáhá nejvíc.
 
 > [!doopravdy]
 > Ve hře ti horečka zrychlí a zesílí útok. Doopravdy makrofág v horečce rychleji nebije. Horečka
-> brzdí nepřítele a pomáhá obráncům se svolat. Karta Pyrogen (IL-6) ti ve hře přidá sílu.
+> brzdí nepřítele a pomáhá obráncům se svolat. Karta {{lore.upgrade.pyrogen}} ti ve hře přidá sílu.
 > Doopravdy IL-6 obráncům sílu nepřidává, jen pomáhá zapnout horečku.
 <!-- TODO-FACT: JANEWAY – horečka nezvyšuje „sílu“ jednotlivé buňky; IL-6 jako pyrogen -->
 

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../../domain/lore_text.dart';
 import '../../domain/meta_progress.dart';
 import '../../game/immuno_game.dart';
 
@@ -141,7 +142,8 @@ class _MetaSummary extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(
-              'Příště: imunizace proti $killedBy (+15 % dmg)',
+              renderLore('Příště: imunizace proti $killedBy '
+                  '({{balance.vaccinationDamageBonus|pctDelta}} dmg)'),
               style: const TextStyle(
                 color:    Color(0xFF58D68D),
                 fontSize: 13,

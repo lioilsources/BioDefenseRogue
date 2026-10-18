@@ -63,7 +63,7 @@ Rozhodnuto podle návrhu a implementováno; vlastník může změnit.
 - **OQ-10 Pády a skloňování.** Game-over potřebuje 3. pád („imunizace proti tankovi"). Stav: pole
   `dativeCz` u záznamů, které mohou zabít (`enemy.*`, `mechanic.fever`). Rozpor: tank je v registru
   „Biofilm (shluk stafylokoků)", ale 3. pád je „tankovi" – nechán kvůli acceptance S1 (texty beze
-  změny). Návrh: v S2 změnit na „biofilmu". Dál zůstává mimo registr „+N paměťových buněk"
+  změny). **S2: změněno na „biofilmu" (game-over „imunizace proti biofilmu").** Dál zůstává mimo registr „+N paměťových buněk"
   (2. pád množ.); návrh: přeformulovat na „Paměťové buňky: +N" místo dalšího pole pro pády.
 - **OQ-11 Zastřešující `mechanic.fever`.** Plán S1 má jen zóny `fever.*`; příčina smrti „fever"
   (kritická zóna i HP drain ve vysoké horečce) potřebuje jeden záznam. Stav: přidán
@@ -80,7 +80,8 @@ Rozhodnuto podle návrhu a implementováno; vlastník může změnit.
   nebylo co přepojit. Názvy zón jsou v registru připravené pro tooltip z OQ-3. Pozn.: „Vysoká
   horečka" místo „hypertermie" – hypertermie je medicínsky jiný stav než horečka.
 - **OQ-15 Čísla v UI mimo registr.** `run_end_overlays.dart` má natvrdo „(+15 % dmg)" (=
-  `Balance.vaccinationDamageBonus`). Návrh: S2 placeholder.
+  `Balance.vaccinationDamageBonus`). **S2: hotovo**, text se renderuje přes
+  `renderLore('… ({{balance.vaccinationDamageBonus|pctDelta}} dmg)')`.
 - **OQ-16 Zdroje.** Všechny `realityCz` mají zatím `sourceRef: 'TODO-FACT: <kandidátní zdroj>'`
   (bez čísel stran – ty doplní K0 v `05-kniha/sources.md`). Podle 05-kniha ADR 0003 je to
   blokátor release; S4 přidá test, že `sourceRef` existuje v `sources.md`.
@@ -89,3 +90,20 @@ Rozhodnuto podle návrhu a implementováno; vlastník může změnit.
   (paměť je specifická pro jednoho nepřítele, ne obecné +HP), `upgrade.cytotoxin` (granule má
   NK/CD8 T, ne makrofág). Nový `large` nález: `enemy.boss.phase2` – zapsán do
   `03-mechaniky-z-biologie.md` §1.
+
+## Z implementace S2 (2026-10-16)
+
+- **OQ-18 Formát `pctLess`.** Plán zná `pct|pctDelta|s|degC|int`. Karty Histamin a Mitochondrie
+  říkají „zpomalují o 40 %", „o 30 % méně"; s `pctDelta` by vyšlo „o −40 %". Stav: přidán formát
+  `pctLess` (0.6 → „40 %"), který **vyhodí výjimku pro hodnotu ≥ 1**. To je hlídání znaménka
+  z ADR 0002: když se konstanta otočí na zrychlení, test spadne a text se musí přepsat.
+- **OQ-19 Placeholder `{{lore.<id>}}`.** Kapitola potřebuje jména karet („karta Pyrogen (IL-6)").
+  Stav: `{{lore.<id>}}` → `nameCz`; BookSync hlásí chybu, když je v kapitole název karty upgradu
+  natvrdo. Pro ostatní druhy pojmů se to nehlídá (běžná slova jako „Horečka" by dávala falešné
+  poplachy).
+- **OQ-20 Chybějící kapitoly mimo release.** BookSync má hlásit „live záznam bez kapitoly", ale
+  kapitoly 00–04 a 06–12 vzniknou až v K3. Stav: mimo `BOOK_RELEASE` se záznam s neexistující
+  kapitolou přeskočí; v release je to chyba (a chybějící soubor kapitoly taky). Jakmile K3 dodá
+  všech 13 souborů, podmínka „mimo release" se zruší.
+- **OQ-21 Desetinná čárka na kartách.** Jediná viditelná změna textu karet v S2:
+  „0.15 °C/s" → „0,15 °C/s" (05-kniha OQ-12).

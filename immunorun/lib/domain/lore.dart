@@ -6,11 +6,13 @@
 // - co má české jméno viditelné hráčem, má záznam; žádná kopie textu jinde v lib/,
 // - realityCz je tvrzení o biologii → sourceRef (zdroj, nebo 'TODO-FACT: …'),
 // - lie = none ⇔ realityCz == null (03-mechaniky-z-biologie.md),
-// - čísla v textech jen dočasně (S1): upgrady drží dnešní znění, S2 je nahradí
-//   placeholdery {{balance.<konstanta>|<formát>}}. Nové texty jsou bez čísel.
+// - čísla v textech nikdy natvrdo: jen placeholdery {{balance.<konstanta>|<formát>}}
+//   (06-sync ADR 0002, render v lore_text.dart); validateLore hlídá obojí.
 
+import '../config/balance_map.g.dart';
 import 'damage.dart';
 import 'enemy_archetype.dart';
+import 'lore_text.dart';
 import 'fever_zone.dart';
 import 'room_type.dart';
 import 'status_effects.dart';
@@ -165,7 +167,9 @@ List<String> validateLore(
   Iterable<Enum>? requiredRefs,
   bool? Function(Enum ref) isPlannedRef = loreRefIsPlanned,
   Iterable<String> knownChapters = BookChapter.all,
+  Map<String, num> lookup = balanceLookup,
 }) {
+  final registry = LoreRegistry(entries.toList());
   final errors   = <String>[];
   final ids      = <String>{};
   final names    = <String>{};
@@ -181,6 +185,16 @@ List<String> validateLore(
     }
     if (e.nameCz.trim().isEmpty)   errors.add('$at prázdné nameCz');
     if (e.inGameCz.trim().isEmpty) errors.add('$at prázdné inGameCz');
+
+    // Čísla jen přes placeholdery; každý placeholder musí jít vyrenderovat.
+    if (e.inGameCz.replaceAll(loreTextPlaceholder, '').contains(RegExp(r'[0-9]'))) {
+      errors.add('$at číslo natvrdo v inGameCz (použij {{balance.…|…}})');
+    }
+    for (final text in [e.inGameCz, ?e.realityCz]) {
+      for (final err in checkLoreText(text, lookup: lookup, registry: registry)) {
+        errors.add('$at $err');
+      }
+    }
 
     if (e.status == LoreStatus.live && e.chapter == null) {
       errors.add('$at live záznam bez kapitoly');
@@ -227,13 +241,14 @@ List<String> validateLore(
 
 const List<LoreEntry> allLore = [
   // ── Upgrady ───────────────────────────────────────────────────────────────
-  // inGameCz = text karty; čísla natvrdo dočasně do S2 (placeholdery).
+  // inGameCz = text karty (UpgradeDef.descCz ho renderuje).
   LoreEntry(
     id:        'upgrade.opsonin',
     kind:      LoreKind.upgrade,
     ref:       UpgradeId.opsonin,
     nameCz:    'Opsonizace (IgG)',
-    inGameCz:  'Zásahy značkují cíl — bere +25 % poškození po 4 s.',
+    inGameCz:  'Zásahy značkují cíl — bere {{balance.opsonizedDamageTakenMulti|pctDelta}} '
+               'poškození po {{balance.opsonizedDuration|s}}.',
     realityCz: 'Protilátka nepřítele nezraní ani nezeslabí. Přilepí se na něj '
                'jako značka a fagocyty ho pak snáz poznají a pohltí.',
     lie:       LieSize.small,
@@ -246,7 +261,8 @@ const List<LoreEntry> allLore = [
     kind:      LoreKind.upgrade,
     ref:       UpgradeId.histamin,
     nameCz:    'Histamin',
-    inGameCz:  'Zásahy zpomalují cíl o 40 % na 2 s.',
+    inGameCz:  'Zásahy zpomalují cíl o {{balance.slowedSpeedMulti|pctLess}} '
+               'na {{balance.slowedDuration|s}}.',
     realityCz: 'Histamin na bakterie nepůsobí. Uvolní ho žírné buňky, cévy pak '
                'propouštějí víc tekutiny, místo oteče a přiběhnou další obránci.',
     lie:       LieSize.large,
@@ -259,7 +275,8 @@ const List<LoreEntry> allLore = [
     kind:      LoreKind.upgrade,
     ref:       UpgradeId.pyrogen,
     nameCz:    'Pyrogen (IL-6)',
-    inGameCz:  '+20 % poškození, ale každý výstřel zvyšuje horečku.',
+    inGameCz:  '{{balance.pyrogenDamageMulti|pctDelta}} poškození, ale každý '
+               'výstřel zvyšuje horečku.',
     realityCz: 'IL-6 opravdu pomáhá zapnout horečku, ale obráncům nepřidává sílu '
                'úderu; horečka jim jen dává lepší podmínky k práci.',
     lie:       LieSize.small,
@@ -272,7 +289,7 @@ const List<LoreEntry> allLore = [
     kind:      LoreKind.upgrade,
     ref:       UpgradeId.treg,
     nameCz:    'Treg (IL-10)',
-    inGameCz:  'Horečka klesá o 0.15 °C/s rychleji.',
+    inGameCz:  'Horečka klesá o {{balance.tregDecayBonus|degC}}/s rychleji.',
     realityCz: 'Regulační T buňky a IL-10 tlumí zánět, a tím horečku jen nepřímo; '
                'přímý „chladič" to není.',
     lie:       LieSize.small,
@@ -285,7 +302,8 @@ const List<LoreEntry> allLore = [
     kind:      LoreKind.upgrade,
     ref:       UpgradeId.mitochondrie,
     nameCz:    'Mitochondrie',
-    inGameCz:  'Speciální útok stojí o 30 % méně ATP.',
+    inGameCz:  'Speciální útok stojí o {{balance.mitochondrieCostMulti|pctLess}} '
+               'méně ATP.',
     realityCz: 'Mitochondrie vyrábějí ATP pro celou buňku. Víc energie neznamená '
                'levnější útok, ale víc síly na všechno, co buňka dělá.',
     lie:       LieSize.small,
@@ -298,7 +316,7 @@ const List<LoreEntry> allLore = [
     kind:      LoreKind.upgrade,
     ref:       UpgradeId.membrana,
     nameCz:    'Membránová fluidita',
-    inGameCz:  '+1 maximální dash náboj.',
+    inGameCz:  '+{{balance.membranaExtraDashCharges|int}} maximální dash náboj.',
     realityCz: 'Pružná membrána pomáhá buňce měnit tvar a protahovat se tkání; '
                '„náboje" pohybu buňka nemá.',
     lie:       LieSize.small,
@@ -311,7 +329,8 @@ const List<LoreEntry> allLore = [
     kind:      LoreKind.upgrade,
     ref:       UpgradeId.cytotoxin,
     nameCz:    'Cytotoxické granule',
-    inGameCz:  '+25 % základní poškození projektilů.',
+    inGameCz:  '{{balance.cytotoxinDamageMulti|pctDelta}} základní poškození '
+               'projektilů.',
     realityCz: 'Cytotoxické granule (perforin, granzymy) používají hlavně NK '
                'buňky a CD8 T buňky, ne makrofág.',
     lie:       LieSize.small,
@@ -341,7 +360,7 @@ const List<LoreEntry> allLore = [
     ref:       EnemyType.tank,
     // OQ-1: shluk S. aureus v biofilmu (ne houba).
     nameCz:    'Biofilm (shluk stafylokoků)',
-    dativeCz:  'tankovi',
+    dativeCz:  'biofilmu',
     inGameCz:  'Pomalý a odolný shluk bakterií, který se těžko odstrčí.',
     realityCz: 'Biofilm je sliz, ve kterém bakterie drží pohromadě; obránci i '
                'antibiotika se k nim hůř dostanou. Po tkáni za obráncem neleze, '
@@ -504,7 +523,7 @@ const List<LoreEntry> allLore = [
     id:        'fever.febrile',
     kind:      LoreKind.feverZone,
     ref:       FeverZone.febrile,
-    nameCz:    'Zvýšená teplota',
+    nameCz:    'Mírná horečka',
     inGameCz:  'Útočíš rychleji a silněji.',
     realityCz: 'Horečka ti útok nezrychlí. Brzdí množení bakterií a pomáhá '
                'obráncům se svolat a pracovat.',
