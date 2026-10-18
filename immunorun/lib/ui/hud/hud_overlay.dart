@@ -53,10 +53,13 @@ class AtpNotifier extends Notifier<double> {
 final atpProvider = NotifierProvider<AtpNotifier, double>(AtpNotifier.new);
 
 class HudOverlay extends ConsumerWidget {
-  const HudOverlay({super.key, this.onPause});
+  const HudOverlay({super.key, this.onPause, this.onFeverInfo});
 
   /// Callback pauzy (tlačítko ⏸ vpravo nahoře vedle teploměru).
   final VoidCallback? onPause;
+
+  /// Dlouhý stisk teploměru → kapitola o horečce (zóna, ve které jsi).
+  final void Function(FeverZone zone)? onFeverInfo;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -73,7 +76,16 @@ class HudOverlay extends ConsumerWidget {
         SafeArea(
           child: Stack(
             children: [
-              Positioned(right: 16, top: 16, child: Thermometer(snapshot: fever)),
+              Positioned(
+                right: 16,
+                top:   16,
+                child: GestureDetector(
+                  onLongPress: onFeverInfo == null
+                      ? null
+                      : () => onFeverInfo!(fever.zone),
+                  child: Thermometer(snapshot: fever),
+                ),
+              ),
               if (onPause != null)
                 Positioned(
                   right: 52,

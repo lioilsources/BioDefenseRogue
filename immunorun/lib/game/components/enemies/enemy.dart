@@ -36,6 +36,9 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
   // Volaný při smrti PŘED onDeath — drop ATP na pozici
   void Function(Vector2 pos, EnemyArchetype archetype)? onDrop;
 
+  /// Nově aplikovaný status (ne obnovení trvání) — pro LoreEncounters.
+  void Function(StatusEffect effect)? onStatusApplied;
+
   bool _componentsLoaded = false;
 
   @override
@@ -55,6 +58,7 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
     onHitCallback   = null;
     onDeath         = null;
     onDrop          = null;
+    onStatusApplied = null;
   }
 
   @override
@@ -103,6 +107,7 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
       }
     }
     _statuses.add(ActiveStatus(effect: effect, duration: duration));
+    onStatusApplied?.call(effect);
   }
 
   void _spawnParticles(bool death) {

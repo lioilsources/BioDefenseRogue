@@ -258,4 +258,7 @@ abstract final class Balance {
   static const double bookImageAspect     = 16 / 10;
   static const int    bookPageTurnMs      = 280;
   static const int    bookAssetsBudgetBytes = 12 * 1024 * 1024; // assets/book ≤ 12 MB (F7, K4)
+  static const double bookToastSeconds    = 2.0;   // „Nová stránka v knize"
+  static const double bookToastTextSize   = 15.0;
+  static const double bookStampSize       = 12.0;  // razítko „POTKÁNO"
 }
