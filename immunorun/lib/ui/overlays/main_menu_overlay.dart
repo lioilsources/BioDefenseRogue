@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../../domain/lore.dart';
 import '../../game/immuno_game.dart';
 import '../meta_providers.dart';
 
@@ -44,7 +45,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                 final meta = ref.watch(metaProvider);
                 if (meta.memoryCells == 0) return const SizedBox.shrink();
                 return Text(
-                  'Paměťové buňky: ${meta.memoryCells}'
+                  '${lore.byId('meta.memoryCells').nameCz}: ${meta.memoryCells}'
                   '  ·  +${meta.bonusStartHp} max HP',
                   style: const TextStyle(
                     color:    Color(0xFF5DADE2),
