@@ -67,7 +67,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2000
     },
     {
       "id": "01-telo-jako-hrad-hero",
@@ -91,7 +91,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2011
     },
     {
       "id": "02-bile-krvinky-hero",
@@ -115,7 +115,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2022
     },
     {
       "id": "03-nepratele-hero",
@@ -139,7 +139,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2030
     },
     {
       "id": "04-fagocytoza-hero",
@@ -163,7 +163,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2042
     },
     {
       "id": "04-fagocytoza-schema-1",
@@ -186,7 +186,7 @@
         "resize:512",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2051
     },
     {
       "id": "05-horecka-hero",
@@ -210,7 +210,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2060
     },
     {
       "id": "05-horecka-schema-1",
@@ -233,7 +233,7 @@
         "resize:512",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2072
     },
     {
       "id": "06-zanet-a-histamin-hero",
@@ -257,7 +257,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2082
     },
     {
       "id": "07-cytokiny-hero",
@@ -281,7 +281,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2093
     },
     {
       "id": "07-cytokiny-schema-1",
@@ -304,7 +304,7 @@
         "resize:512",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2100
     },
     {
       "id": "08-protilatky-hero",
@@ -328,7 +328,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2110
     },
     {
       "id": "08-protilatky-schema-1",
@@ -351,7 +351,7 @@
         "resize:512",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2121
     },
     {
       "id": "09-energie-bunky-hero",
@@ -375,7 +375,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2130
     },
     {
       "id": "10-zabijacke-bunky-hero",
@@ -399,7 +399,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2141
     },
     {
       "id": "11-lymfaticka-uzlina-hero",
@@ -423,7 +423,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2152
     },
     {
       "id": "11-lymfaticka-uzlina-schema-1",
@@ -446,7 +446,7 @@
         "resize:512",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2160
     },
     {
       "id": "12-pamet-a-ockovani-hero",
@@ -470,7 +470,7 @@
         "resize:768",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2171
     },
     {
       "id": "12-pamet-a-ockovani-schema-1",
@@ -493,7 +493,7 @@
         "resize:512",
         "webp:80"
       ],
-      "selected": null
+      "selected": 2183
     }
   ]
 }
