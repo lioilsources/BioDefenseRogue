@@ -7,7 +7,9 @@
 //   v ní existuje,
 // - záznam s realityCz → kapitola má box [!doopravdy],
 // - všechny placeholdery v kapitole jdou vyrenderovat,
-// - název karty upgradu se v kapitole nepíše natvrdo, jen {{lore.<id>}},
+// - název karty upgradu se v kapitole nepíše natvrdo, jen {{lore.<id>}}
+//   (jen názvy se závorkou, např. „Pyrogen (IL-6)"; jednoslovné názvy jako
+//   „Histamin" jsou zároveň běžná slova textu),
 // - release: žádná chybějící kapitola a žádná planned kapitola.
 // Kapitola, která ještě neexistuje (K3), se mimo release jen přeskočí.
 
@@ -61,7 +63,7 @@ List<BookIssue> validateBookSync(
       }
       final plain = text.replaceAll(loreTextPlaceholder, '');
       for (final u in reg.where(kind: LoreKind.upgrade)) {
-        if (plain.contains(u.nameCz)) {
+        if (u.nameCz.contains('(') && plain.contains(u.nameCz)) {
           err(c.id, 'název „${u.nameCz}" natvrdo, použij {{lore.${u.id}}}');
         }
       }

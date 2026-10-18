@@ -143,6 +143,17 @@ void main() {
           _has('neznámý pojem mechanic.neni'));
     });
 
+    test('jednoslovný název karty je běžné slovo, ne chyba', () {
+      final word = LoreEntry(
+        id: 'upgrade.slovo', kind: LoreKind.upgrade, nameCz: 'Histamin',
+        inGameCz: 'Ve hře.', chapter: BookChapter.zanet, anchor: 'otok',
+      );
+      expect(_sync([_chapter(text: 'Histamin roztáhne cévy.',
+              lore: ['mechanic.a', 'upgrade.slovo'])],
+              entries: [_entry('mechanic.a'), word]),
+          isEmpty);
+    });
+
     test('název karty natvrdo místo {{lore.…}}', () {
       expect(_sync([_chapter(text: 'Karta Fixture (X) pomáhá.')]),
           _has('natvrdo'));

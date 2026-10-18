@@ -99,8 +99,9 @@ Rozhodnuto podle návrhu a implementováno; vlastník může změnit.
   z ADR 0002: když se konstanta otočí na zrychlení, test spadne a text se musí přepsat.
 - **OQ-19 Placeholder `{{lore.<id>}}`.** Kapitola potřebuje jména karet („karta Pyrogen (IL-6)").
   Stav: `{{lore.<id>}}` → `nameCz`; BookSync hlásí chybu, když je v kapitole název karty upgradu
-  natvrdo. Pro ostatní druhy pojmů se to nehlídá (běžná slova jako „Horečka" by dávala falešné
-  poplachy).
+  natvrdo, a to jen u názvů se závorkou („Opsonizace (IgG)", „Pyrogen (IL-6)", „Treg (IL-10)").
+  Jednoslovné názvy karet („Histamin", „Mitochondrie") a jiné druhy pojmů jsou zároveň běžná
+  slova textu a hlídat je by dávalo falešné poplachy (úprava v K3).
 - **OQ-20 Chybějící kapitoly mimo release.** BookSync má hlásit „live záznam bez kapitoly", ale
   kapitoly 00–04 a 06–12 vzniknou až v K3. Stav: mimo `BOOK_RELEASE` se záznam s neexistující
   kapitolou přeskočí; v release je to chyba (a chybějící soubor kapitoly taky). Jakmile K3 dodá

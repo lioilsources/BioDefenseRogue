@@ -52,6 +52,33 @@ vlastník nerozhodne jinak.
   (`markdown`, `yaml` v K1) přidány do locku ručně bez změny ostatních verzí, CI gen-check
   (`git diff --exit-code` po `pub get`) ověří, že je lock konzistentní.
 
+## Z K3 (2026-10-16)
+
+Kapitoly 00–04 a 06–12 napsaly paralelně tři pomocné instance podle standardu a vzorové
+kapitoly 5; redakce je sjednotila a prošly validací. Nejistá místa (vše má `TODO-FACT`, souhrn
+v `garant-todo-fact.md`):
+
+- **OQ-21 Očkování, bezpečnost (kap. 12).** Použita varianta A: „Než se vakcína začne používat,
+  odborníci ji dlouho zkoušejí. Sledují ji i potom, co se s ní začne očkovat.“ Opatrnější B:
+  větu vypustit a nechat jen „Na otázky o očkování ti nejlépe odpoví lékař.“ Stejně tak věty
+  o složení vakcíny (oslabený nepřítel / kousek / návod) lze zkrátit na „ukáže tělu, jak nepřítel
+  vypadá“. Návrh: garant dostane kapitolu 12 první (OQ-10) a rozhodne.
+- **OQ-22 Zmínka o lécích (kap. 6).** „Léky proti alergii často blokují histamin“ je fakt, ne
+  rada, ale standard §10 bod 10 je přísný. Návrh: nechat, garant posoudí.
+- **OQ-23 Bio-Defense (1984) v kap. 4 vynechán.** Pro hru není zdroj v `sources.md`. Návrh:
+  doplnit klíč (např. záznam hry v databázi her) a vrátit dvě věty, nebo nechat jen na straně
+  pro rodiče.
+- **OQ-24 Osnova vs. registr: paměťové buňky.** Osnova kap. 12 říkala „získáš smrtí“; podle
+  registru a `balance.dart` se získávají za vyčištěné místnosti a výhru. Text se drží registru,
+  osnova je v tomto bodě překonaná.
+- **OQ-25 Poměry a odhady.** Kap. 0 (buňka : bakterie : virus ≈ 10 : 1 : 0,1, přirovnání míč /
+  kulička / zrnko), kap. 3 (bakterií zhruba jako buněk; vhodný zdroj Sender a kol. 2016 není
+  v `sources.md`), kap. 11 („stovky uzlin“). Návrh: doplnit klíč pro Sender 2016, ostatní ověří
+  garant.
+- **OQ-26 Hesla napříč kapitolami.** Tučné heslo jen při prvním výskytu v kapitole; kapitoly
+  4, 6–12 některá hesla z kap. 2 a 8 (makrofág, B buňka, antigen) netučnily. Návrh: v K7 projít
+  a označit první výskyt v každé kapitole, aby bublina slovníčku fungovala všude.
+
 ## Před K4
 
 - **OQ-2 Modely v ComfyUI vlastníka a jejich licence.** Plán grafiky §3.1 uvádí flux-schnell
