@@ -193,6 +193,28 @@ void main() {
           _hasError('neznámá konstanta Balance.x'));
     });
 
+    test('planned záznam s ref, který už v kódu má gameplay (přechod S5)', () {
+      final errors = _check([
+        _with(id: 'enemy.x', kind: LoreKind.enemy,
+            status: LoreStatus.planned, ref: EnemyType.tank),
+      ]);
+      expect(errors, _hasError('má být live'));
+    });
+
+    test('nový EnemyType bez přepnutí planned záznamu shodí úplnost', () {
+      // Simulace: přibyla hodnota enumu, planned záznam zůstal bez ref.
+      final errors = validateLore(
+        allLore,
+        requiredRefs: [...loreRequiredRefs, _NewEnemy.x],
+      );
+      expect(errors, _hasError('_NewEnemy.x: chybí záznam'));
+    });
+
+    test('id postavy a biomu má prefix podle druhu', () {
+      expect(_check([_with(id: 'hero.x', kind: LoreKind.biome)]),
+          _hasError('id nezačíná „biome."'));
+    });
+
     test('status s gameplay vedený jako planned', () {
       final errors = _check([
         _with(id: 'status.x', kind: LoreKind.status,

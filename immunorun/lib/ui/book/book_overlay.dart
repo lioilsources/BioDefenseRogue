@@ -132,7 +132,10 @@ class _BookScreenState extends State<BookScreen> {
               )
             : open == null
             ? ChapterList(
-                chapters: widget.book.chapters,
+                // Pahýly fáze 2 (status: planned) čtečka neukazuje (S5).
+                chapters: widget.book.chapters
+                    .where((c) => c.status == ChapterStatus.live)
+                    .toList(),
                 onOpen:      _openFromList,
                 onClose:     widget.onClose,
                 seenLore:    widget.seenLore,

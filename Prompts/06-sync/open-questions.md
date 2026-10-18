@@ -119,3 +119,19 @@ Rozhodnuto podle návrhu a implementováno; vlastník může změnit.
 - **OQ-23 `sourceRef` v registru ve formátu klíčů.** Volný text („Janeway (opsonizace)“) přepsán
   na `TODO-FACT: JANEWAY – opsonizace`; test hlídá, že klíč existuje v `sources.md`.
 
+## Z implementace S5 (2026-10-16)
+
+- **OQ-24 Id plánovaných bossů.** Plán S5 jmenuje `boss.staph|flu|aspergillus|apex`, OQ-13 ale
+  zavedl `enemy.boss` pro stafylokoka. Stav: plánovaní bossové jsou `enemy.boss.flu`,
+  `enemy.boss.aspergillus`, `enemy.boss.apex` (druh `enemy`); stafylokok zůstává `enemy.boss`.
+  Postavy a biomy dostaly nové druhy `LoreKind.hero` (`hero.`) a `LoreKind.biome` (`biome.`).
+- **OQ-25 Pahýly kapitol v release.** S2 hlásil chybu „planned kapitola v release“, S5 chce
+  pahýly 13/14 „v release skryté“. Stav: soubory existují i v release, čtečka planned kapitoly
+  neukazuje, BookSync místo toho hlídá, že planned kapitola uvádí jen planned záznamy.
+  Release kontroluje jen chybějící live kapitoly (`BookChapter.all`).
+- **OQ-26 Pravidlo přechodu planned → live (k OQ-12).** Predikát `loreRefIsPlanned` teď říká
+  `false` pro `EnemyType`, `UpgradeId`, `RoomType`, `FeverZone` (hodnota v kódu = gameplay):
+  planned záznam s takovým `ref` je chyba „má být live“. Nová hodnota enumu bez záznamu shodí
+  test úplnosti. Statusy dál podle `statusBaseDuration`, `DamageType` se nekontroluje.
+  Termín „text kapitoly do týdne“ z plánu (OQ-4) hlídá review, ne test.
+

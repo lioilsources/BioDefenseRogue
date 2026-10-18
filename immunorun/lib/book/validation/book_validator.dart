@@ -60,7 +60,7 @@ class BookContext {
     required this.glossaryIds,
     required this.sourceKeys,
     this.imageFiles,
-    this.knownChapters = BookChapter.all,
+    this.knownChapters = BookChapter.known,
     this.release       = false,
     this.limits        = const BookLimits(),
   });
@@ -153,8 +153,9 @@ List<BookIssue> validateChapter(
   }
   _checkImageExists(c.hero, ctx, err);
 
-  // ── Kvíz ──
-  if (c.quiz.length != lim.quizQuestions) {
+  // ── Kvíz (pahýl planned kapitoly kvíz nemá) ──
+  final live = c.status == ChapterStatus.live;
+  if (live && c.quiz.length != lim.quizQuestions) {
     err('kvíz má ${c.quiz.length} otázek (má mít ${lim.quizQuestions})');
   }
   for (final (i, q) in c.quiz.indexed) {
@@ -173,7 +174,6 @@ List<BookIssue> validateChapter(
   }
 
   // ── Stránky ──
-  final live = c.status == ChapterStatus.live;
   if (live && (c.pages.length < lim.pagesMin || c.pages.length > lim.pagesMax)) {
     err('${c.pages.length} stránek (má být ${lim.pagesMin}–${lim.pagesMax})');
   }
