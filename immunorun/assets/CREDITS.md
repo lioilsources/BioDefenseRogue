@@ -6,6 +6,10 @@ Formát: název souboru | zdroj | licence | autor
 ## Aktuálně (F0 placeholder)
 - Žádné externí snímky zatím — vše generováno procedurálně.
 
+## Ikona aplikace
+- ios/…/AppIcon.appiconset, android/…/mipmap-*/ic_launcher.png, macos/…/AppIcon.appiconset, web/icons, web/favicon.png
+  | art/drafts/g0 sprite_macrophage_color_s2104 (makrofág ve stylu SEM), ořez na buňku | flux-schnell, Apache-2.0 | vygenerováno, vlastní výběr
+
 ## Audio
 - assets/audio/*.wav | generováno procedurálně (tool/gen_sfx.dart) | CC0 | vlastní
   (placeholder SFX — lze nahradit 1:1 reálnými zvuky se stejnými názvy)
