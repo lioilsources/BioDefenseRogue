@@ -13,6 +13,9 @@ jobs:
   build-android:
     name: Build & Release Android
     runs-on: ubuntu-latest
+    env:
+      # Secrets can't be read in a step's `if`; a job env can.
+      FIREBASE_APP_ID: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
 
     steps:
       - name: Checkout
@@ -80,6 +83,7 @@ jobs:
           prerelease: true
 
       - name: Upload to Firebase App Distribution
+        if: env.FIREBASE_APP_ID != ''
         uses: wzieba/Firebase-Distribution-Github-Action@v1
         with:
           appId: ${{ secrets.FIREBASE_ANDROID_APP_ID }}
