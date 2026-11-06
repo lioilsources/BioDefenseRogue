@@ -1,0 +1,81 @@
+{
+  "_comment": "Fotorealistické ikony buněk a patogenů (hra + Lexikon zdraví). Prompt = styles[style] + ', ' + tones[tone] + ', ' + subject. Generuje L40S (art/icons/BRIEF.md); 'selected' = seed vybrané varianty. Žádný text v obrázku.",
+  "backend": {
+    "host": "L40S (Windows, ComfyUI)",
+    "model": null,
+    "license": null,
+    "license_verified": false,
+    "_note": "Doplní L40S: přesný checkpoint, verze, licence (viz BRIEF.md §3)."
+  },
+  "size": [1024, 1024],
+  "styles": {
+    "sem": "photorealistic false-colored scanning electron micrograph of a single isolated object centered in frame, whole object fully visible with margin around it, rough organic surface with fine granular texture, soft directional side lighting, subtle ambient occlusion, sharp focus, highly detailed scientific microscopy photograph, plain pure black background",
+    "render": "photorealistic scientific 3D render of a single isolated object centered in frame, whole object fully visible with margin around it, physically based materials, soft studio lighting, subtle ambient occlusion, sharp focus, highly detailed, plain pure black background"
+  },
+  "negative": "text, letters, words, numbers, label, caption, watermark, logo, signature, scale bar, ruler, frame, border, diagram, arrows, multiple panels, cropped, cut off, blurry, cartoon, illustration, drawing",
+  "tones": {
+    "host": "colorized in cool cyan and teal tones",
+    "host_calm": "colorized in calm cool blue tones",
+    "host_memory": "colorized in pale icy cyan and silver tones",
+    "host_alarm": "colorized in cyan tones with warm magenta granules",
+    "bacteria": "colorized in golden ochre and amber tones",
+    "biofilm": "golden ochre bacteria embedded in translucent amethyst purple slime",
+    "toxic": "colorized in deep gold and toxic orange tones",
+    "virus": "colorized in crimson red and coral tones",
+    "fungus": "colorized in olive green and moss tones",
+    "commensal": "colorized in soft mint green tones",
+    "blood": "colorized in deep natural red tones",
+    "molecule": "colorized in cool cyan and white tones"
+  },
+  "seeds_per_subject": 4,
+  "post": {
+    "cutout": "BiRefNet (MIT) → PNG RGBA, ořez na objekt + 6 % okraj, čtverec",
+    "export": "1024 RGBA PNG (master); malé velikosti dělá install na Macu"
+  },
+  "icons": [
+    {"id": "makrofag", "cz": "Makrofág", "group": "host", "lore": "hero.macrophage", "style": "sem", "tone": "host", "use": ["game:player", "book"],
+     "subject": "a large irregular macrophage immune cell with a ruffled membrane and several long thin pseudopodia reaching outward"},
+    {"id": "neutrofil", "cz": "Neutrofil", "group": "host", "lore": "hero.neutrophil", "style": "sem", "tone": "host", "use": ["book", "game:future"],
+     "subject": "a spherical neutrophil white blood cell with a densely ruffled folded surface"},
+    {"id": "nk-bunka", "cz": "NK buňka", "group": "host", "lore": "hero.nk", "style": "sem", "tone": "host", "use": ["book", "game:future"],
+     "subject": "a round natural killer lymphocyte with short microvilli and a few small surface blebs"},
+    {"id": "dendriticka-bunka", "cz": "Dendritická buňka", "group": "host", "lore": null, "style": "sem", "tone": "host", "use": ["book"],
+     "subject": "a star-shaped dendritic cell with a central body and many long thin sheet-like branching dendrites"},
+    {"id": "zirna-bunka", "cz": "Žírná buňka", "group": "host", "lore": null, "style": "sem", "tone": "host_alarm", "use": ["book", "card:upgrade.histamin"],
+     "subject": "a round mast cell with a ruffled surface releasing many small spherical granules from its membrane"},
+    {"id": "b-bunka", "cz": "B buňka", "group": "host", "lore": "hero.bcell", "style": "sem", "tone": "host", "use": ["book", "game:future"],
+     "subject": "a small round B lymphocyte densely covered in fine finger-like microvilli"},
+    {"id": "t-bunka", "cz": "T buňka", "group": "host", "lore": null, "style": "sem", "tone": "host", "use": ["book"],
+     "subject": "a small round T lymphocyte with a relatively smooth surface and sparse short microvilli"},
+    {"id": "cytotoxicka-t-bunka", "cz": "Cytotoxická T buňka", "group": "host", "lore": "hero.cd8", "style": "sem", "tone": "host", "use": ["book", "game:future"],
+     "subject": "a small round cytotoxic T lymphocyte with short microvilli, pressing its contact side against a fragment of a larger target cell membrane"},
+    {"id": "treg", "cz": "Regulační T buňka", "group": "host", "lore": "upgrade.treg", "style": "sem", "tone": "host_calm", "use": ["book", "card:upgrade.treg"],
+     "subject": "a small round regulatory T lymphocyte with a smooth calm surface and sparse short microvilli"},
+    {"id": "pametova-bunka", "cz": "Paměťová buňka", "group": "host", "lore": "meta.memoryCells", "style": "sem", "tone": "host_memory", "use": ["book", "ui:meta"],
+     "subject": "a small round memory lymphocyte with fine microvilli and a softly glowing rim light"},
+    {"id": "eozinofil", "cz": "Eozinofil", "group": "host", "lore": "hero.eosinophil", "style": "sem", "tone": "host_alarm", "use": ["game:future"],
+     "subject": "a round eosinophil white blood cell with a slightly ruffled surface and a few granules visible under the membrane"},
+
+    {"id": "kok", "cz": "Kok", "group": "bacteria", "lore": "enemy.swarmer", "style": "sem", "tone": "bacteria", "use": ["game:swarmer", "book"],
+     "subject": "a small group of four round coccus bacteria touching each other, two of them dividing"},
+    {"id": "stafylokok", "cz": "Zlatý stafylokok", "group": "bacteria", "lore": "enemy.boss", "style": "sem", "tone": "bacteria", "use": ["game:boss", "book"],
+     "subject": "a large grape-like cluster of dozens of round Staphylococcus aureus bacteria"},
+    {"id": "stafylokok-faze2", "cz": "Zlatý stafylokok – 2. fáze", "group": "bacteria", "lore": "enemy.boss.phase2", "style": "sem", "tone": "toxic", "use": ["game:boss2"],
+     "subject": "a large swollen grape-like cluster of Staphylococcus aureus bacteria, many cells actively dividing, surface glistening with secreted toxin droplets"},
+    {"id": "biofilm", "cz": "Biofilm", "group": "bacteria", "lore": "enemy.tank", "style": "sem", "tone": "biofilm", "use": ["game:tank", "book"],
+     "subject": "a compact rounded clump of round Staphylococcus aureus bacteria half embedded in a thick glossy extracellular slime matrix"},
+    {"id": "tycinka-mikrobiom", "cz": "Bakterie mikrobiomu", "group": "commensal", "lore": null, "style": "sem", "tone": "commensal", "use": ["book"],
+     "subject": "three smooth rod-shaped gut bacteria lying side by side"},
+    {"id": "virus-chripka", "cz": "Virus chřipky", "group": "virus", "lore": null, "style": "render", "tone": "virus", "use": ["book", "game:future"],
+     "subject": "a single spherical influenza virus particle densely covered in short club-shaped surface spike proteins"},
+    {"id": "aspergillus", "cz": "Plíseň (Aspergillus)", "group": "fungus", "lore": null, "style": "sem", "tone": "fungus", "use": ["book", "game:future"],
+     "subject": "an Aspergillus mold conidiophore, a single stalk ending in a round head radiating chains of tiny round spores"},
+
+    {"id": "protilatka", "cz": "Protilátka (IgG)", "group": "molecule", "lore": "upgrade.opsonin", "style": "render", "tone": "molecule", "use": ["book", "card:upgrade.opsonin"],
+     "subject": "a single Y-shaped IgG antibody protein molecule, surface model made of rounded lobes"},
+    {"id": "cervena-krvinka", "cz": "Červená krvinka", "group": "context", "lore": "biome.blood", "style": "sem", "tone": "blood", "use": ["book", "bg:blood"],
+     "subject": "a single red blood cell, smooth biconcave disc seen at a slight angle"},
+    {"id": "mitochondrie", "cz": "Mitochondrie", "group": "context", "lore": "upgrade.mitochondrie", "style": "render", "tone": "bacteria", "use": ["book", "card:upgrade.mitochondrie"],
+     "subject": "a single bean-shaped mitochondrion cut open lengthwise revealing folded inner cristae membranes"}
+  ]
+}
