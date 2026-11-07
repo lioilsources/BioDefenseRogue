@@ -6,7 +6,8 @@
     "sampler": "1024x1024, 20 steps, euler/simple, cfg 2.5, ModelSamplingAuraFlow shift 3.1, negative = manifest.negative",
     "license": "Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4",
     "license_verified": true,
-    "_note": "Licence ověřeny z HF API 7. 11. 2026. Výřez: maska BiRefNet, díry v nečerných oblastech zaplněné (tmavý střed buňky jinak zůstal poloprůhledný), barva na hranách dělená alfou kvůli černému pozadí (bez halo). Skript tmobile-sandbox/uc28/icons.py."
+    "_note": "Licence ověřeny z HF API 7. 11. 2026. Výřez: maska BiRefNet, díry v nečerných oblastech zaplněné (tmavý střed buňky jinak zůstal poloprůhledný), barva na hranách dělená alfou kvůli černému pozadí (bez halo). Skript tmobile-sandbox/uc28/icons.py.",
+    "timing": "20,4–20,7 s/obr. warm na L40S (I0 i I1)"
   },
   "size": [
     1024,
@@ -69,7 +70,14 @@
         "book",
         "game:future"
       ],
-      "subject": "a spherical neutrophil white blood cell with a densely ruffled folded surface"
+      "subject": "a spherical neutrophil white blood cell with a densely ruffled folded surface",
+      "seeds": [
+        3010,
+        3011,
+        3012,
+        3013
+      ],
+      "notes": "OK, všechny 4 celé a čisté. Nejvíc zvrásněný povrch má 3012."
     },
     {
       "id": "nk-bunka",
@@ -82,7 +90,14 @@
         "book",
         "game:future"
       ],
-      "subject": "a round natural killer lymphocyte with short microvilli and a few small surface blebs"
+      "subject": "a round natural killer lymphocyte with short microvilli and a few small surface blebs",
+      "seeds": [
+        3020,
+        3021,
+        3022,
+        3023
+      ],
+      "notes": "OK, všechny 4 celé. 3023 má méně a delší výběžky, ostatní jsou si podobné."
     },
     {
       "id": "dendriticka-bunka",
@@ -94,7 +109,14 @@
       "use": [
         "book"
       ],
-      "subject": "a star-shaped dendritic cell with a central body and many long thin sheet-like branching dendrites"
+      "subject": "a star-shaped dendritic cell with a central body and many long thin sheet-like branching dendrites",
+      "seeds": [
+        3030,
+        3031,
+        3032,
+        3033
+      ],
+      "notes": "OK, hvězdicový tvar drží. 3030 je nejčistší, u 3031–3033 jsou některé dendrity rozmazané hloubkou ostrosti."
     },
     {
       "id": "zirna-bunka",
@@ -107,7 +129,14 @@
         "book",
         "card:upgrade.histamin"
       ],
-      "subject": "a round mast cell with a ruffled surface releasing many small spherical granules from its membrane"
+      "subject": "a round mast cell with a ruffled surface releasing many small spherical granules from its membrane",
+      "seeds": [
+        3040,
+        3041,
+        3042,
+        3043
+      ],
+      "notes": "3041 a 3042 jsou nejlepší (purpurové granule v otvoru). 3040 granule skoro nemá. 3043 má rozbitý výřez (BiRefNet vzal jen granule, buňku zahodil), nepoužitelné."
     },
     {
       "id": "b-bunka",
@@ -120,7 +149,14 @@
         "book",
         "game:future"
       ],
-      "subject": "a small round B lymphocyte densely covered in fine finger-like microvilli"
+      "subject": "a small round B lymphocyte densely covered in fine finger-like microvilli",
+      "seeds": [
+        3050,
+        3051,
+        3052,
+        3053
+      ],
+      "notes": "Celé a čisté, ale mikroklky vypadají spíš jako krátké hroty, takže připomíná virus. B, T, Treg a paměťová buňka jsou si velmi podobné, děti je od sebe rozliší hlavně podle odstínu."
     },
     {
       "id": "t-bunka",
@@ -132,7 +168,14 @@
       "use": [
         "book"
       ],
-      "subject": "a small round T lymphocyte with a relatively smooth surface and sparse short microvilli"
+      "subject": "a small round T lymphocyte with a relatively smooth surface and sparse short microvilli",
+      "seeds": [
+        3060,
+        3061,
+        3062,
+        3063
+      ],
+      "notes": "Celé a čisté. Od B buňky se liší jen o něco hladším povrchem. 3062 má na povrchu výraznou kuličku."
     },
     {
       "id": "cytotoxicka-t-bunka",
@@ -145,7 +188,14 @@
         "book",
         "game:future"
       ],
-      "subject": "a small round cytotoxic T lymphocyte with short microvilli, pressing its contact side against a fragment of a larger target cell membrane"
+      "subject": "a small round cytotoxic T lymphocyte with short microvilli, pressing its contact side against a fragment of a larger target cell membrane",
+      "seeds": [
+        3070,
+        3071,
+        3072,
+        3073
+      ],
+      "notes": "Vada: cílová buňka je u 3070, 3071 a 3073 useknutá okrajem snímku a BiRefNet z ní nechal jen útržek. 3072 je celý (T buňka přitisknutá na cílovou buňku), ale cílová buňka je větší než T buňka a vypadá jako polokoule. Automatická kontrola okraje to nezachytila, protože výřez useknutou část odřízl."
     },
     {
       "id": "treg",
@@ -158,7 +208,14 @@
         "book",
         "card:upgrade.treg"
       ],
-      "subject": "a small round regulatory T lymphocyte with a smooth calm surface and sparse short microvilli"
+      "subject": "a small round regulatory T lymphocyte with a smooth calm surface and sparse short microvilli",
+      "seeds": [
+        3080,
+        3081,
+        3082,
+        3083
+      ],
+      "notes": "OK, klidný modrý odstín drží, všechny 4 celé."
     },
     {
       "id": "pametova-bunka",
@@ -171,7 +228,14 @@
         "book",
         "ui:meta"
       ],
-      "subject": "a small round memory lymphocyte with fine microvilli and a softly glowing rim light"
+      "subject": "a small round memory lymphocyte with fine microvilli and a softly glowing rim light",
+      "seeds": [
+        3090,
+        3091,
+        3092,
+        3093
+      ],
+      "notes": "OK, ledově bledý odstín. 3093 je oválná, ostatní kulaté. 3090 a 3091 mají na povrchu kuličku."
     },
     {
       "id": "eozinofil",
@@ -183,7 +247,14 @@
       "use": [
         "game:future"
       ],
-      "subject": "a round eosinophil white blood cell with a slightly ruffled surface and a few granules visible under the membrane"
+      "subject": "a round eosinophil white blood cell with a slightly ruffled surface and a few granules visible under the membrane",
+      "seeds": [
+        3100,
+        3101,
+        3102,
+        3103
+      ],
+      "notes": "OK, purpurové granule pod membránou. Nejčitelnější je 3103. 3100 má načervenalý střed."
     },
     {
       "id": "kok",
@@ -209,7 +280,8 @@
         3115,
         3116,
         3117
-      ]
+      ],
+      "notes_I1": "I1 (nový subject, 3114–3117): koule kolem koků zmizela jen zčásti. 3115 jsou 4 koky na malé podložce, nejlépe sedí. 3114 má 5–6 buněk. 3116 má kolem velký prstenec (výřez ho nechal, nepoužitelné). 3117 sedí na větší buňce. Doporučuju 3115, případně starší 3113."
     },
     {
       "id": "stafylokok",
@@ -222,7 +294,14 @@
         "game:boss",
         "book"
       ],
-      "subject": "a large grape-like cluster of dozens of round Staphylococcus aureus bacteria"
+      "subject": "a large grape-like cluster of dozens of round Staphylococcus aureus bacteria",
+      "seeds": [
+        3120,
+        3121,
+        3122,
+        3123
+      ],
+      "notes": "OK, hrozen koků. 3120 a 3123 jsou nejčistší. 3121 má kolem sebe slizový lem, 3122 má malý výrůstek nahoře."
     },
     {
       "id": "stafylokok-faze2",
@@ -234,7 +313,14 @@
       "use": [
         "game:boss2"
       ],
-      "subject": "a large swollen grape-like cluster of Staphylococcus aureus bacteria, many cells actively dividing, surface glistening with secreted toxin droplets"
+      "subject": "a large swollen grape-like cluster of Staphylococcus aureus bacteria, many cells actively dividing, surface glistening with secreted toxin droplets",
+      "seeds": [
+        3130,
+        3131,
+        3132,
+        3133
+      ],
+      "notes": "OK, oteklý hrozen s kapičkami toxinu (spíš jako malé hrbolky). 3130 a 3133 jsou nejčitelnější."
     },
     {
       "id": "biofilm",
@@ -267,7 +353,14 @@
       "use": [
         "book"
       ],
-      "subject": "three smooth rod-shaped gut bacteria lying side by side"
+      "subject": "three smooth rod-shaped gut bacteria lying side by side",
+      "seeds": [
+        3150,
+        3151,
+        3152,
+        3153
+      ],
+      "notes": "3150 a 3151 jsou dobré: u 3150 výřez odstranil podložku a nechal 3 tyčinky. 3152 má navíc kouli, 3153 misku a rozbitý výřez, obě nepoužitelné."
     },
     {
       "id": "virus-chripka",
@@ -301,7 +394,14 @@
         "book",
         "game:future"
       ],
-      "subject": "an Aspergillus mold conidiophore, a single stalk ending in a round head radiating chains of tiny round spores"
+      "subject": "an Aspergillus mold conidiophore, a single stalk ending in a round head radiating chains of tiny round spores",
+      "seeds": [
+        3170,
+        3171,
+        3172,
+        3173
+      ],
+      "notes": "Vada: u všech 4 je stopka useknutá spodním okrajem snímku (automatická kontrola okraje to hlásí u 3170–3173). Hlavička se sporami vypadá dobře, ale chybí řetízky spor. Navrhuju do subjectu přidat 'short stalk with its base fully visible' nebo stopku zkrátit. Čeká na domluvu."
     },
     {
       "id": "protilatka",
@@ -327,7 +427,8 @@
         3185,
         3186,
         3187
-      ]
+      ],
+      "notes_I1": "I1 (nový subject, 3184–3187): pořád korálky. 3184 vypadá jako šroubovice DNA, 3186 je X, 3185 a 3187 se Y blíží, ale nejsou to globulární domény. Podlaha s odrazem zůstala i se stylem 'no floor', výřez ji ale odstraní. Qwen-Image tenhle motiv nezvládá. Návrh: zkusit styl sem místo render, nebo popsat tvar jen slovy bez 'antibody' (např. 'three rounded lumpy protein lobes joined at a central hinge'). Čeká na domluvu."
     },
     {
       "id": "cervena-krvinka",
@@ -340,7 +441,14 @@
         "book",
         "bg:blood"
       ],
-      "subject": "a single red blood cell, smooth biconcave disc seen at a slight angle"
+      "subject": "a single red blood cell, smooth biconcave disc seen at a slight angle",
+      "seeds": [
+        3190,
+        3191,
+        3192,
+        3193
+      ],
+      "notes": "OK, bikonkávní disk, všechny 4 celé. 3191 a 3193 nejlépe ukazují prohloubený střed."
     },
     {
       "id": "mitochondrie",
@@ -353,7 +461,14 @@
         "book",
         "card:upgrade.mitochondrie"
       ],
-      "subject": "a single bean-shaped mitochondrion cut open lengthwise revealing folded inner cristae membranes"
+      "subject": "a single bean-shaped mitochondrion cut open lengthwise revealing folded inner cristae membranes",
+      "seeds": [
+        3200,
+        3201,
+        3202,
+        3203
+      ],
+      "notes": "Tvar a kristy dobré, ale render styl i s 'no floor, no reflection' kreslí podlahu s odrazem u všech 4. Výřez odraz spolehlivě odstraní, takže to nevadí. 3202 má nejvíc krist."
     }
   ],
   "review_I0": {
