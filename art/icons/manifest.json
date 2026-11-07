@@ -4,9 +4,9 @@
     "host": "L40S (Linux VM, ComfyUI 0.42.0)",
     "model": "Qwen-Image fp8: Comfy-Org/Qwen-Image_ComfyUI split_files/diffusion_models/qwen_image_fp8_e4m3fn.safetensors; text encoder qwen_2.5_vl_7b_fp8_scaled (Qwen2.5-VL-7B); VAE qwen_image_vae",
     "sampler": "1024x1024, 20 steps, euler/simple, cfg 2.5, ModelSamplingAuraFlow shift 3.1, negative = manifest.negative",
-    "license": "Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT",
+    "license": "Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4",
     "license_verified": true,
-    "_note": "Licence ověřeny z HF API 7. 11. 2026. I0 je bez výřezů: BiRefNet čeká na schválení spuštění remote code na L40S."
+    "_note": "Licence ověřeny z HF API 7. 11. 2026. Výřez: maska BiRefNet, díry v nečerných oblastech zaplněné (tmavý střed buňky jinak zůstal poloprůhledný), barva na hranách dělená alfou kvůli černému pozadí (bez halo). Skript tmobile-sandbox/uc28/icons.py."
   },
   "size": [1024, 1024],
   "styles": {
@@ -62,7 +62,7 @@
     {"id": "kok", "cz": "Kok", "group": "bacteria", "lore": "enemy.swarmer", "style": "sem", "tone": "bacteria", "use": ["game:swarmer", "book"],
      "subject": "a small group of four round coccus bacteria touching each other, two of them dividing",
      "seeds": [3110, 3111, 3112, 3113],
-     "notes": "Vada: model kreslí velkou kouli a 3–4 koky uprostřed, jako by byly uvnitř ní. Měřítko nesedí a výřez by vzal celou kouli. Chce úpravu subjectu (např. 'four round coccus bacteria only, no larger cell'), čeká na domluvu."},
+     "notes": "Vada: model kreslí velkou kouli a 3–4 koky uprostřed, jako by byly uvnitř ní. BiRefNet ale u 3110 a 3113 kouli vyřízl a nechal jen 4 koky: 3113 je použitelný, 3110 je po zvětšení rozmazaný. 3111 a 3112 vzaly celou kouli. Pro I1 doporučuju upravit subject (např. 'four round coccus bacteria only, no larger cell'), čeká na domluvu."},
     {"id": "stafylokok", "cz": "Zlatý stafylokok", "group": "bacteria", "lore": "enemy.boss", "style": "sem", "tone": "bacteria", "use": ["game:boss", "book"],
      "subject": "a large grape-like cluster of dozens of round Staphylococcus aureus bacteria"},
     {"id": "stafylokok-faze2", "cz": "Zlatý stafylokok – 2. fáze", "group": "bacteria", "lore": "enemy.boss.phase2", "style": "sem", "tone": "toxic", "use": ["game:boss2"],
