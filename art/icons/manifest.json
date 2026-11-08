@@ -569,7 +569,8 @@
         3213
       ],
       "notes": "Seedy 3210–3213: všechny čtyři sedí – azurová buňka a z jedné strany unikající oblak oranžových kapiček. Doporučuju 3210 (nejčistší oblak, kapky se odlepují od buňky), záloha 3212. 3211 má kapky nalepené na buňce, 3213 má ve výřezu mezi kapkami drobné černé tečky.",
-      "selected": 3210
+      "selected": 3210,
+      "notes_round2": "Master selected/pyrogen.png = 3210. Černé tečky mezi kapkami vyčištěny (výřez s --drop-dark 40: měkký jasový klíč jen na teplých a neutrálních pixelech, azurová buňka zůstává celá). Ve dvou mezerách mezi kapkami zůstal slabý šedý lem, v herní velikosti neviditelný."
     },
     {
       "id": "membrana",
@@ -596,7 +597,8 @@
         3238,
         3239
       ],
-      "subject_v1": "a single amoeboid immune cell stretched into an elongated teardrop shape, extending one long flowing sheet-like membrane ruffle forward, soft rippled flexible membrane"
+      "subject_v1": "a single amoeboid immune cell stretched into an elongated teardrop shape, extending one long flowing sheet-like membrane ruffle forward, soft rippled flexible membrane",
+      "notes_round2": "Kolo 2 (3228, 3229, 3238, 3239): nový subject funguje – kupolovité tělo s širokou zvlněnou membránovou sukní, žádný bičík. 3238 nejlepší (široká pravidelná sukně, jen malý výběžek vlevo dole), záloha 3228 (krátký výběžek nahoře). 3229 je menší a sukně jen vzadu, 3239 má z vršku tenký bičík – nepoužitelné."
     },
     {
       "id": "cytotoxin",
@@ -623,7 +625,8 @@
         3258,
         3259
       ],
-      "subject_v1": "a single round translucent immune cell cut open to reveal many small dense glossy granules clustered on one side of its interior next to a kidney-shaped nucleus"
+      "subject_v1": "a single round translucent immune cell cut open to reveal many small dense glossy granules clustered on one side of its interior next to a kidney-shaped nucleus",
+      "notes_round2": "Kolo 2 (3248, 3249, 3258, 3259, styl sem): 3248 a 3249 sedí – průsvitná buňka, růžové granule na jedné straně, velké tmavé jádro. Výřez původně prorazil tmavé jádro, přeřezáno s --fill-all (vyplní i tmavé díry) – teď celé. 3249 nejlepší (granule výraznější), záloha 3248. 3258: výřez nechal jen granule. 3259: granule skoro chybí."
     }
   ],
   "review_I0": {
