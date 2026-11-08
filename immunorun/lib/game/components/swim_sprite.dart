@@ -28,6 +28,23 @@ class SwimSprite extends SpriteComponent {
     _speedMul     = 1.0 + (r.nextDouble() - 0.5) * 2 * Balance.spriteSwimSpeedJitter;
   }
 
+  /// Čtvercová ikona z `assets/images/icons/<id>.webp`, vystředěná na [center]
+  /// (souřadnice rodiče začínají v jeho levém horním rohu, ne ve středu).
+  static Future<SwimSprite> icon(
+    String id, {
+    required double height,
+    required Vector2 center,
+  }) async {
+    final sprite = await Sprite.load('icons/$id.webp');
+    final aspect = sprite.srcSize.x / sprite.srcSize.y;
+    return SwimSprite(
+      sprite:   sprite,
+      size:     Vector2(height * aspect, height),
+      anchor:   Anchor.center,
+      position: center,
+    );
+  }
+
   static final Random _shared = Random();
 
   late final double _phaseBreathe;

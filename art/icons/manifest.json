@@ -1,0 +1,726 @@
+{
+  "_comment": "Fotorealistické ikony buněk a patogenů (hra + Lexikon zdraví). Prompt = styles[style] + ', ' + tones[tone] + ', ' + subject. Generuje L40S (art/icons/BRIEF.md); 'selected' = seed vybrané varianty. Žádný text v obrázku.",
+  "backend": {
+    "host": "L40S (Linux VM, ComfyUI 0.42.0)",
+    "model": "Qwen-Image fp8: Comfy-Org/Qwen-Image_ComfyUI split_files/diffusion_models/qwen_image_fp8_e4m3fn.safetensors; text encoder qwen_2.5_vl_7b_fp8_scaled (Qwen2.5-VL-7B); VAE qwen_image_vae",
+    "sampler": "1024x1024, 20 steps, euler/simple, cfg 2.5, ModelSamplingAuraFlow shift 3.1, negative = manifest.negative",
+    "license": "Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4",
+    "license_verified": true,
+    "_note": "Licence ověřeny z HF API 7. 11. 2026. Výřez: maska BiRefNet, díry v nečerných oblastech zaplněné (tmavý střed buňky jinak zůstal poloprůhledný), barva na hranách dělená alfou kvůli černému pozadí (bez halo). Skript tmobile-sandbox/uc28/icons.py.",
+    "timing": "20,4–20,7 s/obr. warm na L40S (I0 i I1)"
+  },
+  "size": [
+    1024,
+    1024
+  ],
+  "styles": {
+    "sem": "photorealistic false-colored scanning electron micrograph of a single isolated object centered in frame, whole object fully visible with margin around it, rough organic surface with fine granular texture, soft directional side lighting, subtle ambient occlusion, sharp focus, highly detailed scientific microscopy photograph, plain pure black background",
+    "render": "photorealistic scientific 3D render of a single isolated object centered in frame, whole object fully visible with margin around it, physically based materials, soft studio lighting, subtle ambient occlusion, sharp focus, highly detailed, plain pure black background, floating in empty space, no floor, no ground, no reflection"
+  },
+  "negative": "text, letters, words, numbers, label, caption, watermark, logo, signature, scale bar, ruler, frame, border, diagram, arrows, multiple panels, cropped, cut off, blurry, cartoon, illustration, drawing",
+  "tones": {
+    "host": "colorized in cool cyan and teal tones",
+    "host_calm": "colorized in calm cool blue tones",
+    "host_memory": "colorized in pale icy cyan and silver tones",
+    "host_alarm": "colorized in cyan tones with warm magenta granules",
+    "bacteria": "colorized in golden ochre and amber tones",
+    "biofilm": "golden ochre bacteria embedded in translucent amethyst purple slime",
+    "toxic": "colorized in deep gold and toxic orange tones",
+    "virus": "colorized in crimson red and coral tones",
+    "fungus": "colorized in olive green and moss tones",
+    "commensal": "colorized in soft mint green tones",
+    "blood": "colorized in deep natural red tones",
+    "molecule": "colorized in cool cyan and white tones",
+    "bacteria_coated": "colorized in golden ochre and amber tones",
+    "host_fever": "colorized in cool cyan tones with glowing warm orange droplets"
+  },
+  "seeds_per_subject": 4,
+  "post": {
+    "cutout": "BiRefNet (MIT) → PNG RGBA, ořez na objekt + 6 % okraj, čtverec",
+    "export": "1024 RGBA PNG (master); malé velikosti dělá install na Macu"
+  },
+  "icons": [
+    {
+      "id": "makrofag",
+      "cz": "Makrofág",
+      "group": "host",
+      "lore": "hero.macrophage",
+      "style": "sem",
+      "tone": "host",
+      "use": [
+        "game:player",
+        "book"
+      ],
+      "subject": "a large irregular macrophage immune cell with a ruffled membrane and several long thin pseudopodia reaching outward",
+      "seeds": [
+        3000,
+        3001,
+        3002,
+        3003
+      ],
+      "notes": "Styl drží. U 3002 a 3003 useknul okraj snímku pseudopodie, nevhodné. 3000 a 3001 jsou celé.",
+      "selected": 3000
+    },
+    {
+      "id": "neutrofil",
+      "cz": "Neutrofil",
+      "group": "host",
+      "lore": "hero.neutrophil",
+      "style": "sem",
+      "tone": "host",
+      "use": [
+        "book",
+        "game:future"
+      ],
+      "subject": "a spherical neutrophil white blood cell with a densely ruffled folded surface",
+      "seeds": [
+        3010,
+        3011,
+        3012,
+        3013
+      ],
+      "notes": "OK, všechny 4 celé a čisté. Nejvíc zvrásněný povrch má 3012.",
+      "selected": 3012
+    },
+    {
+      "id": "nk-bunka",
+      "cz": "NK buňka",
+      "group": "host",
+      "lore": "hero.nk",
+      "style": "sem",
+      "tone": "host",
+      "use": [
+        "book",
+        "game:future"
+      ],
+      "subject": "a smooth round natural killer lymphocyte like a soft felt ball with a finely wrinkled velvety surface, slightly larger than other lymphocytes, a few small surface blebs",
+      "seeds": [
+        3020,
+        3021,
+        3022,
+        3023
+      ],
+      "notes": "OK, všechny 4 celé. 3023 má méně a delší výběžky, ostatní jsou si podobné.",
+      "selected": 3030,
+      "retry_seeds": [
+        3028,
+        3029,
+        3030,
+        3031
+      ],
+      "notes_retry": "Retry 3024–3027: nový subject nepomohl, všechny 4 mají pořád hroty kolem obvodu a vypadají jako virus. Qwen-Image ve stylu sem dělá z „microvilli/hair-like“ hroty, zákaz „no spikes“ ignoruje. Selected 3021 zůstává.",
+      "notes_felt": "Felt ball 3028–3031: bez hrotů, 3030 a 3031 mají navíc kulaté hrbolky (granula). Doporučuju 3029, nebo 3030, pokud se má NK od ostatních lymfocytů odlišit i tvarem."
+    },
+    {
+      "id": "dendriticka-bunka",
+      "cz": "Dendritická buňka",
+      "group": "host",
+      "lore": null,
+      "style": "sem",
+      "tone": "host",
+      "use": [
+        "book"
+      ],
+      "subject": "a star-shaped dendritic cell with a central body and many long thin sheet-like branching dendrites",
+      "seeds": [
+        3030,
+        3031,
+        3032,
+        3033
+      ],
+      "notes": "OK, hvězdicový tvar drží. 3030 je nejčistší, u 3031–3033 jsou některé dendrity rozmazané hloubkou ostrosti.",
+      "selected": 3030
+    },
+    {
+      "id": "zirna-bunka",
+      "cz": "Žírná buňka",
+      "group": "host",
+      "lore": null,
+      "style": "sem",
+      "tone": "host_alarm",
+      "use": [
+        "book",
+        "card:upgrade.histamin"
+      ],
+      "subject": "a round mast cell with a ruffled surface releasing many small spherical granules from its membrane",
+      "seeds": [
+        3040,
+        3041,
+        3042,
+        3043
+      ],
+      "notes": "3041 a 3042 jsou nejlepší (purpurové granule v otvoru). 3040 granule skoro nemá. 3043 má rozbitý výřez (BiRefNet vzal jen granule, buňku zahodil), nepoužitelné.",
+      "selected": 3042
+    },
+    {
+      "id": "b-bunka",
+      "cz": "B buňka",
+      "group": "host",
+      "lore": "hero.bcell",
+      "style": "sem",
+      "tone": "host",
+      "use": [
+        "book",
+        "game:future"
+      ],
+      "subject": "a small smooth round B lymphocyte like a soft felt ball with a finely wrinkled velvety surface",
+      "seeds": [
+        3050,
+        3051,
+        3052,
+        3053
+      ],
+      "notes": "Celé a čisté, ale mikroklky vypadají spíš jako krátké hroty, takže připomíná virus. B, T, Treg a paměťová buňka jsou si velmi podobné, děti je od sebe rozliší hlavně podle odstínu.",
+      "selected": 3060,
+      "retry_seeds": [
+        3058,
+        3059,
+        3060,
+        3061
+      ],
+      "notes_retry": "Retry 3054–3057: pořád hroty, stejně jako v I1. Selected 3051 zůstává.",
+      "notes_felt": "Felt ball 3058–3061: bez hrotů, hladká plstěná koule se zvlněným povrchem. Doporučuju 3060 (čistý okraj), záloha 3058. U 3059 trčí na okraji výřezu jemné chloupky."
+    },
+    {
+      "id": "t-bunka",
+      "cz": "T buňka",
+      "group": "host",
+      "lore": null,
+      "style": "sem",
+      "tone": "host",
+      "use": [
+        "book"
+      ],
+      "subject": "a small smooth round T lymphocyte like a soft felt ball with a finely wrinkled velvety surface",
+      "seeds": [
+        3060,
+        3061,
+        3062,
+        3063
+      ],
+      "notes": "Celé a čisté. Od B buňky se liší jen o něco hladším povrchem. 3062 má na povrchu výraznou kuličku.",
+      "selected": 3068,
+      "retry_seeds": [
+        3068,
+        3069,
+        3070,
+        3071
+      ],
+      "notes_retry": "Retry 3064–3067: pořád hroty, 3065/3066 mají navíc kuličku uprostřed. Selected 3061 zůstává.",
+      "notes_felt": "Felt ball 3068–3071: bez hrotů. Doporučuju 3068, záloha 3070. U 3069 jsou na okraji výřezu drobné tmavé tečky."
+    },
+    {
+      "id": "cytotoxicka-t-bunka",
+      "cz": "Cytotoxická T buňka",
+      "group": "host",
+      "lore": "hero.cd8",
+      "style": "sem",
+      "tone": "host",
+      "use": [
+        "book",
+        "game:future"
+      ],
+      "subject": "a small smooth round cytotoxic T lymphocyte like a soft felt ball with a finely wrinkled velvety surface on the left touching a larger round target cell on the right, the target cell surface pitted with small holes, both cells entirely visible inside the frame with wide black margin",
+      "seeds": [
+        3070,
+        3071,
+        3072,
+        3073
+      ],
+      "notes": "Vada: cílová buňka je u 3070, 3071 a 3073 useknutá okrajem snímku a BiRefNet z ní nechal jen útržek. 3072 je celý (T buňka přitisknutá na cílovou buňku), ale cílová buňka je větší než T buňka a vypadá jako polokoule. Automatická kontrola okraje to nezachytila, protože výřez useknutou část odřízl.",
+      "selected": 3078,
+      "retry_seeds": [
+        3078,
+        3079,
+        3080,
+        3081
+      ],
+      "notes_retry": "Retry 3074–3077: obě buňky celé u všech 4, T buňka vlevo spojená můstkem s cílovou buňkou s póry. Výřez 3074 a 3075 prorazil jeden pór v cílové buňce (průhledná díra). Doporučuju 3077 (nejčistší), záloha 3076. T buňka má pořád hroty jako ostatní lymfocyty.",
+      "notes_felt": "Felt ball 3078–3081: T buňka už nevypadá jako virus, je to vrásčitá plstěná kulička. Obě buňky jsou celé. Doporučuju 3078, záloha 3079. U 3080 a 3081 výřez prorazil velký pór v cílové buňce (průhledná díra)."
+    },
+    {
+      "id": "treg",
+      "cz": "Regulační T buňka",
+      "group": "host",
+      "lore": "upgrade.treg",
+      "style": "sem",
+      "tone": "host_calm",
+      "use": [
+        "book",
+        "card:upgrade.treg"
+      ],
+      "subject": "a small smooth round regulatory T lymphocyte like a soft felt ball with a finely wrinkled velvety surface, calm appearance",
+      "seeds": [
+        3080,
+        3081,
+        3082,
+        3083
+      ],
+      "notes": "OK, klidný modrý odstín drží, všechny 4 celé.",
+      "selected": 3088,
+      "retry_seeds": [
+        3088,
+        3089,
+        3090,
+        3091
+      ],
+      "notes_retry": "Retry 3084–3087: pořád hroty. Selected 3082 zůstává.",
+      "notes_felt": "Felt ball 3088–3091: bez hrotů. Doporučuju 3088, záloha 3090. 3089 je výrazně tmavší."
+    },
+    {
+      "id": "pametova-bunka",
+      "cz": "Paměťová buňka",
+      "group": "host",
+      "lore": "meta.memoryCells",
+      "style": "sem",
+      "tone": "host_memory",
+      "use": [
+        "book",
+        "ui:meta"
+      ],
+      "subject": "a small smooth round memory lymphocyte like a soft felt ball with a finely wrinkled velvety surface, softly glowing rim light",
+      "seeds": [
+        3090,
+        3091,
+        3092,
+        3093
+      ],
+      "notes": "OK, ledově bledý odstín. 3093 je oválná, ostatní kulaté. 3090 a 3091 mají na povrchu kuličku.",
+      "selected": 3099,
+      "retry_seeds": [
+        3098,
+        3099,
+        3100,
+        3101
+      ],
+      "notes_retry": "Retry 3094–3097: pořád hroty. Selected 3091 zůstává.",
+      "notes_felt": "Felt ball 3098–3101: bez hrotů, světlá plstěná koule. Doporučuju 3099, záloha 3101."
+    },
+    {
+      "id": "eozinofil",
+      "cz": "Eozinofil",
+      "group": "host",
+      "lore": "hero.eosinophil",
+      "style": "sem",
+      "tone": "host_alarm",
+      "use": [
+        "game:future"
+      ],
+      "subject": "a round eosinophil white blood cell with a slightly ruffled surface and a few granules visible under the membrane",
+      "seeds": [
+        3100,
+        3101,
+        3102,
+        3103
+      ],
+      "notes": "OK, purpurové granule pod membránou. Nejčitelnější je 3103. 3100 má načervenalý střed.",
+      "selected": 3103
+    },
+    {
+      "id": "kok",
+      "cz": "Kok",
+      "group": "bacteria",
+      "lore": "enemy.swarmer",
+      "style": "sem",
+      "tone": "bacteria",
+      "use": [
+        "game:swarmer",
+        "book"
+      ],
+      "subject": "four round coccus bacteria in a tight cluster filling most of the frame, each cell with a fine granular surface, nothing else in the image, no larger cell around them",
+      "seeds": [
+        3110,
+        3111,
+        3112,
+        3113
+      ],
+      "notes": "Vada: model kreslí velkou kouli a 3–4 koky uprostřed, jako by byly uvnitř ní. BiRefNet ale u 3110 a 3113 kouli vyřízl a nechal jen 4 koky: 3113 je použitelný, 3110 je po zvětšení rozmazaný. 3111 a 3112 vzaly celou kouli. Pro I1 doporučuju upravit subject (např. 'four round coccus bacteria only, no larger cell'), čeká na domluvu.",
+      "retry_seeds": [
+        3114,
+        3115,
+        3116,
+        3117
+      ],
+      "notes_I1": "I1 (nový subject, 3114–3117): koule kolem koků zmizela jen zčásti. 3115 jsou 4 koky na malé podložce, nejlépe sedí. 3114 má 5–6 buněk. 3116 má kolem velký prstenec (výřez ho nechal, nepoužitelné). 3117 sedí na větší buňce. Doporučuju 3115, případně starší 3113.",
+      "selected": 3115
+    },
+    {
+      "id": "stafylokok",
+      "cz": "Zlatý stafylokok",
+      "group": "bacteria",
+      "lore": "enemy.boss",
+      "style": "sem",
+      "tone": "bacteria",
+      "use": [
+        "game:boss",
+        "book"
+      ],
+      "subject": "a large grape-like cluster of dozens of round Staphylococcus aureus bacteria",
+      "seeds": [
+        3120,
+        3121,
+        3122,
+        3123
+      ],
+      "notes": "OK, hrozen koků. 3120 a 3123 jsou nejčistší. 3121 má kolem sebe slizový lem, 3122 má malý výrůstek nahoře.",
+      "selected": 3120
+    },
+    {
+      "id": "stafylokok-faze2",
+      "cz": "Zlatý stafylokok – 2. fáze",
+      "group": "bacteria",
+      "lore": "enemy.boss.phase2",
+      "style": "sem",
+      "tone": "toxic",
+      "use": [
+        "game:boss2"
+      ],
+      "subject": "a large swollen grape-like cluster of Staphylococcus aureus bacteria, many cells actively dividing, surface glistening with secreted toxin droplets",
+      "seeds": [
+        3130,
+        3131,
+        3132,
+        3133
+      ],
+      "notes": "OK, oteklý hrozen s kapičkami toxinu (spíš jako malé hrbolky). 3130 a 3133 jsou nejčitelnější.",
+      "selected": 3133
+    },
+    {
+      "id": "biofilm",
+      "cz": "Biofilm",
+      "group": "bacteria",
+      "lore": "enemy.tank",
+      "style": "sem",
+      "tone": "biofilm",
+      "use": [
+        "game:tank",
+        "book"
+      ],
+      "subject": "a compact rounded clump of round Staphylococcus aureus bacteria half embedded in a thick glossy extracellular slime matrix",
+      "seeds": [
+        3140,
+        3141,
+        3142,
+        3143
+      ],
+      "notes": "Styl drží, ametystový sliz a zlaté koky jsou dobře čitelné. Všechny 4 použitelné.",
+      "selected": 3143
+    },
+    {
+      "id": "tycinka-mikrobiom",
+      "cz": "Bakterie mikrobiomu",
+      "group": "commensal",
+      "lore": null,
+      "style": "sem",
+      "tone": "commensal",
+      "use": [
+        "book"
+      ],
+      "subject": "three smooth rod-shaped gut bacteria lying side by side",
+      "seeds": [
+        3150,
+        3151,
+        3152,
+        3153
+      ],
+      "notes": "3150 a 3151 jsou dobré: u 3150 výřez odstranil podložku a nechal 3 tyčinky. 3152 má navíc kouli, 3153 misku a rozbitý výřez, obě nepoužitelné.",
+      "selected": 3150
+    },
+    {
+      "id": "virus-chripka",
+      "cz": "Virus chřipky",
+      "group": "virus",
+      "lore": null,
+      "style": "render",
+      "tone": "virus",
+      "use": [
+        "book",
+        "game:future"
+      ],
+      "subject": "a single spherical influenza virus particle densely covered in short club-shaped surface spike proteins",
+      "seeds": [
+        3160,
+        3161,
+        3162,
+        3163
+      ],
+      "notes": "Styl drží, karmínová, celá částice. Povrch působí spíš plastově, sedí ke stylu render.",
+      "selected": 3162
+    },
+    {
+      "id": "aspergillus",
+      "cz": "Plíseň (Aspergillus)",
+      "group": "fungus",
+      "lore": null,
+      "style": "sem",
+      "tone": "fungus",
+      "use": [
+        "book",
+        "game:future"
+      ],
+      "subject": "a short Aspergillus mold conidiophore standing upright, its whole short stalk including the swollen foot at its base fully visible, round head radiating many chains of tiny round spores like a dandelion, entire structure inside the frame with wide black margin",
+      "seeds": [
+        3170,
+        3171,
+        3172,
+        3173
+      ],
+      "notes": "Vada: u všech 4 je stopka useknutá spodním okrajem snímku (automatická kontrola okraje to hlásí u 3170–3173). Hlavička se sporami vypadá dobře, ale chybí řetízky spor. Navrhuju do subjectu přidat 'short stalk with its base fully visible' nebo stopku zkrátit. Čeká na domluvu.",
+      "retry_seeds": [
+        3174,
+        3175,
+        3176,
+        3177
+      ],
+      "size": [
+        768,
+        1344
+      ],
+      "notes_retry": "Retry 3174–3177 (768×1344): stopka celá včetně patky u všech 4, okraj nikde. Hlavička je spíš „pampeliška“ z paliček než řetízky spor. Doporučuju 3175 (nejjemnější hlavička) nebo 3174. Výřez je doplněný na čtverec 1024.",
+      "selected": 3175
+    },
+    {
+      "id": "opsonizace",
+      "cz": "Opsonizace",
+      "group": "molecule",
+      "lore": "upgrade.opsonin",
+      "style": "sem",
+      "tone": "bacteria",
+      "use": [
+        "book",
+        "card:upgrade.opsonin"
+      ],
+      "subject": "a single round golden coccus bacterium whose whole surface is densely coated with many tiny cyan protein molecules",
+      "seeds": [
+        3180,
+        3181,
+        3182,
+        3183
+      ],
+      "notes": "Vada: model čte 'Y-shaped' jako písmeno Y z kuliček (3181 dokonce X), působí kresleně. 3181–3183 mají podlahu s odrazem místo čistě černého pozadí. Chce úpravu subjectu (popsat 2 ramena Fab a kmen Fc místo 'Y-shaped') a do stylu render přidat 'no floor, no reflection'. Čeká na domluvu.",
+      "retry_seeds": [
+        3188,
+        3189,
+        3190,
+        3191
+      ],
+      "notes_I1": "I1 (nový subject, 3184–3187): pořád korálky. 3184 vypadá jako šroubovice DNA, 3186 je X, 3185 a 3187 se Y blíží, ale nejsou to globulární domény. Podlaha s odrazem zůstala i se stylem 'no floor', výřez ji ale odstraní. Qwen-Image tenhle motiv nezvládá. Návrh: zkusit styl sem místo render, nebo popsat tvar jen slovy bez 'antibody' (např. 'three rounded lumpy protein lobes joined at a central hinge'). Čeká na domluvu.",
+      "notes_retry": "Retry 3188–3191: 3188 a 3190 přesně sedí (zlatý kok, azurové shluky molekul po celém povrchu), 3189 má molekul méně, 3191 je skoro celý zlatý. Doporučuju 3190, záloha 3188.",
+      "selected": 3190
+    },
+    {
+      "id": "cervena-krvinka",
+      "cz": "Červená krvinka",
+      "group": "context",
+      "lore": "biome.blood",
+      "style": "sem",
+      "tone": "blood",
+      "use": [
+        "book",
+        "bg:blood"
+      ],
+      "subject": "a single red blood cell, smooth biconcave disc seen at a slight angle",
+      "seeds": [
+        3190,
+        3191,
+        3192,
+        3193
+      ],
+      "notes": "OK, bikonkávní disk, všechny 4 celé. 3191 a 3193 nejlépe ukazují prohloubený střed.",
+      "selected": 3191
+    },
+    {
+      "id": "mitochondrie",
+      "cz": "Mitochondrie",
+      "group": "context",
+      "lore": "upgrade.mitochondrie",
+      "style": "render",
+      "tone": "bacteria",
+      "use": [
+        "book",
+        "card:upgrade.mitochondrie"
+      ],
+      "subject": "a single bean-shaped mitochondrion cut open lengthwise revealing folded inner cristae membranes",
+      "seeds": [
+        3200,
+        3201,
+        3202,
+        3203
+      ],
+      "notes": "Tvar a kristy dobré, ale render styl i s 'no floor, no reflection' kreslí podlahu s odrazem u všech 4. Výřez odraz spolehlivě odstraní, takže to nevadí. 3202 má nejvíc krist.",
+      "selected": 3202
+    },
+    {
+      "id": "pyrogen",
+      "cz": "Pyrogen (IL-6)",
+      "group": "molecule",
+      "lore": "upgrade.pyrogen",
+      "style": "sem",
+      "tone": "host_fever",
+      "use": [
+        "book",
+        "card:upgrade.pyrogen"
+      ],
+      "subject": "a single round immune cell with a ruffled surface releasing a small cloud of many tiny glowing droplets that drift away from one side of the cell",
+      "seeds": [
+        3210,
+        3211,
+        3212,
+        3213
+      ]
+    },
+    {
+      "id": "membrana",
+      "cz": "Membránová fluidita",
+      "group": "context",
+      "lore": "upgrade.membrana",
+      "style": "sem",
+      "tone": "host",
+      "use": [
+        "book",
+        "card:upgrade.membrana"
+      ],
+      "subject": "a single amoeboid immune cell stretched into an elongated teardrop shape, extending one long flowing sheet-like membrane ruffle forward, soft rippled flexible membrane",
+      "seeds": [
+        3220,
+        3221,
+        3222,
+        3223
+      ]
+    },
+    {
+      "id": "cytotoxin",
+      "cz": "Cytotoxické granule",
+      "group": "context",
+      "lore": "upgrade.cytotoxin",
+      "style": "render",
+      "tone": "host_alarm",
+      "use": [
+        "book",
+        "card:upgrade.cytotoxin"
+      ],
+      "subject": "a single round translucent immune cell cut open to reveal many small dense glossy granules clustered on one side of its interior next to a kidney-shaped nucleus",
+      "seeds": [
+        3230,
+        3231,
+        3232,
+        3233
+      ]
+    }
+  ],
+  "review_I0": {
+    "date": "2026-11-07",
+    "by": "BioDefense",
+    "verdict": "Styl schválen (Qwen-Image, SEM i render). Pokračuj I1.",
+    "selected": {
+      "makrofag": 3000,
+      "biofilm": 3143,
+      "virus-chripka": 3162
+    },
+    "redo": {
+      "kok": "nový subject, seedy 3114–3117",
+      "protilatka": "nový subject + render bez podlahy, seedy 3184–3187"
+    },
+    "notes": [
+      "makrofag 3000: celý, bez useknutých panožek; 3003 výřez ořízl okraj, takové varianty nevybírej",
+      "biofilm 3143: velké koky, ve hře čitelné i v malé velikosti",
+      "virus 3162: nejčistší paličkovité výběžky",
+      "Výřez: díry a hrany vypadají dobře, postup BiRefNet ponech",
+      "U všech ikon v I1 hlídej, aby objekt nebyl useknutý okrajem snímku (makrofag 3002, 3003)"
+    ]
+  },
+  "review_I1": {
+    "date": "2026-11-08",
+    "by": "BioDefense",
+    "selected": {
+      "neutrofil": 3012,
+      "nk-bunka": 3021,
+      "dendriticka-bunka": 3030,
+      "zirna-bunka": 3042,
+      "b-bunka": 3051,
+      "t-bunka": 3061,
+      "cytotoxicka-t-bunka": 3072,
+      "treg": 3082,
+      "pametova-bunka": 3091,
+      "eozinofil": 3103,
+      "kok": 3115,
+      "stafylokok": 3120,
+      "stafylokok-faze2": 3133,
+      "tycinka-mikrobiom": 3150,
+      "cervena-krvinka": 3191,
+      "mitochondrie": 3202
+    },
+    "provisional": [
+      "b-bunka",
+      "t-bunka",
+      "treg",
+      "pametova-bunka",
+      "nk-bunka",
+      "cytotoxicka-t-bunka"
+    ],
+    "redo": {
+      "b-bunka, t-bunka, treg, pametova-bunka, nk-bunka": "Ostré hroty na povrchu dělají z lymfocytů viry (dítě je splete s virem chřipky). Nový subject: hustý sametový koberec jemných mikroklků, žádné hroty ani kuličky. Seedy 3054–, 3064–, 3084–, 3094–, 3024– (po 4). Dosavadní selected zůstává jako záloha.",
+      "cytotoxicka-t-bunka": "Nový subject: obě buňky celé v záběru vedle sebe. Seedy 3074–3077, záloha 3072.",
+      "aspergillus": "Nový subject s krátkou celou stopkou, rozměr 768×1344 (na výšku), výřez pak doplnit na čtverec. Seedy 3174–3177.",
+      "protilatka → opsonizace": "Samotnou protilátku Qwen-Image nezvládá (korálky, Y/X, DNA). Ikonu měníme na motiv karty Opsonizace: zlatý kok obalený drobnými azurovými molekulami, styl sem. Id přejmenováno na opsonizace, seedy 3188–3191. Protilátku samotnou ukazuje kniha schématem."
+    },
+    "notes": [
+      "mitochondrie: odraz výřez odstranil, 3202 bereme",
+      "stafylokok 3120 (boss) a stafylokok-faze2 3133 se dobře liší odstínem",
+      "tycinka-mikrobiom 3151 má tmavý lem po výřezu, proto 3150",
+      "Po dodělávkách commitni do selected/ mastery všech selected, ne jen I0"
+    ],
+    "retry_result": {
+      "date": "2026-11-08",
+      "lymfocyty": "Nový subject bez hrotů nefungoval u žádné z 20 variant (NK, B, T, Treg, paměťová). Návrh: vypustit slova microvilli/hair/spikes úplně a popsat povrch pozitivně, např. „a smooth round cell like a soft felt ball with a finely wrinkled, velvety surface“, případně jiný styl. Čeká na domluvu.",
+      "doporuceno": {
+        "cytotoxicka-t-bunka": 3077,
+        "aspergillus": 3175,
+        "opsonizace": 3190
+      }
+    }
+  },
+  "review_retry": {
+    "date": "2026-11-08",
+    "by": "BioDefense",
+    "selected": {
+      "cytotoxicka-t-bunka": 3077,
+      "aspergillus": 3175,
+      "opsonizace": 3190
+    },
+    "redo": "Lymfocyty: souhlas s návrhem L40S (felt ball, bez slov microvilli/hair/spikes). Platí i pro malou T buňku u CD8: u 3077 vypadá jako virus útočící na buňku. Retry seedy v retry_seeds; dosavadní selected zůstávají jako záloha.",
+    "notes": [
+      "aspergillus 3175: pampeliška místo řetízků spor je pro ikonu v pořádku",
+      "Když felt ball nepomůže ani teď, bereme zálohy a další kolo nedělej"
+    ],
+    "felt_result": {
+      "date": "2026-11-08",
+      "souhrn": "Felt ball funguje: hroty zmizely u všech 24 variant. Lymfocyty se mezi sebou pořád liší hlavně odstínem.",
+      "doporuceno": {
+        "b-bunka": 3060,
+        "t-bunka": 3068,
+        "treg": 3088,
+        "pametova-bunka": 3099,
+        "nk-bunka": 3029,
+        "cytotoxicka-t-bunka": 3078
+      }
+    }
+  },
+  "review_felt": {
+    "date": "2026-11-08",
+    "by": "BioDefense",
+    "selected": {
+      "b-bunka": 3060,
+      "t-bunka": 3068,
+      "treg": 3088,
+      "pametova-bunka": 3099,
+      "nk-bunka": 3030,
+      "cytotoxicka-t-bunka": 3078
+    },
+    "notes": [
+      "NK 3030: povrchové váčky ji odliší i tvarem, NK buňky granula skutečně mají",
+      "Lymfocyty se liší hlavně odstínem. Biologicky to sedí, v SEM vypadají podobně; kniha to může říct",
+      "Sada je kompletní, další kolo není potřeba"
+    ]
+  }
+}
