@@ -31,7 +31,8 @@
     "commensal": "colorized in soft mint green tones",
     "blood": "colorized in deep natural red tones",
     "molecule": "colorized in cool cyan and white tones",
-    "bacteria_coated": "colorized in golden ochre and amber tones"
+    "bacteria_coated": "colorized in golden ochre and amber tones",
+    "host_fever": "colorized in cool cyan tones with glowing warm orange droplets"
   },
   "seeds_per_subject": 4,
   "post": {
@@ -548,6 +549,63 @@
       ],
       "notes": "Tvar a kristy dobré, ale render styl i s 'no floor, no reflection' kreslí podlahu s odrazem u všech 4. Výřez odraz spolehlivě odstraní, takže to nevadí. 3202 má nejvíc krist.",
       "selected": 3202
+    },
+    {
+      "id": "pyrogen",
+      "cz": "Pyrogen (IL-6)",
+      "group": "molecule",
+      "lore": "upgrade.pyrogen",
+      "style": "sem",
+      "tone": "host_fever",
+      "use": [
+        "book",
+        "card:upgrade.pyrogen"
+      ],
+      "subject": "a single round immune cell with a ruffled surface releasing a small cloud of many tiny glowing droplets that drift away from one side of the cell",
+      "seeds": [
+        3210,
+        3211,
+        3212,
+        3213
+      ]
+    },
+    {
+      "id": "membrana",
+      "cz": "Membránová fluidita",
+      "group": "context",
+      "lore": "upgrade.membrana",
+      "style": "sem",
+      "tone": "host",
+      "use": [
+        "book",
+        "card:upgrade.membrana"
+      ],
+      "subject": "a single amoeboid immune cell stretched into an elongated teardrop shape, extending one long flowing sheet-like membrane ruffle forward, soft rippled flexible membrane",
+      "seeds": [
+        3220,
+        3221,
+        3222,
+        3223
+      ]
+    },
+    {
+      "id": "cytotoxin",
+      "cz": "Cytotoxické granule",
+      "group": "context",
+      "lore": "upgrade.cytotoxin",
+      "style": "render",
+      "tone": "host_alarm",
+      "use": [
+        "book",
+        "card:upgrade.cytotoxin"
+      ],
+      "subject": "a single round translucent immune cell cut open to reveal many small dense glossy granules clustered on one side of its interior next to a kidney-shaped nucleus",
+      "seeds": [
+        3230,
+        3231,
+        3232,
+        3233
+      ]
     }
   ],
   "review_I0": {
