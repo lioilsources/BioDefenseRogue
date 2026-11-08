@@ -567,7 +567,8 @@
         3211,
         3212,
         3213
-      ]
+      ],
+      "notes": "Seedy 3210–3213: všechny čtyři sedí – azurová buňka a z jedné strany unikající oblak oranžových kapiček. Doporučuju 3210 (nejčistší oblak, kapky se odlepují od buňky), záloha 3212. 3211 má kapky nalepené na buňce, 3213 má ve výřezu mezi kapkami drobné černé tečky."
     },
     {
       "id": "membrana",
@@ -586,6 +587,13 @@
         3221,
         3222,
         3223
+      ],
+      "notes": "Seedy 3220–3227: vada u všech 8. Model kreslí spermii nebo pulce: kulatá hlavička a dlouhý zvlněný bičík. „Elongated teardrop“ + „long flowing sheet-like membrane ruffle“ čte jako ocas. Dítě to nepřečte jako buňku, která se plazí. Návrh nového subjectu (bez slov long, teardrop, flowing): „a single flattened immune cell crawling on a flat surface, seen from above at an angle, round body with one broad fan-shaped thin ruffled membrane skirt spreading wide along its whole front edge like a frilly fried egg, no tail, no flagellum“. Čeká na domluvu.",
+      "retry_seeds": [
+        3224,
+        3225,
+        3226,
+        3227
       ]
     },
     {
@@ -605,6 +613,13 @@
         3231,
         3232,
         3233
+      ],
+      "notes": "Seedy 3230–3237: vada u všech 8. „Kidney-shaped nucleus“ model kreslí doslova jako orgán ledviny i s močovodem. „Cut open“ dává kreslený řez se dvěma polovinami a styl render přidává podlahu s odrazem; BiRefNet pak řez rozbije (jen 3232 má celý výřez, ale s ledvinou). Návrh: styl sem místo render a subject bez slov kidney a cut open, např. „a single round immune cell with a thin translucent surface through which a cluster of small dense glossy granules shows on one side, next to a large bean-shaped dark nucleus“. Čeká na domluvu.",
+      "retry_seeds": [
+        3234,
+        3235,
+        3236,
+        3237
       ]
     }
   ],
