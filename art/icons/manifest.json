@@ -107,7 +107,8 @@
         3030,
         3031
       ],
-      "notes_retry": "Retry 3024–3027: nový subject nepomohl, všechny 4 mají pořád hroty kolem obvodu a vypadají jako virus. Qwen-Image ve stylu sem dělá z „microvilli/hair-like“ hroty, zákaz „no spikes“ ignoruje. Selected 3021 zůstává."
+      "notes_retry": "Retry 3024–3027: nový subject nepomohl, všechny 4 mají pořád hroty kolem obvodu a vypadají jako virus. Qwen-Image ve stylu sem dělá z „microvilli/hair-like“ hroty, zákaz „no spikes“ ignoruje. Selected 3021 zůstává.",
+      "notes_felt": "Felt ball 3028–3031: bez hrotů, 3030 a 3031 mají navíc kulaté hrbolky (granula). Doporučuju 3029, nebo 3030, pokud se má NK od ostatních lymfocytů odlišit i tvarem."
     },
     {
       "id": "dendriticka-bunka",
@@ -176,7 +177,8 @@
         3060,
         3061
       ],
-      "notes_retry": "Retry 3054–3057: pořád hroty, stejně jako v I1. Selected 3051 zůstává."
+      "notes_retry": "Retry 3054–3057: pořád hroty, stejně jako v I1. Selected 3051 zůstává.",
+      "notes_felt": "Felt ball 3058–3061: bez hrotů, hladká plstěná koule se zvlněným povrchem. Doporučuju 3060 (čistý okraj), záloha 3058. U 3059 trčí na okraji výřezu jemné chloupky."
     },
     {
       "id": "t-bunka",
@@ -203,7 +205,8 @@
         3070,
         3071
       ],
-      "notes_retry": "Retry 3064–3067: pořád hroty, 3065/3066 mají navíc kuličku uprostřed. Selected 3061 zůstává."
+      "notes_retry": "Retry 3064–3067: pořád hroty, 3065/3066 mají navíc kuličku uprostřed. Selected 3061 zůstává.",
+      "notes_felt": "Felt ball 3068–3071: bez hrotů. Doporučuju 3068, záloha 3070. U 3069 jsou na okraji výřezu drobné tmavé tečky."
     },
     {
       "id": "cytotoxicka-t-bunka",
@@ -231,7 +234,8 @@
         3080,
         3081
       ],
-      "notes_retry": "Retry 3074–3077: obě buňky celé u všech 4, T buňka vlevo spojená můstkem s cílovou buňkou s póry. Výřez 3074 a 3075 prorazil jeden pór v cílové buňce (průhledná díra). Doporučuju 3077 (nejčistší), záloha 3076. T buňka má pořád hroty jako ostatní lymfocyty."
+      "notes_retry": "Retry 3074–3077: obě buňky celé u všech 4, T buňka vlevo spojená můstkem s cílovou buňkou s póry. Výřez 3074 a 3075 prorazil jeden pór v cílové buňce (průhledná díra). Doporučuju 3077 (nejčistší), záloha 3076. T buňka má pořád hroty jako ostatní lymfocyty.",
+      "notes_felt": "Felt ball 3078–3081: T buňka už nevypadá jako virus, je to vrásčitá plstěná kulička. Obě buňky jsou celé. Doporučuju 3078, záloha 3079. U 3080 a 3081 výřez prorazil velký pór v cílové buňce (průhledná díra)."
     },
     {
       "id": "treg",
@@ -259,7 +263,8 @@
         3090,
         3091
       ],
-      "notes_retry": "Retry 3084–3087: pořád hroty. Selected 3082 zůstává."
+      "notes_retry": "Retry 3084–3087: pořád hroty. Selected 3082 zůstává.",
+      "notes_felt": "Felt ball 3088–3091: bez hrotů. Doporučuju 3088, záloha 3090. 3089 je výrazně tmavší."
     },
     {
       "id": "pametova-bunka",
@@ -287,7 +292,8 @@
         3100,
         3101
       ],
-      "notes_retry": "Retry 3094–3097: pořád hroty. Selected 3091 zůstává."
+      "notes_retry": "Retry 3094–3097: pořád hroty. Selected 3091 zůstává.",
+      "notes_felt": "Felt ball 3098–3101: bez hrotů, světlá plstěná koule. Doporučuju 3099, záloha 3101."
     },
     {
       "id": "eozinofil",
@@ -628,6 +634,18 @@
     "notes": [
       "aspergillus 3175: pampeliška místo řetízků spor je pro ikonu v pořádku",
       "Když felt ball nepomůže ani teď, bereme zálohy a další kolo nedělej"
-    ]
+    ],
+    "felt_result": {
+      "date": "2026-11-08",
+      "souhrn": "Felt ball funguje: hroty zmizely u všech 24 variant. Lymfocyty se mezi sebou pořád liší hlavně odstínem.",
+      "doporuceno": {
+        "b-bunka": 3060,
+        "t-bunka": 3068,
+        "treg": 3088,
+        "pametova-bunka": 3099,
+        "nk-bunka": 3029,
+        "cytotoxicka-t-bunka": 3078
+      }
+    }
   }
 }
