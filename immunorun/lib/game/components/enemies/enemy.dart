@@ -6,6 +6,7 @@ import '../../../config/balance.dart';
 import '../../../domain/enemy_archetype.dart';
 import '../../../domain/status_effects.dart';
 import '../particle_burst.dart';
+import '../swim_sprite.dart';
 
 abstract class Enemy extends CircleComponent with CollisionCallbacks {
   Enemy({required this.archetype})
@@ -40,6 +41,18 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
   void Function(StatusEffect effect)? onStatusApplied;
 
   bool _componentsLoaded = false;
+
+  /// Poloměr vizuálu: kroužek opsonizace se kreslí vně spritu, jinak by ho
+  /// sprite (dítě, kreslí se až po rodiči) zakryl.
+  late double _visualRadius = archetype.radius;
+
+  /// Přidá ikonu jako sprite a přizpůsobí jí kroužek statusu.
+  Future<SwimSprite> addIcon(String id, double height) async {
+    final sprite = await SwimSprite.icon(id, height: height, center: size / 2);
+    add(sprite);
+    _visualRadius = height / 2;
+    return sprite;
+  }
 
   @override
   Future<void> onLoad() async {
@@ -81,7 +94,7 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
     if (hasStatus(StatusEffect.opsonized)) {
       canvas.drawCircle(
         Offset(size.x / 2, size.y / 2),
-        archetype.radius + 4,
+        _visualRadius + 4,
         _opsonizedPaint,
       );
     }

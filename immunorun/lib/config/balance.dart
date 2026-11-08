@@ -12,8 +12,11 @@ abstract final class Balance {
   static const double playerSpeed        = 280.0; // px/s
   static const double playerRadius       = 24.0;  // px (hitbox poloměr)
   static const int    playerMaxHp        = 100;
-  static const double playerSpriteHeight  = 96.0;  // px výška spritu (šířka = aspect ratio)
-  static const double swarmerSpriteHeight = 52.0;  // px výška spritu
+  // Sprity jsou čtvercové ikony (assets/images/icons/, 6 % okraj). Výška ≈ hitbox + výběžky.
+  static const double playerSpriteHeight  = 96.0;  // px, makrofág: tělo ≈ hitbox, zbytek panožky
+  static const double swarmerSpriteHeight = 36.0;  // px, čtveřice koků
+  static const double tankSpriteHeight    = 60.0;  // px, biofilm
+  static const double bossSpriteHeight    = 92.0;  // px, hrozen stafylokoků
 
   // ── Gesta / ovládání (mobil) ───────────────────────────────────────────────
   // Pohyb = drift (pomalé tažení) + dash (flick). Combos = swipe vzory.
@@ -219,8 +222,6 @@ abstract final class Balance {
   static const int    tankStartDifficulty = 1;    // od které místnosti se objeví
   static const int    tankMaxPerWave      = 3;
   static const int    tankSwarmerWeight   = 2;    // 1 tank ubere N swarmer slotů
-  static const Color  tankColor           = Color(0xFF9B59B6); // ametystová
-  static const Color  tankBorderColor     = Color(0xFF6C3483);
 
   // ── Kniha: redakční limity (05-kniha/03-redakcni-standard.md §9) ──────────
   // Hlavní text = odstavce a ### mimo boxy; placeholder {{…}} = 1 slovo.

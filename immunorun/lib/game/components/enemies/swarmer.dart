@@ -3,7 +3,6 @@ import 'package:flame/components.dart';
 import '../../../config/balance.dart';
 import '../../../domain/enemy_archetype.dart';
 import '../player/player.dart';
-import '../swim_sprite.dart';
 import 'enemy.dart';
 
 class Swarmer extends Enemy {
@@ -30,14 +29,7 @@ class Swarmer extends Enemy {
     await super.onLoad();
     if (_spriteLoaded) return;
     _spriteLoaded = true;
-    final sprite = await Sprite.load('pathogens/cocci.png');
-    final h      = Balance.swarmerSpriteHeight;
-    final aspect = sprite.srcSize.x / sprite.srcSize.y;
-    add(SwimSprite(
-      sprite: sprite,
-      size:   Vector2(h * aspect, h),
-      anchor: Anchor.center,
-    ));
+    await addIcon('kok', Balance.swarmerSpriteHeight);
   }
 
   @override

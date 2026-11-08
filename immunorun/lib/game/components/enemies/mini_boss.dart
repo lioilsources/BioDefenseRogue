@@ -8,6 +8,7 @@ import '../../../config/balance.dart';
 import '../../../domain/enemy_archetype.dart';
 import '../../systems/fever_controller.dart';
 import '../player/player.dart';
+import '../swim_sprite.dart';
 import 'enemy.dart';
 
 class MiniBoss extends Enemy {
@@ -31,13 +32,15 @@ class MiniBoss extends Enemy {
 
   static final _orbitCenter = Vector2(Balance.arenaWidth / 2, Balance.arenaHeight / 2);
 
-  static final _phase1Paint = Paint()..color = const Color(0xFFFF8C00);
-  static final _phase2Paint = Paint()..color = const Color(0xFFCC1100);
+  // Fáze 1: hrozen S. aureus; fáze 2: oteklý hrozen s kapkami toxinu.
+  late final SwimSprite _body;
+  late final Sprite     _phase2Sprite;
 
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    paint = _phase1Paint;
+    _body         = await addIcon('stafylokok', Balance.bossSpriteHeight);
+    _phase2Sprite = await Sprite.load('icons/stafylokok-faze2.webp');
   }
 
   @override
@@ -56,7 +59,7 @@ class MiniBoss extends Enemy {
     final fever  = feverGetter().tempC;
     if (hpFrac <= Balance.bossPhase2HpFraction || fever >= Balance.bossFeverTrigger) {
       _phase = 2;
-      paint  = _phase2Paint;
+      _body.sprite = _phase2Sprite;
       onPhaseShift?.call();
     }
   }
