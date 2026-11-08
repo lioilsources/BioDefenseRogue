@@ -100,7 +100,7 @@
         3023
       ],
       "notes": "OK, všechny 4 celé. 3023 má méně a delší výběžky, ostatní jsou si podobné.",
-      "selected": 3021,
+      "selected": 3030,
       "retry_seeds": [
         3028,
         3029,
@@ -170,7 +170,7 @@
         3053
       ],
       "notes": "Celé a čisté, ale mikroklky vypadají spíš jako krátké hroty, takže připomíná virus. B, T, Treg a paměťová buňka jsou si velmi podobné, děti je od sebe rozliší hlavně podle odstínu.",
-      "selected": 3051,
+      "selected": 3060,
       "retry_seeds": [
         3058,
         3059,
@@ -198,7 +198,7 @@
         3063
       ],
       "notes": "Celé a čisté. Od B buňky se liší jen o něco hladším povrchem. 3062 má na povrchu výraznou kuličku.",
-      "selected": 3061,
+      "selected": 3068,
       "retry_seeds": [
         3068,
         3069,
@@ -227,7 +227,7 @@
         3073
       ],
       "notes": "Vada: cílová buňka je u 3070, 3071 a 3073 useknutá okrajem snímku a BiRefNet z ní nechal jen útržek. 3072 je celý (T buňka přitisknutá na cílovou buňku), ale cílová buňka je větší než T buňka a vypadá jako polokoule. Automatická kontrola okraje to nezachytila, protože výřez useknutou část odřízl.",
-      "selected": 3077,
+      "selected": 3078,
       "retry_seeds": [
         3078,
         3079,
@@ -256,7 +256,7 @@
         3083
       ],
       "notes": "OK, klidný modrý odstín drží, všechny 4 celé.",
-      "selected": 3082,
+      "selected": 3088,
       "retry_seeds": [
         3088,
         3089,
@@ -285,7 +285,7 @@
         3093
       ],
       "notes": "OK, ledově bledý odstín. 3093 je oválná, ostatní kulaté. 3090 a 3091 mají na povrchu kuličku.",
-      "selected": 3091,
+      "selected": 3099,
       "retry_seeds": [
         3098,
         3099,
@@ -647,5 +647,22 @@
         "cytotoxicka-t-bunka": 3078
       }
     }
+  },
+  "review_felt": {
+    "date": "2026-11-08",
+    "by": "BioDefense",
+    "selected": {
+      "b-bunka": 3060,
+      "t-bunka": 3068,
+      "treg": 3088,
+      "pametova-bunka": 3099,
+      "nk-bunka": 3030,
+      "cytotoxicka-t-bunka": 3078
+    },
+    "notes": [
+      "NK 3030: povrchové váčky ji odliší i tvarem, NK buňky granula skutečně mají",
+      "Lymfocyty se liší hlavně odstínem. Biologicky to sedí, v SEM vypadají podobně; kniha to může říct",
+      "Sada je kompletní, další kolo není potřeba"
+    ]
   }
 }
