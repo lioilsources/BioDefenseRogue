@@ -598,7 +598,8 @@
         3239
       ],
       "subject_v1": "a single amoeboid immune cell stretched into an elongated teardrop shape, extending one long flowing sheet-like membrane ruffle forward, soft rippled flexible membrane",
-      "notes_round2": "Kolo 2 (3228, 3229, 3238, 3239): nový subject funguje – kupolovité tělo s širokou zvlněnou membránovou sukní, žádný bičík. 3238 nejlepší (široká pravidelná sukně, jen malý výběžek vlevo dole), záloha 3228 (krátký výběžek nahoře). 3229 je menší a sukně jen vzadu, 3239 má z vršku tenký bičík – nepoužitelné."
+      "notes_round2": "Kolo 2 (3228, 3229, 3238, 3239): nový subject funguje – kupolovité tělo s širokou zvlněnou membránovou sukní, žádný bičík. 3238 nejlepší (široká pravidelná sukně, jen malý výběžek vlevo dole), záloha 3228 (krátký výběžek nahoře). 3229 je menší a sukně jen vzadu, 3239 má z vršku tenký bičík – nepoužitelné.",
+      "selected": 3238
     },
     {
       "id": "cytotoxin",
@@ -626,7 +627,8 @@
         3259
       ],
       "subject_v1": "a single round translucent immune cell cut open to reveal many small dense glossy granules clustered on one side of its interior next to a kidney-shaped nucleus",
-      "notes_round2": "Kolo 2 (3248, 3249, 3258, 3259, styl sem): 3248 a 3249 sedí – průsvitná buňka, růžové granule na jedné straně, velké tmavé jádro. Výřez původně prorazil tmavé jádro, přeřezáno s --fill-all (vyplní i tmavé díry) – teď celé. 3249 nejlepší (granule výraznější), záloha 3248. 3258: výřez nechal jen granule. 3259: granule skoro chybí."
+      "notes_round2": "Kolo 2 (3248, 3249, 3258, 3259, styl sem): 3248 a 3249 sedí – průsvitná buňka, růžové granule na jedné straně, velké tmavé jádro. Výřez původně prorazil tmavé jádro, přeřezáno s --fill-all (vyplní i tmavé díry) – teď celé. 3249 nejlepší (granule výraznější), záloha 3248. 3258: výřez nechal jen granule. 3259: granule skoro chybí.",
+      "selected": 3249
     }
   ],
   "review_I0": {
@@ -748,7 +750,9 @@
     "date": "2026-11-08",
     "by": "BioDefense",
     "selected": {
-      "pyrogen": 3210
+      "pyrogen": 3210,
+      "membrana": 3238,
+      "cytotoxin": 3249
     },
     "redo": {
       "membrana": "nový subject (bez teardrop/flowing → bičík), seedy 3228, 3229, 3238, 3239",
@@ -757,7 +761,8 @@
     "notes": [
       "pyrogen 3210: nejčistší výřez, kapky čitelné; 3212 záloha",
       "membrana: návrh L40S převzat, jen bez 'fried egg' (riziko doslovného vejce)",
-      "cytotoxin: 'bean-shaped' vynecháno (riziko fazole), jádro jen 'large round dark nucleus'"
+      "cytotoxin: 'bean-shaped' vynecháno (riziko fazole), jádro jen 'large round dark nucleus'",
+      "kolo 2: membrana 3238 (široká sukně, jen malý výběžek vlevo dole), cytotoxin 3249 (granule čitelné, celý výřez)"
     ]
   }
 }
