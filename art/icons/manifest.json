@@ -106,7 +106,8 @@
         3025,
         3026,
         3027
-      ]
+      ],
+      "notes_retry": "Retry 3024–3027: nový subject nepomohl, všechny 4 mají pořád hroty kolem obvodu a vypadají jako virus. Qwen-Image ve stylu sem dělá z „microvilli/hair-like“ hroty, zákaz „no spikes“ ignoruje. Selected 3021 zůstává."
     },
     {
       "id": "dendriticka-bunka",
@@ -174,7 +175,8 @@
         3055,
         3056,
         3057
-      ]
+      ],
+      "notes_retry": "Retry 3054–3057: pořád hroty, stejně jako v I1. Selected 3051 zůstává."
     },
     {
       "id": "t-bunka",
@@ -200,7 +202,8 @@
         3065,
         3066,
         3067
-      ]
+      ],
+      "notes_retry": "Retry 3064–3067: pořád hroty, 3065/3066 mají navíc kuličku uprostřed. Selected 3061 zůstává."
     },
     {
       "id": "cytotoxicka-t-bunka",
@@ -227,7 +230,8 @@
         3075,
         3076,
         3077
-      ]
+      ],
+      "notes_retry": "Retry 3074–3077: obě buňky celé u všech 4, T buňka vlevo spojená můstkem s cílovou buňkou s póry. Výřez 3074 a 3075 prorazil jeden pór v cílové buňce (průhledná díra). Doporučuju 3077 (nejčistší), záloha 3076. T buňka má pořád hroty jako ostatní lymfocyty."
     },
     {
       "id": "treg",
@@ -254,7 +258,8 @@
         3085,
         3086,
         3087
-      ]
+      ],
+      "notes_retry": "Retry 3084–3087: pořád hroty. Selected 3082 zůstává."
     },
     {
       "id": "pametova-bunka",
@@ -281,7 +286,8 @@
         3095,
         3096,
         3097
-      ]
+      ],
+      "notes_retry": "Retry 3094–3097: pořád hroty. Selected 3091 zůstává."
     },
     {
       "id": "eozinofil",
@@ -462,7 +468,8 @@
       "size": [
         768,
         1344
-      ]
+      ],
+      "notes_retry": "Retry 3174–3177 (768×1344): stopka celá včetně patky u všech 4, okraj nikde. Hlavička je spíš „pampeliška“ z paliček než řetízky spor. Doporučuju 3175 (nejjemnější hlavička) nebo 3174. Výřez je doplněný na čtverec 1024."
     },
     {
       "id": "opsonizace",
@@ -489,7 +496,8 @@
         3190,
         3191
       ],
-      "notes_I1": "I1 (nový subject, 3184–3187): pořád korálky. 3184 vypadá jako šroubovice DNA, 3186 je X, 3185 a 3187 se Y blíží, ale nejsou to globulární domény. Podlaha s odrazem zůstala i se stylem 'no floor', výřez ji ale odstraní. Qwen-Image tenhle motiv nezvládá. Návrh: zkusit styl sem místo render, nebo popsat tvar jen slovy bez 'antibody' (např. 'three rounded lumpy protein lobes joined at a central hinge'). Čeká na domluvu."
+      "notes_I1": "I1 (nový subject, 3184–3187): pořád korálky. 3184 vypadá jako šroubovice DNA, 3186 je X, 3185 a 3187 se Y blíží, ale nejsou to globulární domény. Podlaha s odrazem zůstala i se stylem 'no floor', výřez ji ale odstraní. Qwen-Image tenhle motiv nezvládá. Návrh: zkusit styl sem místo render, nebo popsat tvar jen slovy bez 'antibody' (např. 'three rounded lumpy protein lobes joined at a central hinge'). Čeká na domluvu.",
+      "notes_retry": "Retry 3188–3191: 3188 a 3190 přesně sedí (zlatý kok, azurové shluky molekul po celém povrchu), 3189 má molekul méně, 3191 je skoro celý zlatý. Doporučuju 3190, záloha 3188."
     },
     {
       "id": "cervena-krvinka",
@@ -595,6 +603,15 @@
       "stafylokok 3120 (boss) a stafylokok-faze2 3133 se dobře liší odstínem",
       "tycinka-mikrobiom 3151 má tmavý lem po výřezu, proto 3150",
       "Po dodělávkách commitni do selected/ mastery všech selected, ne jen I0"
-    ]
+    ],
+    "retry_result": {
+      "date": "2026-11-08",
+      "lymfocyty": "Nový subject bez hrotů nefungoval u žádné z 20 variant (NK, B, T, Treg, paměťová). Návrh: vypustit slova microvilli/hair/spikes úplně a popsat povrch pozitivně, např. „a smooth round cell like a soft felt ball with a finely wrinkled, velvety surface“, případně jiný styl. Čeká na domluvu.",
+      "doporuceno": {
+        "cytotoxicka-t-bunka": 3077,
+        "aspergillus": 3175,
+        "opsonizace": 3190
+      }
+    }
   }
 }
