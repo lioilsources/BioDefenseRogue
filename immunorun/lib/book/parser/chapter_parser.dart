@@ -104,6 +104,15 @@ GlossaryParseResult parseGlossary(String source) {
       continue;
     }
     final paras = page.blocks.whereType<ParagraphBlock>().toList();
+    final icons = [
+      for (final r in page.blocks.whereType<IconRowBlock>()) ...r.icons,
+    ];
+    if (icons.length > 1) {
+      errors.add('heslo „${h.text}": nejvýš jedna ikona');
+    }
+    if (page.blocks.whereType<ImageBlock>().isNotEmpty) {
+      errors.add('heslo „${h.text}": schéma do slovníčku nepatří');
+    }
     terms.add(GlossaryTerm(
       id:         h.anchor!,
       name:       h.text,
@@ -114,6 +123,7 @@ GlossaryParseResult parseGlossary(String source) {
         ],
       ],
       sources: [for (final p in paras) ...p.sources],
+      icon:    icons.firstOrNull,
     ));
   }
   return GlossaryParseResult(terms, errors);
@@ -206,6 +216,7 @@ List<QuizQuestion> _parseQuiz(Object? raw, List<String> errors) {
 final _anchorRe  = RegExp(r'\s*\{#([^}]*)\}\s*$');
 final _commentRe = RegExp(r'<!--(.*?)-->', dotAll: true);
 final _boxTagRe  = RegExp(r'^\[!([a-z]+)\]\s*');
+const _iconPrefix = 'icon:';
 
 class _BodyParser {
   _BodyParser(this.errors, {this.glossary = false, this.allowLists = false});
@@ -290,7 +301,24 @@ class _BodyParser {
       final onlyImage = kids.every((k) =>
           (k is md.Element && k.tag == 'img') ||
           (k is md.Text && k.text.trim().isEmpty));
-      if (!onlyImage || imgs.length > 1) {
+      if (!onlyImage) {
+        errors.add('obrázek musí stát samostatně v odstavci');
+      }
+      final icons = imgs.where((e) =>
+          (e.attributes['src'] ?? '').startsWith(_iconPrefix));
+      if (icons.isNotEmpty) {
+        if (icons.length != imgs.length) {
+          errors.add('ikony a schéma nesmí stát v jednom odstavci');
+        }
+        return IconRowBlock([
+          for (final e in icons)
+            BookIcon(
+              id:  e.attributes['src']!.substring(_iconPrefix.length),
+              alt: e.attributes['alt'] ?? '',
+            ),
+        ]);
+      }
+      if (imgs.length > 1) {
         errors.add('obrázek musí stát samostatně v odstavci');
       }
       final img = imgs.first;

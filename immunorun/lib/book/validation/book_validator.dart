@@ -38,6 +38,7 @@ class BookLimits {
     this.quizAnswers          = Balance.bookQuizAnswers,
     this.quizWhyWordsMax      = Balance.bookQuizWhyWordsMax,
     this.zvedaveMax           = Balance.bookZvedaveMax,
+    this.iconsPerRowMax       = Balance.bookIconsPerRowMax,
   });
 
   final int wordsPerPageMax;
@@ -53,6 +54,7 @@ class BookLimits {
   final int quizAnswers;
   final int quizWhyWordsMax;
   final int zvedaveMax;
+  final int iconsPerRowMax;
 }
 
 class BookContext {
@@ -60,6 +62,7 @@ class BookContext {
     required this.glossaryIds,
     required this.sourceKeys,
     this.imageFiles,
+    this.iconIds,
     this.knownChapters = BookChapter.known,
     this.release       = false,
     this.limits        = const BookLimits(),
@@ -72,6 +75,10 @@ class BookContext {
   /// Soubory v assets/book/images/. null = existence obrázků se nekontroluje
   /// (do K4, OQ-19); v release je kontrola povinná vždy.
   final Set<String>? imageFiles;
+
+  /// Id ikon v assets/images/icons/ (bez `.webp`). null = existence se
+  /// nekontroluje; v release je kontrola povinná vždy.
+  final Set<String>? iconIds;
 
   /// `--dart-define=BOOK_RELEASE=true`: žádný TODO-FACT, obrázky musí existovat.
   final bool release;
@@ -219,6 +226,13 @@ List<BookIssue> validateChapter(
           }
           if (alt.trim().isEmpty) err('obrázek „$file" bez popisku', at);
           _checkImageExists(file, ctx, (m) => err(m, at));
+        case IconRowBlock(:final icons):
+          if (icons.length > lim.iconsPerRowMax) {
+            err('${icons.length} ikon v řadě (max ${lim.iconsPerRowMax})', at);
+          }
+          for (final i in icons) {
+            _checkIcon(i, ctx, (m) => err(m, at));
+          }
         case BoxBlock(:final kind, :final children, :final sources):
           boxes++;
           boxCount[kind] = boxCount[kind]! + 1;
@@ -313,6 +327,7 @@ List<BookIssue> validateGlossary(List<GlossaryTerm> terms, BookContext ctx) {
     if (!_kebab.hasMatch(t.id)) err('id není kebab-case bez diakritiky');
     if (countWords(inlineText(t.definition)) == 0) err('heslo bez definice');
     _checkSources(t.sources, ctx, at, (m, [_]) => err(m));
+    if (t.icon != null) _checkIcon(t.icon!, ctx, err);
   }
   return issues;
 }
@@ -340,6 +355,15 @@ void _checkSources(
     if (ctx.release && !n.verified) {
       err('TODO-FACT v release: „${n.text}"', at);
     }
+  }
+}
+
+void _checkIcon(BookIcon icon, BookContext ctx, void Function(String) err) {
+  if (icon.alt.trim().isEmpty) err('ikona „${icon.id}" bez popisku');
+  final ids = ctx.iconIds;
+  if (ids == null && !ctx.release) return;
+  if (!(ids ?? const {}).contains(icon.id)) {
+    err('ikona „${icon.id}" neexistuje v assets/images/icons/');
   }
 }
 

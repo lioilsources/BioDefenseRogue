@@ -10,3 +10,5 @@
   tvrzení čekají na garanta (`Prompts/05-kniha/garant-todo-fact.md`).
 - 2026-10-16: kapitoly 05 a 07 odkazují na karty přes `{{lore.<id>}}` (S2).
 - 2026-10-17: obrázky kapitol 00–12 (19× flux-schnell, výběr variant v `art/book/manifest.json`, K4).
+- 2026-11-08: fotorealistické ikony buněk a patogenů v kapitolách 02 a 03 (`![…](icon:<id>)`)
+  a u 17 hesel slovníčku; soubory sdílené se hrou (`assets/images/icons/`, `art/icons/manifest.json`).

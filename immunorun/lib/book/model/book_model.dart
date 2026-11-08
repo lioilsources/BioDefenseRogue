@@ -106,6 +106,22 @@ final class ImageBlock extends Block {
   final String alt;
 }
 
+/// Fotorealistická ikona buňky nebo patogenu: `![Popisek](icon:makrofag)`.
+/// Soubor je sdílený se hrou: `assets/images/icons/<id>.webp`.
+class BookIcon {
+  const BookIcon({required this.id, required this.alt});
+
+  final String id;
+  final String alt;
+}
+
+/// Řada ikon v jednom odstavci (`![…](icon:a) ![…](icon:b)`). Není to schéma.
+final class IconRowBlock extends Block {
+  const IconRowBlock(this.icons);
+
+  final List<BookIcon> icons;
+}
+
 final class BoxBlock extends Block {
   const BoxBlock(this.kind, this.children, {this.sources = const []});
 
@@ -195,10 +211,14 @@ class GlossaryTerm {
     required this.name,
     required this.definition,
     this.sources = const [],
+    this.icon,
   });
 
   final String           id;
   final String           name;
   final List<Inline>     definition;
   final List<SourceNote> sources;
+
+  /// Ikona nad definicí v bublině (řádek `![…](icon:id)` pod nadpisem hesla).
+  final BookIcon?        icon;
 }
