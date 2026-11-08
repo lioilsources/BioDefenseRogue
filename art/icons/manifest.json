@@ -568,7 +568,8 @@
         3212,
         3213
       ],
-      "notes": "Seedy 3210–3213: všechny čtyři sedí – azurová buňka a z jedné strany unikající oblak oranžových kapiček. Doporučuju 3210 (nejčistší oblak, kapky se odlepují od buňky), záloha 3212. 3211 má kapky nalepené na buňce, 3213 má ve výřezu mezi kapkami drobné černé tečky."
+      "notes": "Seedy 3210–3213: všechny čtyři sedí – azurová buňka a z jedné strany unikající oblak oranžových kapiček. Doporučuju 3210 (nejčistší oblak, kapky se odlepují od buňky), záloha 3212. 3211 má kapky nalepené na buňce, 3213 má ve výřezu mezi kapkami drobné černé tečky.",
+      "selected": 3210
     },
     {
       "id": "membrana",
@@ -581,7 +582,7 @@
         "book",
         "card:upgrade.membrana"
       ],
-      "subject": "a single amoeboid immune cell stretched into an elongated teardrop shape, extending one long flowing sheet-like membrane ruffle forward, soft rippled flexible membrane",
+      "subject": "a single flattened crawling immune cell seen from above, round dome-shaped cell body with a broad thin fan-shaped ruffled membrane sheet spreading out along its front edge, compact shape, no tail, no flagellum",
       "seeds": [
         3220,
         3221,
@@ -590,24 +591,25 @@
       ],
       "notes": "Seedy 3220–3227: vada u všech 8. Model kreslí spermii nebo pulce: kulatá hlavička a dlouhý zvlněný bičík. „Elongated teardrop“ + „long flowing sheet-like membrane ruffle“ čte jako ocas. Dítě to nepřečte jako buňku, která se plazí. Návrh nového subjectu (bez slov long, teardrop, flowing): „a single flattened immune cell crawling on a flat surface, seen from above at an angle, round body with one broad fan-shaped thin ruffled membrane skirt spreading wide along its whole front edge like a frilly fried egg, no tail, no flagellum“. Čeká na domluvu.",
       "retry_seeds": [
-        3224,
-        3225,
-        3226,
-        3227
-      ]
+        3228,
+        3229,
+        3238,
+        3239
+      ],
+      "subject_v1": "a single amoeboid immune cell stretched into an elongated teardrop shape, extending one long flowing sheet-like membrane ruffle forward, soft rippled flexible membrane"
     },
     {
       "id": "cytotoxin",
       "cz": "Cytotoxické granule",
       "group": "context",
       "lore": "upgrade.cytotoxin",
-      "style": "render",
+      "style": "sem",
       "tone": "host_alarm",
       "use": [
         "book",
         "card:upgrade.cytotoxin"
       ],
-      "subject": "a single round translucent immune cell cut open to reveal many small dense glossy granules clustered on one side of its interior next to a kidney-shaped nucleus",
+      "subject": "a single round immune cell with a smooth thin translucent membrane through which many small dense glossy granules glow, clustered on one side of the cell next to a large round dark nucleus",
       "seeds": [
         3230,
         3231,
@@ -616,11 +618,12 @@
       ],
       "notes": "Seedy 3230–3237: vada u všech 8. „Kidney-shaped nucleus“ model kreslí doslova jako orgán ledviny i s močovodem. „Cut open“ dává kreslený řez se dvěma polovinami a styl render přidává podlahu s odrazem; BiRefNet pak řez rozbije (jen 3232 má celý výřez, ale s ledvinou). Návrh: styl sem místo render a subject bez slov kidney a cut open, např. „a single round immune cell with a thin translucent surface through which a cluster of small dense glossy granules shows on one side, next to a large bean-shaped dark nucleus“. Čeká na domluvu.",
       "retry_seeds": [
-        3234,
-        3235,
-        3236,
-        3237
-      ]
+        3248,
+        3249,
+        3258,
+        3259
+      ],
+      "subject_v1": "a single round translucent immune cell cut open to reveal many small dense glossy granules clustered on one side of its interior next to a kidney-shaped nucleus"
     }
   ],
   "review_I0": {
@@ -736,6 +739,22 @@
       "NK 3030: povrchové váčky ji odliší i tvarem, NK buňky granula skutečně mají",
       "Lymfocyty se liší hlavně odstínem. Biologicky to sedí, v SEM vypadají podobně; kniha to může říct",
       "Sada je kompletní, další kolo není potřeba"
+    ]
+  },
+  "review_cards": {
+    "date": "2026-11-08",
+    "by": "BioDefense",
+    "selected": {
+      "pyrogen": 3210
+    },
+    "redo": {
+      "membrana": "nový subject (bez teardrop/flowing → bičík), seedy 3228, 3229, 3238, 3239",
+      "cytotoxin": "styl sem, nový subject bez kidney/cut open, seedy 3248, 3249, 3258, 3259"
+    },
+    "notes": [
+      "pyrogen 3210: nejčistší výřez, kapky čitelné; 3212 záloha",
+      "membrana: návrh L40S převzat, jen bez 'fried egg' (riziko doslovného vejce)",
+      "cytotoxin: 'bean-shaped' vynecháno (riziko fazole), jádro jen 'large round dark nucleus'"
     ]
   }
 }
