@@ -1,0 +1,9 @@
+Immunorun és un roguelite d'acció per a nens a partir de 10 anys i adults. Jugues com un macròfag, un glòbul blanc que neda pels teixits i elimina els bacteris abans que es multipliquin.
+
+• Partides curtes: neteja sales, tria el camí i derrota el cap, l'estafilococ daurat.
+• Cartes de millora basades en la biologia real: opsonització, histamina, pirogen, mitocondris i més.
+• La febre com a mecànica: la febre lleu t'ajuda, l'alta et perjudica.
+• Cèl·lules de memòria i vacunació: el que t'ha vençut serà més fàcil de vèncer la propera vegada.
+• Control amb gestos: llisca per envestir, dibuixa un cercle per llançar una salva.
+
+El joc inclou el Lèxic de la salut il·lustrat (de moment només en txec): capítols sobre els glòbuls blancs, la febre, la inflamació, els anticossos i la vacunació, amb qüestionaris. Allà on el joc simplifica per ser divertit, el llibre explica com és de veritat.

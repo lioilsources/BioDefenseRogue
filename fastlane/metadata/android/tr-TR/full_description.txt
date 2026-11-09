@@ -1,0 +1,9 @@
+Immunorun, 10 yaş üstü çocuklar ve yetişkinler için bir aksiyon roguelite oyunudur. Dokular arasında yüzen ve bakterileri çoğalmadan yok eden bir beyaz kan hücresini, yani makrofajı oynuyorsun.
+
+• Kısa oyunlar: odaları temizle, yolunu seç ve boss'u, altın stafilokoku yen.
+• Gerçek biyolojiye dayanan geliştirme kartları: opsonizasyon, histamin, pirojen, mitokondri ve daha fazlası.
+• Bir mekanik olarak ateş: hafif ateş sana yardım eder, yüksek ateş zarar verir.
+• Bellek hücreleri ve aşılama: seni yenen şeyi bir dahaki sefere daha kolay yenersin.
+• Hareketle kontrol: atılmak için kaydır, yaylım için daire çiz.
+
+Oyunda resimli Sağlık Sözlüğü de var (şimdilik yalnızca Çekçe): akyuvarlar, ateş, iltihap, antikorlar ve aşılar hakkında testli bölümler. Oyunun eğlence için basitleştirdiği yerlerde kitap, gerçeğin nasıl olduğunu anlatır.
