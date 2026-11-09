@@ -26,27 +26,31 @@ class BookOverlay extends ConsumerWidget {
     final book     = ref.watch(bookProvider);
     final fontStep = ref.watch(metaProvider.select((m) => m.bookFontStep));
     final meta     = ref.watch(metaProvider);
-    return book.when(
-      data: (b) => BookScreen(
-        book:           b,
-        initialChapter: game.bookChapterRequest,
-        initialAnchor:  game.bookAnchorRequest,
-        seenLore:       meta.seenLore,
-        lastChapter:    meta.lastChapter,
-        onChapterOpened: game.setLastChapter,
-        fontStep:       fontStep,
-        onFontStep:     game.setBookFontStep,
-        onClose:        game.closeBook,
-        onPageTurn:     () => game.audio.play(Sfx.pageTurn),
-        quizDone:       meta.quizDone,
-        onQuizDone:     game.markQuizDone,
-      ),
-      loading: () => const _Backdrop(child: SizedBox.expand()),
-      error:   (e, _) => _Backdrop(
-        child: Center(child: TextButton(
-          onPressed: game.closeBook,
-          child: const Text('Knihu se nepodařilo načíst. Zavřít'),
-        )),
+    // Kniha je zatím jen česky → i v RTL jazycích UI se sází zleva.
+    return Directionality(
+      textDirection: TextDirection.ltr,
+      child: book.when(
+        data: (b) => BookScreen(
+          book:           b,
+          initialChapter: game.bookChapterRequest,
+          initialAnchor:  game.bookAnchorRequest,
+          seenLore:       meta.seenLore,
+          lastChapter:    meta.lastChapter,
+          onChapterOpened: game.setLastChapter,
+          fontStep:       fontStep,
+          onFontStep:     game.setBookFontStep,
+          onClose:        game.closeBook,
+          onPageTurn:     () => game.audio.play(Sfx.pageTurn),
+          quizDone:       meta.quizDone,
+          onQuizDone:     game.markQuizDone,
+        ),
+        loading: () => const _Backdrop(child: SizedBox.expand()),
+        error:   (e, _) => _Backdrop(
+          child: Center(child: TextButton(
+            onPressed: game.closeBook,
+            child: const Text('Knihu se nepodařilo načíst. Zavřít'),
+          )),
+        ),
       ),
     );
   }

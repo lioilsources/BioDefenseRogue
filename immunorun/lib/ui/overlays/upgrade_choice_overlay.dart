@@ -3,6 +3,8 @@ import 'package:flutter/material.dart';
 import '../../domain/lore.dart';
 import '../../domain/upgrade.dart';
 import '../../game/immuno_game.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/lore_l10n.dart';
 
 /// Výběr upgradu po vyčištění místnosti — 1 z N karet.
 class UpgradeChoiceOverlay extends StatelessWidget {
@@ -24,9 +26,9 @@ class UpgradeChoiceOverlay extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'VYBER CYTOKIN / RECEPTOR',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).upgradeChoiceTitle,
+              style: const TextStyle(
                 color:      Colors.white,
                 fontSize:   22,
                 fontWeight: FontWeight.bold,
@@ -82,9 +84,9 @@ class _UpgradeCard extends StatelessWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               Align(
-                alignment: Alignment.topRight,
+                alignment: AlignmentDirectional.topEnd,
                 child: IconButton(
-                  tooltip:   'Co to je? (Lexikon)',
+                  tooltip:   AppLocalizations.of(context).upgradeInfoTooltip,
                   icon:      const Icon(Icons.info_outline, color: c, size: 22),
                   onPressed: () => game.openBookAt(lore.byRef(def.id)),
                 ),
@@ -92,7 +94,7 @@ class _UpgradeCard extends StatelessWidget {
               Icon(_icon(def.id), color: c, size: 38),
               const SizedBox(height: 10),
               Text(
-                def.nameCz,
+                lore.byRef(def.id).name,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color:      c,
@@ -103,7 +105,7 @@ class _UpgradeCard extends StatelessWidget {
               ),
               const SizedBox(height: 8),
               Text(
-                def.descCz,
+                lore.byRef(def.id).inGame,
                 textAlign: TextAlign.center,
                 style: const TextStyle(
                   color:    Colors.white70,

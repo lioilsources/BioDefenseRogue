@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../../game/immuno_game.dart';
-import '../book/book_theme.dart';
+import '../../l10n/app_localizations.dart';
 
 /// Pauza — Esc nebo tlačítko v HUD.
 class PauseOverlay extends StatelessWidget {
@@ -11,6 +11,7 @@ class PauseOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return ColoredBox(
       color: Colors.black.withValues(alpha: 0.65),
       child: Center(
@@ -24,9 +25,9 @@ class PauseOverlay extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              const Text(
-                'PAUZA',
-                style: TextStyle(
+              Text(
+                l10n.pauseTitle,
+                style: const TextStyle(
                   color:      Colors.white,
                   fontSize:   30,
                   fontWeight: FontWeight.bold,
@@ -35,25 +36,25 @@ class PauseOverlay extends StatelessWidget {
               ),
               const SizedBox(height: 28),
               _PauseButton(
-                label:     'POKRAČOVAT',
+                label:     l10n.pauseResume,
                 color:     Colors.green.shade700,
                 onPressed: game.resumeGame,
               ),
               const SizedBox(height: 12),
               _PauseButton(
-                label:     bookButtonCz,
+                label:     l10n.menuBook,
                 color:     Colors.teal.shade700,
                 onPressed: game.openBook,
               ),
               const SizedBox(height: 12),
               _PauseButton(
-                label:     'RESTART RUNU',
+                label:     l10n.pauseRestart,
                 color:     Colors.orange.shade800,
                 onPressed: game.restartRun,
               ),
               const SizedBox(height: 12),
               _PauseButton(
-                label:     'ZPĚT DO MENU',
+                label:     l10n.backToMenu,
                 color:     Colors.blueGrey.shade700,
                 onPressed: game.returnToMenu,
               ),

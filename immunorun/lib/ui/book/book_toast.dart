@@ -2,6 +2,18 @@ import 'package:cute_kid_fonts/cute_kid_fonts.dart';
 import 'package:flutter/material.dart';
 
 import '../../config/balance.dart';
+import '../../domain/lore.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/lore_l10n.dart';
+
+/// Text toastu pro nově potkané pojmy (id z registru, první je nejnovější).
+String bookToastText(AppLocalizations l10n, List<String> fresh) {
+  if (fresh.isEmpty) return '';
+  final first = lore.byId(fresh.first).name;
+  return fresh.length == 1
+      ? l10n.bookToastOne(first)
+      : l10n.bookToastMany(first, fresh.length - 1);
+}
 
 /// „Nová stránka v knize" — nenásilná nota při vyčištění místnosti.
 /// Nejde na ni kliknout (06-sync S3), zmizí sama.

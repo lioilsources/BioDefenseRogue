@@ -5,6 +5,8 @@ import '../../config/balance.dart';
 import '../../domain/lore.dart';
 import '../../game/systems/fever_controller.dart';
 import '../../game/systems/wave_controller.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/lore_l10n.dart';
 import 'thermometer.dart';
 
 class FeverNotifier extends Notifier<FeverSnapshot> {
@@ -76,9 +78,9 @@ class HudOverlay extends ConsumerWidget {
         SafeArea(
           child: Stack(
             children: [
-              Positioned(
-                right: 16,
-                top:   16,
+              PositionedDirectional(
+                end: 16,
+                top: 16,
                 child: GestureDetector(
                   onLongPress: onFeverInfo == null
                       ? null
@@ -87,17 +89,17 @@ class HudOverlay extends ConsumerWidget {
                 ),
               ),
               if (onPause != null)
-                Positioned(
-                  right: 52,
-                  top:   12,
+                PositionedDirectional(
+                  end: 52,
+                  top: 12,
                   child: IconButton(
                     icon: const Icon(Icons.pause_circle_outline,
                         color: Colors.white54, size: 30),
                     onPressed: onPause,
                   ),
                 ),
-              Positioned(left:  16, top: 16, child: _HpBar(normalized: hp)),
-              Positioned(left:  16, top: 52, child: _AtpBar(normalized: atp)),
+              PositionedDirectional(start: 16, top: 16, child: _HpBar(normalized: hp)),
+              PositionedDirectional(start: 16, top: 52, child: _AtpBar(normalized: atp)),
               Positioned(
                 top:   0,
                 left:  0,
@@ -174,6 +176,7 @@ class _WaveIndicator extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     final String label;
     final Color  color;
 
@@ -181,14 +184,14 @@ class _WaveIndicator extends StatelessWidget {
       case WavePhase.countdown:
         final secs = snapshot.timeRemaining.ceil();
         label = snapshot.wave == 0
-            ? 'ZAČÍNÁME ZA ${secs}s'
-            : 'VLNA ${snapshot.wave + 1} ZA ${secs}s';
+            ? l10n.hudStartingIn(secs)
+            : l10n.hudWaveIn(snapshot.wave + 1, secs);
         color = const Color(0xFF2ECC71);
       case WavePhase.active:
-        label = 'VLNA ${snapshot.wave}';
+        label = l10n.hudWave(snapshot.wave);
         color = const Color(0xFFE74C3C);
       case WavePhase.cleared:
-        label = 'VLNA ${snapshot.wave} — VYČIŠTĚNO!';
+        label = l10n.hudWaveCleared(snapshot.wave);
         color = const Color(0xFF2ECC71);
     }
 
@@ -229,7 +232,7 @@ class _AtpBar extends StatelessWidget {
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          '${lore.byId('resource.atp').nameCz}  [E]',
+          '${lore.byId('resource.atp').name}  [E]',
           style: TextStyle(
             color:    ready ? const Color(0xFF3498DB) : Colors.white38,
             fontSize: 11,
@@ -247,7 +250,7 @@ class _AtpBar extends StatelessWidget {
           ),
           child: FractionallySizedBox(
             widthFactor: normalized.clamp(0.0, 1.0),
-            alignment:   Alignment.centerLeft,
+            alignment:   AlignmentDirectional.centerStart,
             child: Container(
               decoration: BoxDecoration(
                 color:        color,
@@ -295,7 +298,7 @@ class _HpBar extends StatelessWidget {
           ),
           child: FractionallySizedBox(
             widthFactor: normalized.clamp(0.0, 1.0),
-            alignment:   Alignment.centerLeft,
+            alignment:   AlignmentDirectional.centerStart,
             child:       Container(
               decoration: BoxDecoration(
                 color:        color,

@@ -1,11 +1,14 @@
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'data/meta_repository.dart';
 import 'domain/lore.dart';
 import 'domain/meta_progress.dart';
 import 'game/immuno_game.dart';
+import 'l10n/app_localizations.dart';
+import 'l10n/lore_l10n.dart';
 import 'ui/book/book_overlay.dart';
 import 'ui/book/book_toast.dart';
 import 'ui/hud/hud_overlay.dart';
@@ -30,9 +33,32 @@ class ImmunoApp extends StatelessWidget {
       title:                      'IMMUNORUN',
       debugShowCheckedModeBanner: false,
       theme:                      ThemeData.dark(),
+      localizationsDelegates:     const [
+        AppLocalizations.delegate,
+        GlobalMaterialLocalizations.delegate,
+        GlobalWidgetsLocalizations.delegate,
+        GlobalCupertinoLocalizations.delegate,
+      ],
+      supportedLocales:           AppLocalizations.supportedLocales,
+      localeListResolutionCallback: resolveAppLocale,
       home:                       const _GameScreen(),
     );
   }
+}
+
+/// Jako výchozí rozlišení Flutteru, jen tradiční čínština bez skriptu
+/// (zh_TW, zh_HK, zh_MO z Androidu) nespadne do zjednodušené.
+Locale resolveAppLocale(List<Locale>? preferred, Iterable<Locale> supported) {
+  const hant = Locale.fromSubtags(languageCode: 'zh', scriptCode: 'Hant');
+  final fixed = [
+    for (final l in preferred ?? const <Locale>[])
+      if (l.languageCode == 'zh' && l.scriptCode == null &&
+          const {'TW', 'HK', 'MO'}.contains(l.countryCode))
+        hant
+      else
+        l,
+  ];
+  return basicLocaleListResolution(fixed, supported);
 }
 
 class _GameScreen extends StatefulWidget {
@@ -81,6 +107,8 @@ class _GameScreenState extends State<_GameScreen> {
 
   @override
   Widget build(BuildContext context) {
+    // Názvy pojmů čte i herní kód bez contextu → jazyk do globálu registru.
+    loreLocale = AppLocalizations.of(context).localeName;
     return FutureBuilder<MetaProgress>(
       future:  _metaFuture,
       builder: (context, snapshot) {
@@ -120,7 +148,8 @@ class _GameScreenState extends State<_GameScreen> {
           'upgradeChoice': (context, game) => UpgradeChoiceOverlay(game: game),
           'transition': (context, game) => const _TransitionOverlay(),
           'book':       (context, game) => BookOverlay(game: game),
-          'bookToast':  (context, game) => BookToast(text: game.bookToastText),
+          'bookToast':  (context, game) => BookToast(text: bookToastText(
+                AppLocalizations.of(context), game.bookToastFresh)),
         },
         initialActiveOverlays: const [],
       ),

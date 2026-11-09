@@ -3,7 +3,8 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../domain/lore.dart';
 import '../../game/immuno_game.dart';
-import '../book/book_theme.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/lore_l10n.dart';
 import '../meta_providers.dart';
 
 /// Hlavní menu — overlay, ne route (viz UX doc §12).
@@ -20,6 +21,7 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
   @override
   Widget build(BuildContext context) {
     final game = widget.game;
+    final l10n = AppLocalizations.of(context);
     return ColoredBox(
       color: Colors.black.withValues(alpha: 0.75),
       child: Center(
@@ -36,9 +38,9 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
               ),
             ),
             const SizedBox(height: 8),
-            const Text(
-              'Imunitní buňka vs. infekce',
-              style: TextStyle(color: Colors.white54, fontSize: 14),
+            Text(
+              l10n.menuSubtitle,
+              style: const TextStyle(color: Colors.white54, fontSize: 14),
             ),
             const SizedBox(height: 16),
             Consumer(
@@ -46,8 +48,8 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
                 final meta = ref.watch(metaProvider);
                 if (meta.memoryCells == 0) return const SizedBox.shrink();
                 return Text(
-                  '${lore.byId('meta.memoryCells').nameCz}: ${meta.memoryCells}'
-                  '  ·  +${meta.bonusStartHp} max HP',
+                  l10n.menuMemoryCells(lore.byId('meta.memoryCells').name,
+                      meta.memoryCells, meta.bonusStartHp),
                   style: const TextStyle(
                     color:    Color(0xFF5DADE2),
                     fontSize: 14,
@@ -58,19 +60,19 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
             ),
             const SizedBox(height: 24),
             _MenuButton(
-              label:     'SPUSTIT RUN',
+              label:     l10n.menuStartRun,
               color:     Colors.green.shade700,
               onPressed: game.startRun,
             ),
             const SizedBox(height: 14),
             _MenuButton(
-              label:     bookButtonCz,
+              label:     l10n.menuBook,
               color:     Colors.teal.shade700,
               onPressed: game.openBook,
             ),
             const SizedBox(height: 14),
             _MenuButton(
-              label: game.audio.enabled ? 'ZVUK: ZAP' : 'ZVUK: VYP',
+              label: game.audio.enabled ? l10n.menuSoundOn : l10n.menuSoundOff,
               color: Colors.blueGrey.shade700,
               onPressed: () =>
                   setState(() => game.audio.enabled = !game.audio.enabled),

@@ -1,0 +1,8 @@
+# UI hry: šablona je čeština (zdrojový jazyk), ostatní jazyky jsou překlady z ní.
+# Kniha (assets/book/cs/) a registr pojmů (lib/domain/lore.dart) sem nepatří;
+# překlady názvů pojmů jsou v lib/l10n/lore/.
+arb-dir: lib/l10n
+template-arb-file: app_cs.arb
+output-localization-file: app_localizations.dart
+output-class: AppLocalizations
+nullable-getter: false

@@ -59,7 +59,8 @@ class ImmunoGame extends FlameGame
       LoreEncounters(seen: initialMeta.seenLore);
 
   /// Text toastu „Nová stránka v knize" (overlay 'bookToast').
-  String bookToastText = '';
+  /// Nově potkané pojmy pro toast (text skládá overlay podle jazyka UI).
+  List<String> bookToastFresh = const [];
   async.Timer? _bookToastTimer;
 
   /// Buňky získané v posledním dohraném runu (pro game-over/run-won UI).
@@ -281,10 +282,7 @@ class ImmunoGame extends FlameGame
     meta = meta.copyWith(seenLore: encounters.seen);
     onMetaChanged?.call(meta);
     if (!toast) return;
-    final first = lore.byId(fresh.first).nameCz;
-    bookToastText = fresh.length == 1
-        ? 'Nová stránka v knize: $first'
-        : 'Nové stránky v knize: $first a další (${fresh.length - 1})';
+    bookToastFresh = fresh.toList();
     overlays.add('bookToast');
     _bookToastTimer?.cancel();
     _bookToastTimer = async.Timer(

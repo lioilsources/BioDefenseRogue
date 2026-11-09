@@ -4,7 +4,8 @@ import '../../domain/lore.dart';
 import '../../domain/lore_text.dart';
 import '../../domain/meta_progress.dart';
 import '../../game/immuno_game.dart';
-import '../book/book_theme.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/lore_l10n.dart';
 
 /// Game over — smrt hráče nebo kritická horečka.
 class GameOverOverlay extends StatelessWidget {
@@ -14,6 +15,7 @@ class GameOverOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final waves = game.wavesCleared;
+    final l10n  = AppLocalizations.of(context);
     return Center(
       child: Container(
         padding:    const EdgeInsets.symmetric(horizontal: 48, vertical: 36),
@@ -25,9 +27,9 @@ class GameOverOverlay extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'GAME OVER',
-              style: TextStyle(
+            Text(
+              l10n.gameOverTitle,
+              style: const TextStyle(
                 color:      Colors.redAccent,
                 fontSize:   36,
                 fontWeight: FontWeight.bold,
@@ -36,7 +38,7 @@ class GameOverOverlay extends StatelessWidget {
             ),
             const SizedBox(height: 12),
             Text(
-              waves > 0 ? 'Přežito vln: $waves' : 'Padl jsi hned.',
+              waves > 0 ? l10n.gameOverWaves(waves) : l10n.gameOverInstant,
               style: const TextStyle(
                 color:    Colors.white70,
                 fontSize: 16,
@@ -49,19 +51,19 @@ class GameOverOverlay extends StatelessWidget {
               Padding(
                 padding: const EdgeInsets.only(bottom: 10),
                 child: _EndButton(
-                  label:     'CO MĚ ZABILO?',
+                  label:     l10n.gameOverCause,
                   color:     Colors.teal.shade700,
                   onPressed: () => game.openBookAt(cause),
                 ),
               ),
             _EndButton(
-              label:     'ZKUSIT ZNOVU',
+              label:     l10n.gameOverRetry,
               color:     Colors.green.shade700,
               onPressed: game.resetGame,
             ),
             const SizedBox(height: 10),
             _EndButton(
-              label:     'ZPĚT DO MENU',
+              label:     l10n.backToMenu,
               color:     Colors.blueGrey.shade700,
               onPressed: game.returnToMenu,
             ),
@@ -81,6 +83,7 @@ class RunWonOverlay extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n = AppLocalizations.of(context);
     return Center(
       child: Container(
         padding:    const EdgeInsets.symmetric(horizontal: 48, vertical: 36),
@@ -92,9 +95,9 @@ class RunWonOverlay extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'IMMUNITA DOSAŽENA',
-              style: TextStyle(
+            Text(
+              l10n.runWonTitle,
+              style: const TextStyle(
                 color:      Color(0xFF2ECC71),
                 fontSize:   30,
                 fontWeight: FontWeight.bold,
@@ -102,27 +105,27 @@ class RunWonOverlay extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 12),
-            const Text(
-              'Patogen zničen. Host přežil.',
-              style: TextStyle(color: Colors.white70, fontSize: 16),
+            Text(
+              l10n.runWonSubtitle,
+              style: const TextStyle(color: Colors.white70, fontSize: 16),
             ),
             const SizedBox(height: 8),
             _MetaSummary(game: game),
             const SizedBox(height: 28),
             _EndButton(
-              label:     '$bookButtonCz: ${_memory.nameCz.toUpperCase()}',
+              label:     '${l10n.menuBook}: ${_memory.name.toUpperCase()}',
               color:     Colors.teal.shade700,
               onPressed: () => game.openBookAt(_memory),
             ),
             const SizedBox(height: 10),
             _EndButton(
-              label:     'NOVÝ RUN',
+              label:     l10n.runWonNewRun,
               color:     Colors.green.shade700,
               onPressed: game.resetGame,
             ),
             const SizedBox(height: 10),
             _EndButton(
-              label:     'ZPĚT DO MENU',
+              label:     l10n.backToMenu,
               color:     Colors.blueGrey.shade700,
               onPressed: game.returnToMenu,
             ),
@@ -140,8 +143,9 @@ class _MetaSummary extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l10n     = AppLocalizations.of(context);
     final earned   = game.lastRunCellsEarned;
-    final killedBy = killedByLabelCz(game.meta.lastKilledByType);
+    final killedBy = loreForKilledBy(game.meta.lastKilledByType)?.vaccinationTarget;
     final vaccinated =
         vaccinationTarget(game.meta.lastKilledByType) != null;
 
@@ -150,7 +154,7 @@ class _MetaSummary extends StatelessWidget {
       children: [
         if (earned > 0)
           Text(
-            '+$earned paměťových buněk',
+            l10n.metaCellsEarned(earned),
             style: const TextStyle(
               color:    Color(0xFF5DADE2),
               fontSize: 14,
@@ -161,8 +165,11 @@ class _MetaSummary extends StatelessWidget {
           Padding(
             padding: const EdgeInsets.only(top: 4),
             child: Text(
-              renderLore('Příště: imunizace proti $killedBy '
-                  '({{balance.vaccinationDamageBonus|pctDelta}} dmg)'),
+              l10n.metaVaccinationHint(
+                killedBy,
+                renderLore('{{balance.vaccinationDamageBonus|pctDelta}}',
+                    locale: loreLocale),
+              ),
               style: const TextStyle(
                 color:    Color(0xFF58D68D),
                 fontSize: 13,
