@@ -47,21 +47,23 @@ class UpgradeChoiceOverlay extends StatelessWidget {
   }
 }
 
+/// Fotorealistická ikona karty (art/icons/manifest.json, `use: card:upgrade.*`).
+String upgradeIconAsset(UpgradeId id) => 'assets/images/icons/${switch (id) {
+      UpgradeId.opsonin      => 'opsonizace',
+      UpgradeId.histamin     => 'zirna-bunka',
+      UpgradeId.pyrogen      => 'pyrogen',
+      UpgradeId.treg         => 'treg',
+      UpgradeId.mitochondrie => 'mitochondrie',
+      UpgradeId.membrana     => 'membrana',
+      UpgradeId.cytotoxin    => 'cytotoxin',
+    }}.webp';
+
 class _UpgradeCard extends StatelessWidget {
   const _UpgradeCard({required this.def, required this.game});
 
   final UpgradeDef def;
   final ImmunoGame game;
 
-  static IconData _icon(UpgradeId id) => switch (id) {
-        UpgradeId.opsonin      => Icons.gps_fixed,
-        UpgradeId.histamin     => Icons.slow_motion_video,
-        UpgradeId.pyrogen      => Icons.local_fire_department,
-        UpgradeId.treg         => Icons.ac_unit,
-        UpgradeId.mitochondrie => Icons.battery_charging_full,
-        UpgradeId.membrana     => Icons.double_arrow,
-        UpgradeId.cytotoxin    => Icons.bolt,
-      };
 
   @override
   Widget build(BuildContext context) {
@@ -89,7 +91,7 @@ class _UpgradeCard extends StatelessWidget {
                   onPressed: () => game.openBookAt(lore.byRef(def.id)),
                 ),
               ),
-              Icon(_icon(def.id), color: c, size: 38),
+              Image.asset(upgradeIconAsset(def.id), width: 72, height: 72),
               const SizedBox(height: 10),
               Text(
                 def.nameCz,
