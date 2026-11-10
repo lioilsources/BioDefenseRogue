@@ -50,6 +50,7 @@ Podmnožina Markdownu. Co tu není, parser v K1 odmítne. **[test]**
 | Heslo | `**text**` nebo `**text\|heslo**` | Viz §5. Tučné písmo se na nic jiného nepoužívá. |
 | Kurzíva | `*Staphylococcus aureus*` | Jen pro latinské názvy a názvy knih. |
 | Obrázek | `![Popisek pro čtečku](05-horecka-schema-1.webp)` | Jen schéma. Hero je ve front matter. Popisek je povinný (přístupnost). |
+| Ikona | `![Popisek](icon:makrofag)`, víc ikon v jednom odstavci = řada | Viz §12. Ne v boxu. |
 | Box | `> [!druh]` + odstavce s `>` | Viz §4. |
 | Odrážky | `- text` | Jen uvnitř boxu `prakticky`. |
 | Zdroj | `<!-- src: … -->`, `<!-- TODO-FACT: … -->` | Viz §6. Ve čtečce se nezobrazuje. |
@@ -178,6 +179,11 @@ Box `vedel` stojí tam, kde se tematicky hodí, ne nutně na konci.
   **[test]**
 - Zadání obrázku (jedna věta pro ComfyUI) je v `04-osnova.md`, v K4 se přenese do
   `art/book/manifest.json`.
+- **Ikona** (fotorealistická buňka nebo patogen, sdílená se hrou): `![Popisek](icon:<id>)`, soubor
+  `immunorun/assets/images/icons/<id>.webp`, zadání v `art/icons/manifest.json`. Samostatný odstavec,
+  nejčastěji hned pod `##`; řada nejvýš 4 ikon (`Balance.bookIconsPerRowMax`).
+  Ikona nenahrazuje schéma. Ve slovníčku smí heslo mít jednu ikonu pod nadpisem, bublina ji ukáže.
+  Popisek je povinný a popisuje, co je vidět. Existence souboru **[test]**.
 - V obrázku nesmí být text, šipky s popisky ani měřítko (ADR 0004). Popisky sází Flutter.
 
 ## 13. Kontrolní seznam autora (před PR)

@@ -42,6 +42,8 @@ nepřítele. V téhle kapitole poznáš hlavní členy týmu.
 
 ## Makrofág {#makrofag}
 
+![Makrofág: velká modrá buňka s dlouhými panožkami](icon:makrofag)
+
 Ve hře hraješ za **makrofág|makrofag**. To jméno znamená „velký žrout“. Makrofág hlídá v tkáních.
 Když najde bakterii, obejme ji a sní. Víc o tom je v kapitole 4.
 <!-- TODO-FACT: HOREJSI – etymologie slova makrofág, makrofágy v tkáních, fagocytóza -->
@@ -60,6 +62,8 @@ a přivolá další obránce.
 
 ## Neutrofil {#neutrofil}
 
+![Neutrofil: kulatá buňka se zvrásněným povrchem](icon:neutrofil)
+
 Ve hře neutrofil zatím nepotkáš. V těle je to ale nejčastější bílá krvinka v krvi. **Neutrofil**
 je rychlý. Při infekci dorazí na místo mezi prvními a pohlcuje bakterie.
 <!-- TODO-FACT: HOREJSI – neutrofily jako nejpočetnější leukocyty v krvi, první na místě infekce -->
@@ -76,9 +80,13 @@ je rychlý. Při infekci dorazí na místo mezi prvními a pohlcuje bakterie.
 
 ## Další členové týmu {#dalsi-clenove}
 
+![NK buňka](icon:nk-bunka) ![Dendritická buňka s rozvětvenými výběžky](icon:dendriticka-bunka) ![Žírná buňka uvolňuje granule](icon:zirna-bunka)
+
 **NK buňka|nk-bunka** hledá tvoje buňky, které nakazil virus, a zničí je. **Dendritická buňka|dendriticka-bunka** sbírá kousky nepřítele a ukazuje je ostatním. **Žírná buňka|zirna-bunka**
 spouští poplach, po kterém rána zčervená a oteče.
 <!-- TODO-FACT: HOREJSI – funkce NK buněk, dendritických buněk a žírných buněk -->
+
+![B buňka](icon:b-bunka) ![T buňka](icon:t-bunka) ![Cytotoxická T buňka u nakažené buňky](icon:cytotoxicka-t-bunka)
 
 **B buňka|b-bunka** vyrábí protilátky. Jsou to značky, které se přilepí na nepřítele. **T buňka|t-bunka** pomáhá řídit obranu. Některé T buňky samy ničí nakažené buňky. B i T buňky si umí
 nepřítele zapamatovat.

@@ -81,6 +81,20 @@ class BlockView extends StatelessWidget {
         ),
       ImageBlock(:final file, :final alt) =>
         BookImage(file: file, alt: alt, palette: palette),
+      IconRowBlock(:final icons) => Padding(
+          padding: const EdgeInsets.only(bottom: 12),
+          child: Center(
+            child: Wrap(
+              spacing:    16,
+              runSpacing: 8,
+              alignment:  WrapAlignment.center,
+              children: [
+                for (final i in icons)
+                  BookIconImage(icon: i, size: Balance.bookIconSize),
+              ],
+            ),
+          ),
+        ),
       BoxBlock(:final kind, :final children) =>
         BookBox(kind: kind, scale: scale, children: children),
     };
@@ -256,6 +270,30 @@ class BookImage extends StatelessWidget {
             ),
           ),
         ),
+      ),
+    );
+  }
+}
+
+/// Ikona buňky nebo patogenu, sdílená se hrou (`assets/images/icons/`).
+/// Když soubor chybí, nezobrazí nic (validace to hlídá).
+class BookIconImage extends StatelessWidget {
+  const BookIconImage({super.key, required this.icon, required this.size});
+
+  final BookIcon icon;
+  final double   size;
+
+  @override
+  Widget build(BuildContext context) {
+    return Semantics(
+      image: true,
+      label: icon.alt,
+      child: Image.asset(
+        'assets/images/icons/${icon.id}.webp',
+        width:  size,
+        height: size,
+        excludeFromSemantics: true,
+        errorBuilder: (context, _, _) => SizedBox.square(dimension: size),
       ),
     );
   }
