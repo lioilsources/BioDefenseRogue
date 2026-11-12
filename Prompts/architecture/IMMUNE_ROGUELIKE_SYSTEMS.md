@@ -53,8 +53,13 @@ Extracelulární bakterie, tvoří absces a biofilm.
 - **Fáze 2 — Biofilm:** zdi z biofilmu stahují arénu, coagulase štíty pohlcují dmg.
   Counter: NETs / Th17 prolomí biofilm.
 - **Fáze 3 — MRSA shift** *(spustí se jen při horečce > 39,5 °C)*: pod tepelným tlakem
-  mutuje na methicilin-rezistentní formu — vypne tvůj „antibiotický" boon, zrychlí se.
-  **Pointa:** pokud bosse přehříváš kvůli rychlému burstu, sám si spustíš jeho tvrdší fázi.
+  se **odhalí** methicilin-rezistentní subpopulace — vypne tvůj „antibiotický" boon, zrychlí se.
+  **Pointa:** pokud bosse přehříváš kvůli rychlému burstu, sám si vyselektuješ jeho tvrdší formu.
+
+> **Revize (viz `IMMUNE_ROGUELIKE_REVIEW.md` §A2 #1/#8):** MRSA rezistence = gen **mecA**
+> (pozměněný PBP2a) na mobilním elementu **SCCmec**, tj. *předem přítomný / horizontálně
+> získaný*, **ne teplem indukovaný**. Rámuj shift jako „tlak **odhalí** rezistentní menšinu,
+> která tu byla už předtím", ne „boss zmutuje, protože ho pálíš". Codex ať to uvede explicitně.
 
 ### 2.2 BIOME 2 — Krevní řečiště · „The Drift Engine" (chřipkový virus)
 Intracelulární. Ztělesnění interakce horečka × mutace.
@@ -71,10 +76,17 @@ Intracelulární. Ztělesnění interakce horečka × mutace.
 Houba. Tanky, biofilm, spory. **Invertuje** horečkový tlak.
 
 - **Fáze 1 — Sporová pole:** DoT zóny, hyfy se rozrůstají arénou.
-- **Fáze 2 — Imunosuprese:** aura **sráží tvoji horečku** pod febrilní sweet spot →
-  ztrácíš buffy. Poprvé ti hra horečku *bere*, ne přidává.
+- **Fáze 2 — Imunosuprese:** aura navodí **imunosupresivní/ochlazený niche** (steroidní
+  motiv — kortikosteroidy jsou antipyretické *i* imunosupresivní) → tvoje horečka klesá pod
+  febrilní sweet spot a ztrácíš buffy. Poprvé ti hra horečku *bere*, ne přidává.
 - **Fáze 3 — Invaze:** pokud máš horečku moc nízkou, přeroste tě. Musíš ji za boje
   znovu rozdmýchat (agresivní/zánětlivé schopnosti) a udržet, dokud houbu nespálíš.
+
+> **Revize (viz `REVIEW` §A2 #9):** Neexistuje silný mechanismus, jímž by houba aktivně
+> *snižovala* horečku hostitele — nerámuj to jako „antipyretický toxin houby". Přesná biologie
+> je opak: **houby jsou teplotně omezené** (endotermie/horečka = antifungální bariéra,
+> Casadevall) → „drž horečku nahoře, ať houbu spálíš". Pokles horečky navázat na
+> imunosupresi/steroidy (oportunismus Aspergilla u imunokompromitovaných), ne na houbu samu.
 
 ### 2.4 FINÁLNÍ BOSS — Systémová sepse · „The Apex Strain"
 **Tvoje nemesis.** Jeho kit je procedurálně složený z mutací, které tvoje patogeny
@@ -96,10 +108,15 @@ chování. Každá zbraň má `Primary`, `Special`, `Cast` a vlastní mechaniku.
 
 ### 3.1 NEUTROFIL — „The Burst" · rychlý glass-cannon
 - **Primary:** rychlé fagocytární kousnutí (krátký dosah, vysoký rate)
-- **Special:** ROS oxidativní vzplanutí — AoE nuke, **stojí život** (neutrofil po
-  degranulaci umírá)
-- **Cast:** NET — past, drží swarm
-- **Mechanika:** odpočet životnosti (degranulace). High risk, recykluj rychle.
+- **Special:** ROS oxidativní vzplanutí — AoE nuke, energeticky drahé
+- **Cast:** NET — past, drží swarm (**NETóza**: buňka zemře, aby uvolnila síť → tohle je ta
+  „stojí život" mechanika)
+- **Mechanika:** odpočet krátké životnosti (neutrofil žije hodiny–dny) + NETóza jako
+  suicidální cast. High risk, recykluj rychle.
+
+> **Revize (viz `REVIEW` §A2 #4):** samotná **degranulace fatální není**. „Stojí život"
+> navázat na **NETózu** (suicidální uvolnění NET) nebo na časovač krátké životnosti; ROS burst
+> nechat jako costly-but-not-necessarily-suicidal.
 - **Aspekty:** *Degranulace* (větší burst) · *NETóza* (trap-focus, control) ·
   *Roj* (přivolá neutrofilní spojence)
 
@@ -118,11 +135,17 @@ chování. Každá zbraň má `Primary`, `Special`, `Cast` a vlastní mechaniku.
 
 ### 3.4 B BUŇKA / PLAZMOCYT — „The Volley" · ranged, protilátky
 - **Primary:** protilátkové projektily (opsonizace → mark pro bonus dmg)
-- **Special:** class-switch — IgM ↔ IgG ↔ IgA ↔ IgE (mění chování projektilu)
-- **Mechanika:** musí „kalibrovat" na nového nepřítele (affinity maturation) —
-  první zásahy slabé, sílí. **Antigenní drift to resetuje** → přímá vazba na mutace.
+- **Special:** class-switch — IgM → IgG / IgA / IgE (mění chování projektilu),
+  **jednosměrný commit** (viz revize)
+- **Mechanika:** musí „kalibrovat" na nového nepřítele (affinity maturation, vyžaduje
+  **Tfh** pomoc) — první zásahy slabé, sílí. **Antigenní drift to resetuje** → přímá vazba na mutace.
 - **Aspekty:** *IgE* (anti-parazit/alergická AoE) · *Memory* (drží kalibraci mezi
   místnostmi) · *Pentamer* (IgM, synergie s komplementem)
+
+> **Revize (viz `REVIEW` §A2 #5):** class-switch rekombinace je **nevratná a jednosměrná**
+> (deletuje konstantní geny), ne obousměrný toggle — udělat z přepnutí jednosměrný commit
+> s cenou, nebo flagovat jako vědomé zjednodušení. Afinní maturace navíc vyžaduje
+> **T-folikulární-helper (Tfh)** v germinálních centrech → zvážit doplnění do Th rosteru.
 
 ### 3.5 CYTOTOXICKÁ T (CD8) — „The Sentence" · preciznost, anti-intracelulární
 - **Primary:** smrtící přesný úder na infikované buňky (lock-on přes MHC-I)
@@ -133,11 +156,18 @@ chování. Každá zbraň má `Primary`, `Special`, `Cast` a vlastní mechaniku.
   dříve viděným nepřátelům — synergie s meta)
 
 ### 3.6 EOSINOFIL / ŽÍRNÁ BUŇKA — „The Cascade" · zone control, fever-coupled
-- **Primary:** degranulační kužel (histamin / major basic protein)
-- **Special:** anafylaktická bomba — obří AoE, **prudce zvedne horečku**
+- **Primary:** degranulační kužel (eozinofilní major basic protein)
+- **Special:** cytokinová salva — obří AoE, **prudce zvedne horečku** (přes pyrogenní
+  TNF-α / IL-6 z mastocytů); volitelný **anafylaktický šok** = host-damage/self-damage event
 - **Mechanika:** explicitně provázaná s horečkou — škáluje s horečkou a tlačí ji nahoru.
   Nejvíc „fever-build" zbraň.
 - **Aspekty:** *Granulocyt* (raw dmg) · *IgE-coupling* (synergie s B-buňkou)
+
+> **Revize (viz `REVIEW` §A2 #3):** **anafylaxe horečku nezvyšuje** — histamin dělá
+> vazodilataci/hypotenzi/bronchospasmus a je typicky afebrilní. Fever-coupling navázat na
+> **pyrogenní cytokiny (TNF-α / IL-6)**, jichž jsou mastocyty zásobárnou, ne na histamin.
+> Samotnou **anafylaxi** modelovat jako host-shock / self-damage event (sedne do
+> imunopatologického tématu).
 
 > **Maturační upgrady** (= Daedalus hammer): in-run dropy, které mění jednu zbraň
 > (např. „Primary neutrofilu zasáhne ve vlně" / „Class-switch nemá cooldown").
@@ -165,6 +195,16 @@ Globální metr **36,5 → 42 °C**. Dvojrole: okamžitý zdroj v boji **a** obt
 V febrilní zóně se hromadí HSP stacky → buffy (např. odolnost, dmg). Vizuálně i
 mechanicky odměňují *udržení* horečky v sweet spotu, ne jen její spike.
 
+> **Revize (viz `REVIEW` §A1/§A2 #2/#11):**
+> 1. **Duální role horečky** — implementace zatím buffuje jen hráče. Doplnit druhou půlku:
+>    ve febrilní zóně **patogeni zpomalí/oslabnou** a v normotermii má hráč mírnou penaltu.
+>    Jinak se hráč naučí jen „teplo = můj DPS ↑" a mine reálnou lekci (horečka je koordinovaná
+>    strategie hostitele — pomáhá tobě a *zároveň* škodí jim; navíc nutriční imunita, sekvestrace
+>    železa/zinku).
+> 2. **Fever vs. hyperthermie** — regulovaná horečka (set-point až ~41 °C) je sama vzácně
+>    škodlivá; letální je *neregulovaná* hyperthermie/úpal. Hra oba slévá (dramaticky OK);
+>    Codex ať rozliší set-point fever od tepelného poškození. Klinicky „hyperpyrexie" > 41,1 °C.
+
 ### 4.4 Startovní horečka = obtížnost (Pact of Punishment / 4 levely originálu)
 Před runem volíš startovní teplotu. Vyšší = těžší run, ale lepší loot **a** víc
 materiálu pro meta-progresi. Přímý dědic 4 obtížností Bio-Defense.
@@ -173,9 +213,18 @@ materiálu pro meta-progresi. Přímý dědic 4 obtížností Bio-Defense.
 
 ## 5. Mutační systém (mezi runy)
 
-Každý druh patogenu má **genom vlastností** + rostoucí **resistance profile**. Po
-každém runu hra vyhodnotí, **jak** jsi daný druh nejčastěji zabíjel, a podle toho
-mutuje protiopatření:
+> **⭐ Revize — nejdůležitější korekce celé hry (viz `REVIEW` §A2 #1):** Formulace „patogen
+> **získá** rezistenci, protože **přežil** tvůj tlak" a „mutační budget úměrný přežitému tlaku"
+> učí **lamarckovský / řízený** model (organismus získá vlastnost, protože ji potřebuje) —
+> přesně tu představu, proti níž biologové bojují. Reálně (**Luria–Delbrück 1943**): mutace
+> vznikají **náhodně a předem**, nezávisle na selektoru; selekce jen **obohatí** už existující
+> rezistentní varianty. **Rámuj všude níže jako:** „malá rezistentní subpopulace už existovala
+> → tvůj tlak ji nechal převládnout", ne „patogen se naučil". Přidat **horizontální přenos genů**
+> (plazmidy, biofilm = HGT hotspot) jako druhý, věrnější kanál šíření rezistence.
+
+Každý druh patogenu má **genom vlastností** + rostoucí **resistance profile** (podíl
+rezistentní subpopulace). Po každém runu hra vyhodnotí, **jak** jsi daný druh nejčastěji
+zabíjel, a podle toho **jaká pre-existující varianta byla vyselektována**:
 
 | Tvoje dominantní taktika | Mutace patogenu | Důsledek |
 |--------------------------|-----------------|----------|
@@ -186,9 +235,15 @@ mutuje protiopatření:
 | **přežití vysoké horečky** | **termotolerance** | febrilní zóna neoslabuje |
 
 ### 5.1 Mutační body (mutation budget)
-Patogen získá MB úměrně **selekčnímu tlaku, který přežil**. Klíčové:
-**čím horčí run, tím víc MB** → vysoká horečka = rychlejší evoluce rezistence.
-MB utrácí za traity z tabulky výše. Strop, aby hra nebyla nehratelná.
+Selekční tlak, který linie přežila, určuje, **jak silně se pre-existující rezistentní
+varianta obohatí** (posun `resistance profile`). Klíčové: **čím horčí run, tím silnější
+selekce** → vysoká horečka = rychlejší **obohacení** rezistence v populaci (ne rychlejší
+„vynalézání" nových traitů). Strop, aby hra nebyla nehratelná.
+
+> **Revize:** „MB" nechápat jako body, které si patogen „vydělá a utratí za trait, co zrovna
+> potřebuje" — to je lamarckovské. Model = **náhodná variace (existuje předem) + selekce
+> (tvůj tlak) + drift/HGT**. SOS response (§6.2) zvyšuje *rychlost náhodné mutace* (víc losů),
+> ne její *směr*.
 
 ### 5.2 Arms race vs. meta
 Proti jejich mutaci stojí **tvoje paměťové buňky a vakcinace** (meta). Cílená
@@ -212,10 +267,13 @@ Tohle je ta nejhodnotnější mechanika — krátkodobá síla proti dlouhodobé
 > hladovíš a budoucí runy zůstávají mírné. (Analogie nadužívání antibiotik.)
 
 ### 6.2 Stresové mutace uprostřed runu (SOS response)
-Spike horečky umí spustit **okamžitou** mutaci u elit/bossů (bakteriální SOS response
-reálně zvyšuje mutabilitu pod stresem). Příklad: dotlačíš bosse do hyperpyrexie kvůli
-rychlému burstu → spustíš jeho rezistentní fázi (viz MRSA shift, §2.1). Přehřátí se
-trestá *hned*, nejen příště.
+Spike horečky umí zvýšit **mutabilitu** u elit/bossů (bakteriální SOS response, error-prone
+polymerázy Pol IV/V, hypermutátorové stavy reálně zvyšují mutační *rychlost* pod stresem).
+Příklad: dotlačíš bosse do hyperpyrexie → víc náhodných variant, z nichž tvůj tlak vybere
+rezistentní (viz MRSA shift, §2.1). Přehřátí se trestá *hned*, nejen příště.
+
+> **Revize:** SOS zvyšuje *rychlost* náhodné mutace (víc losů do loterie), **nesměruje**,
+> která mutace se objeví. Rámuj „mutuje rychleji", ne „mutuje směrem k odpovědi".
 
 ### 6.3 „Selection Denier" strategie
 Pokročilý hráč může horečku **úmyslně držet nízko** (Treg, antipyretika, chladné
