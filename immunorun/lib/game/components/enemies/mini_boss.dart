@@ -39,8 +39,8 @@ class MiniBoss extends Enemy {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    _body         = await addIcon('stafylokok', Balance.bossSpriteHeight);
-    _phase2Sprite = await Sprite.load('icons/stafylokok-faze2.webp');
+    _body         = await addIcon(GameIcons.stafylokok, Balance.bossSpriteHeight);
+    _phase2Sprite = await Sprite.load(GameIcons.path(GameIcons.stafylokokFaze2));
   }
 
   @override
