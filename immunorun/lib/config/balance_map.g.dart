@@ -1,5 +1,5 @@
 // GENEROVÁNO: dart run tool/gen_balance_map.dart — needitovat ručně.
-// Zdroj: lib/config/balance.dart (static const int/double), 188 konstant.
+// Zdroj: lib/config/balance.dart (static const int/double), 190 konstant.
 
 import 'balance.dart';
 
@@ -138,6 +138,8 @@ const Map<String, num> balanceLookup = {
   'mitochondrieCostMulti': Balance.mitochondrieCostMulti,
   'cytotoxinDamageMulti': Balance.cytotoxinDamageMulti,
   'membranaExtraDashCharges': Balance.membranaExtraDashCharges,
+  'upgradeCardIconSize': Balance.upgradeCardIconSize,
+  'overlayScreenMargin': Balance.overlayScreenMargin,
   'memoryCellsPerRoom': Balance.memoryCellsPerRoom,
   'memoryCellsWinBonus': Balance.memoryCellsWinBonus,
   'memoryHpPerCell': Balance.memoryHpPerCell,

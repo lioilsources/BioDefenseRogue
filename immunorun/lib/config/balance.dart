@@ -205,6 +205,8 @@ abstract final class Balance {
   static const double cytotoxinDamageMulti      = 1.25; // +25 % base dmg projektilu
   static const int    membranaExtraDashCharges  = 1;    // +1 max dash náboj
   static const Color  opsonizedRingColor        = Color(0xFFF1C40F); // žlutý ring
+  static const double upgradeCardIconSize       = 72.0; // pt, ilustrace na kartě
+  static const double overlayScreenMargin       = 12.0; // pt, dialog se zmenší, nepřeteče
 
   // ── Meta-progrese (paměťové buňky, vakcinace) ─────────────────────────────
   static const int    memoryCellsPerRoom     = 1;    // buňky za vyčištěnou místnost
