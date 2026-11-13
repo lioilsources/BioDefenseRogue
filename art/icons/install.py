@@ -5,6 +5,8 @@
 
 Zmenší na 512 px (sprite ve hře má nejvýš ~100 pt, tedy ≤ 400 px při DPR 4) a uloží WebP
 s alfou. Sekci „Ikony“ v CREDITS.md přepíše podle manifestu (model, licence, seed).
+Ikony, které v manifestu už nejsou, z assets smaže (pubspec balí celou složku).
+Nejdřív zkontroluje celý manifest, takže chyba nenechá sadu napůl přepsanou.
 
 Závislosti: stdlib + Pillow.
 """
@@ -25,21 +27,36 @@ QUALITY = 85
 
 def main():
     m = json.loads((ROOT / "manifest.json").read_text())
-    OUT.mkdir(parents=True, exist_ok=True)
     backend = m["backend"]
+    # Krátký název modelu: text před první dvojtečkou („Qwen-Image fp8: Comfy-Org/…“).
+    model = backend["model"].split(":", 1)[0].strip()
+
+    problems = []
+    for e in m["icons"]:
+        if e.get("selected") is None:
+            problems.append(f"{e['id']}: chybí selected")
+        elif not (ROOT / "selected" / f"{e['id']}.png").exists():
+            problems.append(f"{e['id']}: chybí selected/{e['id']}.png")
+    if problems:
+        raise SystemExit("\n".join(problems))
+
+    OUT.mkdir(parents=True, exist_ok=True)
+    keep = {f"{e['id']}.webp" for e in m["icons"]}
+    for old in OUT.glob("*.webp"):
+        if old.name not in keep:
+            old.unlink()
+            print(f"smazáno: {old.name} (není v manifestu)")
     lines = [
         CREDITS_HEADER,
         "Generováno podle art/icons/manifest.json (L40S, ComfyUI). Formát: soubor | model, seed | licence | prompt",
     ]
     for e in m["icons"]:
-        seed = e.get("selected")
-        if seed is None:
-            raise SystemExit(f"{e['id']}: chybí selected")
+        seed = e["selected"]
         src = ROOT / "selected" / f"{e['id']}.png"
         img = Image.open(src).convert("RGBA").resize((SIZE, SIZE), Image.LANCZOS)
         img.save(OUT / f"{e['id']}.webp", "WEBP", quality=QUALITY, method=6)
         lines.append(
-            f"- assets/images/icons/{e['id']}.webp | Qwen-Image fp8, seed {seed}; výřez BiRefNet"
+            f"- assets/images/icons/{e['id']}.webp | {model}, seed {seed}; výřez BiRefNet"
             f" | {backend['license']} | prompt v art/icons/manifest.json"
         )
         print(f"{e['id']}.webp  {(OUT / (e['id'] + '.webp')).stat().st_size // 1024} kB")
