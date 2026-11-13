@@ -3,8 +3,9 @@
 Každý vizuální soubor v assets/images/ musí mít záznam níže.
 Formát: název souboru | zdroj | licence | autor
 
-## Aktuálně (F0 placeholder)
-- Žádné externí snímky zatím — vše generováno procedurálně.
+## Přehled
+- Žádné externí snímky ani fotky z mikroskopu. Všechny obrázky jsou vygenerované modely
+  uvedenými v sekcích níže (ikona aplikace, kniha, ikony buněk a patogenů), zvuky procedurálně.
 
 ## Ikona aplikace
 - ios/…/AppIcon.appiconset, android/…/mipmap-*/ic_launcher.png, macos/…/AppIcon.appiconset, web/icons, web/favicon.png

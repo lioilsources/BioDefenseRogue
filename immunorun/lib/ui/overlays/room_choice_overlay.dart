@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../config/balance.dart';
 import '../../domain/lore.dart';
 import '../../domain/room_type.dart';
 import '../../game/immuno_game.dart';
+import 'fit_to_screen.dart';
 
 class RoomChoiceOverlay extends StatelessWidget {
   const RoomChoiceOverlay({super.key, required this.game});
@@ -12,7 +14,7 @@ class RoomChoiceOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final choices = game.pendingChoices;
-    return Center(
+    return FitToScreen(
       child: Container(
         padding:    const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
         decoration: BoxDecoration(
@@ -46,6 +48,15 @@ class RoomChoiceOverlay extends StatelessWidget {
   }
 }
 
+/// Ilustrace karty dveří: ikona toho, co v místnosti čeká (`assets/images/icons/`).
+/// Boj = roj koků, elite = biofilm (tank), léčení = červená krvinka, boss = stafylokok.
+String roomIconAsset(RoomType t) => 'assets/images/icons/${switch (t) {
+      RoomType.combat   => 'kok',
+      RoomType.elite    => 'biofilm',
+      RoomType.treasure => 'cervena-krvinka',
+      RoomType.boss     => 'stafylokok',
+    }}.webp';
+
 class _DoorButton extends StatelessWidget {
   const _DoorButton({required this.node, required this.game});
 
@@ -53,13 +64,6 @@ class _DoorButton extends StatelessWidget {
   final ImmunoGame game;
 
   static String _label(RoomType t) => lore.byRef(t).nameCz.toUpperCase();
-
-  static IconData _icon(RoomType t) => switch (t) {
-        RoomType.combat   => Icons.gps_fixed,
-        RoomType.elite    => Icons.star,
-        RoomType.treasure => Icons.medical_services,
-        RoomType.boss     => Icons.whatshot,
-      };
 
   static Color _color(RoomType t) => switch (t) {
         RoomType.combat   => Colors.red,
@@ -86,7 +90,17 @@ class _DoorButton extends StatelessWidget {
           child: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
-              Icon(_icon(node.type), color: c, size: 44),
+              Image.asset(
+                roomIconAsset(node.type),
+                width:  Balance.roomCardIconSize,
+                height: Balance.roomCardIconSize,
+                cacheWidth: (Balance.roomCardIconSize *
+                        MediaQuery.devicePixelRatioOf(context))
+                    .round(),
+                excludeFromSemantics: true, // název místnosti je hned pod ní
+                errorBuilder: (context, _, _) => const SizedBox.square(
+                    dimension: Balance.roomCardIconSize),
+              ),
               const SizedBox(height: 10),
               Text(
                 _label(node.type),

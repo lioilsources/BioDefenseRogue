@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:cute_kid_fonts/cute_kid_fonts_testing.dart';
 import 'package:flutter/material.dart';
@@ -13,6 +14,28 @@ import 'package:immunorun/ui/book/book_overlay.dart';
 
 final _skip = !Platform.isMacOS;
 
+/// Podíl pixelů, který se smí lišit. Nová verze Flutteru posouvá vyhlazení
+/// hran o jednotky pixelů (11/2026: 3–12 px z 304 500 na okrajích karet);
+/// změna textu nebo rozložení je o řády větší.
+const _tolerance = 0.0001; // 0,01 % ≈ 30 px
+
+class _TolerantComparator extends LocalFileComparator {
+  _TolerantComparator(super.testFile);
+
+  @override
+  Future<bool> compare(Uint8List imageBytes, Uri golden) async {
+    final result = await GoldenFileComparator.compareLists(
+        imageBytes, await getGoldenBytes(golden));
+    if (result.passed || result.diffPercent <= _tolerance) {
+      result.dispose();
+      return true;
+    }
+    final error = await generateFailureOutput(result, golden, basedir);
+    result.dispose();
+    throw FlutterError(error);
+  }
+}
+
 void main() {
   final book = assembleBook({
     for (final f in Directory('assets/book/cs').listSync().whereType<File>())
@@ -22,6 +45,9 @@ void main() {
   setUpAll(() async {
     TestWidgetsFlutterBinding.ensureInitialized();
     await loadKidFonts();
+    final base = goldenFileComparator as LocalFileComparator;
+    goldenFileComparator =
+        _TolerantComparator(base.basedir.resolve('book_golden_test.dart'));
   });
 
   Future<void> scene(
