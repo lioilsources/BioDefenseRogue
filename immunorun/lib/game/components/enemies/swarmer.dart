@@ -3,6 +3,7 @@ import 'package:flame/components.dart';
 import '../../../config/balance.dart';
 import '../../../domain/enemy_archetype.dart';
 import '../player/player.dart';
+import '../swim_sprite.dart';
 import 'enemy.dart';
 
 class Swarmer extends Enemy {
@@ -29,7 +30,7 @@ class Swarmer extends Enemy {
     await super.onLoad();
     if (_spriteLoaded) return;
     _spriteLoaded = true;
-    await addIcon('kok', Balance.swarmerSpriteHeight);
+    await addIcon(GameIcons.kok, Balance.swarmerSpriteHeight);
   }
 
   @override

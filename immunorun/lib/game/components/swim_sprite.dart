@@ -4,6 +4,21 @@ import 'package:flame/components.dart';
 
 import '../../config/balance.dart';
 
+/// Ikony herních entit v `assets/images/icons/`. Jediné místo s jejich id;
+/// [all] se přednačítá v `ImmunoGame.onLoad`, aby `onLoad` entit nečekal na dekódování.
+abstract final class GameIcons {
+  static const makrofag        = 'makrofag';
+  static const kok             = 'kok';
+  static const biofilm         = 'biofilm';
+  static const stafylokok      = 'stafylokok';
+  static const stafylokokFaze2 = 'stafylokok-faze2';
+
+  static const all = [makrofag, kok, biofilm, stafylokok, stafylokokFaze2];
+
+  /// Cesta relativní k `assets/images/` (konvence Flame `Images`).
+  static String path(String id) => 'icons/$id.webp';
+}
+
 /// `SpriteComponent` s jemným „plaváním" — nezávislý idle pohyb pro život buňky.
 ///
 /// Moduluje **scale** (nádech/výdech), **angle** (kolébání) a drobný **bob**
@@ -35,7 +50,7 @@ class SwimSprite extends SpriteComponent {
     required double height,
     required Vector2 center,
   }) async {
-    final sprite = await Sprite.load('icons/$id.webp');
+    final sprite = await Sprite.load(GameIcons.path(id));
     final aspect = sprite.srcSize.x / sprite.srcSize.y;
     return SwimSprite(
       sprite:   sprite,
