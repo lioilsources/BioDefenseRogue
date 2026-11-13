@@ -41,7 +41,17 @@ jobs:
       - name: Bump build number
         working-directory: immunorun
         run: |
-          BASE=$(grep '^version:' pubspec.yaml | sed -E 's/^version: ([0-9.]+).*/\1/')
+          # Tag v1.2.3 nebo v1.2.3-alpha → 1.2.3; ruční spuštění bere verzi z pubspec.
+          if [[ "$GITHUB_REF" == refs/tags/v* ]]; then
+            BASE="${GITHUB_REF_NAME#v}"
+            BASE="${BASE%%-*}"
+          else
+            BASE=$(grep '^version:' pubspec.yaml | sed -E 's/^version: ([0-9.]+).*/\1/')
+          fi
+          if [[ ! "$BASE" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]]; then
+            echo "::error::Neplatná verze '$BASE' (tag musí být vX.Y.Z[-přípona])"
+            exit 1
+          fi
           NEW="${BASE}+${{ github.run_number }}"
           sed -i -E "s/^version: .*/version: ${NEW}/" pubspec.yaml
           echo "Build version: ${NEW}"
@@ -81,7 +91,8 @@ jobs:
           name: BioDefenseRogue ${{ github.ref_name }}
           tag_name: ${{ github.ref_name }}
           draft: false
-          prerelease: true
+          # Přípona tagu (v1.2.3-alpha, -rc1…) = pre-release; stejně jako release-ios.
+          prerelease: ${{ contains(github.ref_name, '-') }}
 
       - name: Upload to Firebase App Distribution
         if: env.FIREBASE_APP_ID != ''
