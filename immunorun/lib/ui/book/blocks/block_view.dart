@@ -25,11 +25,16 @@ class BlockView extends StatelessWidget {
     required this.block,
     required this.palette,
     required this.scale,
+    this.onLink,
   });
 
   final Block      block;
   final KidPalette palette;
   final double     scale;
+
+  /// Když je zadané, adresy webů v textu (szu.cz…) jdou ťuknout. Jen strana
+  /// pro rodiče; v kapitolách pro děti odkazy nejsou (05-kniha OQ-29).
+  final void Function(String domain)? onLink;
 
   @override
   Widget build(BuildContext context) {
@@ -55,7 +60,8 @@ class BlockView extends StatelessWidget {
         ),
       ParagraphBlock(:final inlines) => Padding(
           padding: const EdgeInsets.only(bottom: 12),
-          child: InlineText(inlines: inlines, palette: palette, scale: scale),
+          child: InlineText(
+              inlines: inlines, palette: palette, scale: scale, onLink: onLink),
         ),
       ListBlock(:final items) => Padding(
           padding: const EdgeInsets.only(bottom: 8),
@@ -71,7 +77,8 @@ class BlockView extends StatelessWidget {
                       Text('•  ', style: _body(context)),
                       Expanded(
                         child: InlineText(
-                            inlines: item, palette: palette, scale: scale),
+                            inlines: item, palette: palette, scale: scale,
+                            onLink: onLink),
                       ),
                     ],
                   ),
@@ -113,11 +120,15 @@ class InlineText extends StatefulWidget {
     required this.palette,
     required this.scale,
     this.interactive = true,
+    this.onLink,
   });
 
   final List<Inline> inlines;
   final KidPalette   palette;
   final double       scale;
+
+  /// Viz [BlockView.onLink].
+  final void Function(String domain)? onLink;
 
   /// false = hesla bez tapu (uvnitř bubliny slovníčku).
   final bool interactive;
@@ -147,6 +158,32 @@ class _InlineTextState extends State<InlineText> {
     return r;
   }
 
+  /// Holá doména (szu.cz, who.int, www.mzcr.cz); cesta za lomítkem se nebere.
+  static final _domain = RegExp(r'\b(?:[a-z0-9-]+\.)+(?:cz|sk|eu|int|org|com)\b');
+
+  /// Text s adresami webů rozdělený na kusy; adresy jdou ťuknout.
+  List<InlineSpan> _linkify(String text, TextStyle linkStyle) {
+    final onLink = widget.onLink;
+    if (onLink == null || !widget.interactive) return [TextSpan(text: text)];
+    final spans = <InlineSpan>[];
+    var at = 0;
+    for (final m in _domain.allMatches(text)) {
+      if (m.start > at) spans.add(TextSpan(text: text.substring(at, m.start)));
+      final domain = m[0]!;
+      final r = TapGestureRecognizer()..onTap = () => onLink(domain);
+      _taps.add(r);
+      spans.add(TextSpan(
+        text:           domain,
+        recognizer:     r,
+        semanticsLabel: '$domain, odkaz na web',
+        style:          linkStyle,
+      ));
+      at = m.end;
+    }
+    if (at < text.length) spans.add(TextSpan(text: text.substring(at)));
+    return spans;
+  }
+
   @override
   Widget build(BuildContext context) {
     for (final t in _taps) {
@@ -166,7 +203,17 @@ class _InlineTextState extends State<InlineText> {
         children: [
           for (final i in inlines)
             switch (i) {
-              TextRun()     => TextSpan(text: renderBookText(i.text)),
+              TextRun()     => TextSpan(
+                  children: _linkify(
+                    renderBookText(i.text),
+                    TextStyle(
+                      color:           palette.mid,
+                      fontWeight:      FontWeight.w700,
+                      decoration:      TextDecoration.underline,
+                      decorationColor: palette.mid,
+                    ),
+                  ),
+                ),
               EmphasisRun() => TextSpan(
                   text:  renderBookText(i.text),
                   style: const TextStyle(fontStyle: FontStyle.italic),
