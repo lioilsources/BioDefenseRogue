@@ -148,7 +148,7 @@ class BossProjectile extends CircleComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    add(CircleHitbox(radius: Balance.bossProjectileRadius, anchor: Anchor.center));
+    add(CircleHitbox(radius: Balance.bossProjectileRadius, position: size / 2, anchor: Anchor.center));
   }
 
   @override

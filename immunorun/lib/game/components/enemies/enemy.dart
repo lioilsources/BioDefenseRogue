@@ -60,7 +60,7 @@ abstract class Enemy extends CircleComponent with CollisionCallbacks {
     _hp = archetype.maxHp;
     if (!_componentsLoaded) {
       _componentsLoaded = true;
-      add(CircleHitbox(radius: archetype.radius, anchor: Anchor.center));
+      add(CircleHitbox(radius: archetype.radius, position: size / 2, anchor: Anchor.center));
     }
   }
 
