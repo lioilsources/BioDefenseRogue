@@ -7,10 +7,10 @@ Pravidla projektu jsou v `CLAUDE.md` a platí celá. Tady je jen to, co z nich n
 
 ## 0. Stav plnění (2026-11-13)
 
-Všechno níže je v otevřených PR, nic z toho není v `main`. **Pořadí merge:** nejdřív #29.
-Flutter mezitím vydal stable 3.50.0 a CI bez pinu padá na `analyze --fatal-infos` (nové varování
-o `material.dart`). Na tom teď stojí CI všech ostatních PR. Po merge #29 se pustí znovu a mělo
-by projít bez dalších změn.
+Všechny PR níže (#26–#37) jsou 13. 11. mergnuté do `main` (squash). Nejdřív šel #29 (pin
+Flutteru 3.47.9; stable 3.50.0 shazoval `analyze --fatal-infos`), konflikty mezi #26, #31, #32 a #35
+jsou vyřešené. Celek prošel gate na macOS (274 testů včetně goldenů). Nový tag ani release zatím
+není. Grafika G3/G4 se generuje na L40S podle `art/fx/BRIEF.md` (větev `art/fx-bg`).
 
 | bod | PR | stav |
 |---|---|---|
@@ -30,10 +30,6 @@ by projít bez dalších změn.
 | 4 OQ-29 odkazy pro rodiče | #36 | dialog + `url_launcher`; otevřená rodičovská brána pro Kids/Families |
 | 4 balíček pro garanta | – | připravený lokálně (zip), poslat garantovi je na vlastníkovi |
 | 5 screenshoty pro story | – | nezačato |
-
-Konflikty mezi PR: #26, #32 a #35 mění stejné overlaye v různých řádcích. #32 a #35 přidávají
-konstanty do `balance.dart`, takže se může pohádat `balance_map.g.dart`. Řešení je přegenerovat
-(`dart run tool/gen_balance_map.dart`). #27 a #33 mění různé části `swim_sprite.dart`.
 
 ## 1. Kde jsme
 
