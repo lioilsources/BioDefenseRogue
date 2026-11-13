@@ -29,7 +29,7 @@ class Projectile extends CircleComponent with CollisionCallbacks {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    add(CircleHitbox(radius: radius, anchor: Anchor.center));
+    add(CircleHitbox(radius: radius, position: size / 2, anchor: Anchor.center));
   }
 
   @override
