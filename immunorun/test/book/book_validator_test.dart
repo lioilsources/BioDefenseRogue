@@ -108,6 +108,7 @@ Matcher _has(String fragment) =>
 
 BookContext _ctxWith({
   Set<String>? imageFiles,
+  Set<String>? iconIds,
   bool release = false,
   BookLimits limits = const BookLimits(chapterWordsMin: 10),
 }) =>
@@ -115,6 +116,7 @@ BookContext _ctxWith({
       glossaryIds: _ctx.glossaryIds,
       sourceKeys:  _ctx.sourceKeys,
       imageFiles:  imageFiles,
+      iconIds:     iconIds,
       release:     release,
       limits:      limits,
     );
@@ -147,6 +149,43 @@ void main() {
     test('hero se špatným jménem', () {
       expect(_errors(_swap('hero: $_id-hero.webp', 'hero: obrazek.webp')),
           _has('neodpovídá jménu $_id-hero.webp'));
+    });
+  });
+
+  group('ikony', () {
+    String withIcons(String row) => _swap('Tekutina z cév vytvoří otok.',
+        'Tekutina z cév vytvoří otok.\n\n$row');
+
+    test('existující ikona projde a schéma nenahradí', () {
+      final md = withIcons('![Žírná buňka](icon:zirna-bunka)');
+      expect(_errors(md, ctx: _ctxWith(iconIds: {'zirna-bunka'})), isEmpty);
+    });
+    test('neexistující ikona', () {
+      final md = withIcons('![Žírná buňka](icon:zirna)');
+      expect(_errors(md, ctx: _ctxWith(iconIds: {'zirna-bunka'})),
+          _has('ikona „zirna" neexistuje'));
+    });
+    test('release vyžaduje ikony i bez výpisu složky', () {
+      final md = withIcons('![Žírná buňka](icon:zirna-bunka)');
+      expect(_errors(md, ctx: _ctxWith(release: true)),
+          _has('ikona „zirna-bunka" neexistuje'));
+    });
+    test('ikona bez popisku', () {
+      expect(_errors(withIcons('![](icon:kok)')), _has('bez popisku'));
+    });
+    test('moc ikon v řadě', () {
+      final row = List.filled(5, '![K](icon:kok)').join(' ');
+      expect(_errors(withIcons(row)), _has('5 ikon v řadě'));
+    });
+    test('ikona hesla ve slovníčku', () {
+      final terms = [
+        const GlossaryTerm(
+          id: 'kok', name: 'Kok', definition: [TextRun('Bakterie.')],
+          icon: BookIcon(id: 'kok', alt: ''),
+        ),
+      ];
+      expect(validateGlossary(terms, _ctxWith(iconIds: {})).map((i) => '$i'),
+          allOf(_has('bez popisku'), _has('ikona „kok" neexistuje')));
     });
   });
 

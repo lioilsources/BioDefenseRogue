@@ -35,6 +35,8 @@ quiz:
 
 ## Koky {#koky}
 
+![Shluk čtyř kulatých zlatých bakterií, koků](icon:kok)
+
 Ve hře na tebe najíždí roj malých kulatých nepřátel. Jsou to **bakterie**. Bakterie je živý tvor
 z jediné buňky, mnohem menší než tvoje buňky.
 <!-- TODO-FACT: MIKRO – bakterie jako jednobuněčné organismy, velikost oproti lidským buňkám -->
@@ -53,6 +55,8 @@ vypadají jako hrozen vína.
 
 ## Biofilm {#biofilm}
 
+![Hrouda zlatých koků napůl zabořených ve fialovém slizu](icon:biofilm)
+
 Ve hře je tank pomalý a odolný. Těžko ho odstrčíš a dlouho vydrží. Je to **biofilm**: shluk
 stafylokoků zabalených do slizu.
 
@@ -69,6 +73,8 @@ Biofilm znáš i ze zubů, je to zubní plak.
 ---
 
 ## Zlatý stafylokok {#stafylokok}
+
+![Velký shluk zlatých stafylokoků, který vypadá jako hrozen](icon:stafylokok)
 
 Ve hře na konci čeká boss, velký stafylokok. Krouží arénou a střílí po tobě. Celým jménem je to
 zlatý stafylokok (*Staphylococcus aureus*). Na misce vyroste v hromádky bakterií, kterým se říká
@@ -101,6 +107,8 @@ vyplatí, až když jich je hodně.
 
 ## Viry {#viry}
 
+![Kulatý virus chřipky pokrytý krátkými výběžky](icon:virus-chripka)
+
 Ve hře zatím viry nepotkáš. **Virus** je mnohem menší než bakterie. Sám se množit neumí, nemá
 vlastní továrnu. Dostane se do tvé buňky a přinutí ji vyrábět nové viry.
 <!-- TODO-FACT: MIKRO – virus jako vnitrobuněčný parazit, velikost oproti bakterii -->
@@ -112,6 +120,8 @@ očkování, o něm je kapitola 12.
 ---
 
 ## Houby {#houby}
+
+![Plíseň Aspergillus: stopka s kulatou hlavičkou plnou spor](icon:aspergillus)
 
 Nepřítelem může být i **plíseň|plisen**, drobná houba. Plíseň *Aspergillus* roste třeba ve vlhkém
 sklepě. Množí se **sporami|spora**. Spora je drobounká částečka, ze které vyroste nová plíseň.
@@ -125,6 +135,8 @@ a sní.
 ---
 
 ## Mikrobiom {#mikrobiom}
+
+![Tři zelené tyčinkovité bakterie ze střeva](icon:tycinka-mikrobiom)
 
 Většina bakterií v těle ale nepřítel není. Ve střevech, na kůži i v ústech jich žije obrovské
 množství. Dohromady se jim říká **mikrobiom**. Pomáhají ti trávit jídlo a zabírají místo, takže se

@@ -25,6 +25,8 @@ Malá molekula, která v buňce nese energii. Funguje jako baterie: buňka ji na
 
 ## B buňka {#b-bunka}
 
+![B buňka](icon:b-bunka)
+
 Bílá krvinka, která vyrábí protilátky. Umí si nepřítele zapamatovat.
 <!-- TODO-FACT: HOREJSI – B lymfocyty -->
 
@@ -39,6 +41,8 @@ Buňka v krvi a tkáních, která chrání tělo před nepřáteli. Je jich něk
 <!-- TODO-FACT: HOREJSI – leukocyty, přehled typů -->
 
 ## Biofilm {#biofilm}
+
+![Biofilm: koky ve slizu](icon:biofilm)
 
 Sliz, ve kterém bakterie drží pohromadě a jsou přilepené k povrchu. Obránci i léky se k nim v něm hůř dostanou.
 <!-- TODO-FACT: MIKRO – biofilm -->
@@ -65,10 +69,14 @@ Drobná bílkovina, kterou si buňky posílají zprávy. Říká jim, co se děj
 
 ## Cytotoxická T buňka {#cytotoxicka-t-bunka}
 
+![Cytotoxická T buňka](icon:cytotoxicka-t-bunka)
+
 Druh T buňky, který vyhledává a ničí vlastní buňky nakažené virem. Pozná jednoho konkrétního nepřítele.
 <!-- TODO-FACT: JANEWAY – CD8 T lymfocyty, rozpoznání infikovaných buněk -->
 
 ## Dendritická buňka {#dendriticka-bunka}
+
+![Dendritická buňka](icon:dendriticka-bunka)
 
 Bílá krvinka s mnoha výběžky, která sbírá kousky nepřítele. Ukazuje je T buňkám, aby věděly, koho hledat.
 <!-- TODO-FACT: HOREJSI – dendritické buňky a prezentace antigenu -->
@@ -135,6 +143,8 @@ Výběr té obranné buňky, která nepřítele pozná. Právě ta se pak namno�
 
 ## Kok {#kok}
 
+![Shluk koků](icon:kok)
+
 Bakterie kulatého tvaru. Jméno pochází z řeckého slova pro zrnko.
 <!-- TODO-FACT: MIKRO – koky, etymologie -->
 
@@ -170,6 +180,8 @@ Bílkovina, která rozkládá stěnu bakterií. Najdeš ji i ve slzách a sliná
 
 ## Makrofág {#makrofag}
 
+![Makrofág](icon:makrofag)
+
 Velká bílá krvinka, která hlídá v tkáních a pohlcuje bakterie a staré buňky. Ve hře za ni hraješ.
 <!-- TODO-FACT: HOREJSI – makrofágy a jejich funkce -->
 
@@ -195,15 +207,21 @@ Přístroj, který zvětší věci tak malé, že je okem neuvidíš. Ve škole 
 
 ## Mitochondrie {#mitochondrie}
 
+![Rozříznutá mitochondrie](icon:mitochondrie)
+
 Drobná část uvnitř buňky, která z cukru a kyslíku vyrábí ATP. Funguje jako elektrárna buňky.
 <!-- TODO-FACT: ALBERTS – mitochondrie a buněčné dýchání -->
 
 ## Neutrofil {#neutrofil}
 
+![Neutrofil](icon:neutrofil)
+
 Nejčastější bílá krvinka v krvi. Při infekci dorazí na místo mezi prvními a pohlcuje bakterie.
 <!-- TODO-FACT: HOREJSI – neutrofily -->
 
 ## NK buňka {#nk-bunka}
+
+![NK buňka](icon:nk-bunka)
 
 Bílá krvinka, která hledá tvoje buňky nakažené virem a ničí je. NK znamená anglicky „přirozený zabiják“.
 <!-- TODO-FACT: HOREJSI – NK buňky (natural killer) -->
@@ -215,6 +233,8 @@ Způsob, jak tělu ukázat nepřítele předem, bez nemoci. Tělo si ho zapamatu
 
 ## Opsonizace {#opsonizace}
 
+![Bakterie obalená protilátkami](icon:opsonizace)
+
 Označení nepřítele protilátkami nebo jinými látkami. Fagocyt pak označeného nepřítele snáz pozná a pohltí.
 <!-- TODO-FACT: JANEWAY – opsonizace (protilátky, komplement) -->
 
@@ -224,6 +244,8 @@ Nafouknuté místo v těle, kam z cév prosákla tekutina. Při zánětu pomáh�
 <!-- TODO-FACT: HOREJSI – edém při zánětu -->
 
 ## Paměťová buňka {#pametova-bunka}
+
+![Paměťová buňka](icon:pametova-bunka)
 
 Obranná buňka, která po setkání s nepřítelem zůstane v těle dlouho. Když se stejný nepřítel vrátí, rychle spustí obranu.
 <!-- TODO-FACT: JANEWAY – paměťové B a T lymfocyty -->
@@ -239,6 +261,8 @@ Látka zabijáckých buněk, která udělá do nakažené buňky malý otvor. Ot
 <!-- TODO-FACT: JANEWAY – perforin a granzymy -->
 
 ## Plíseň {#plisen}
+
+![Plíseň Aspergillus](icon:aspergillus)
 
 Drobná houba, která roste třeba na starém jídle nebo ve vlhku. Množí se sporami.
 <!-- TODO-FACT: MIKRO – plísně, Aspergillus -->
@@ -265,6 +289,8 @@ Způsob, jak si bakterie „spočítají“, kolik jich je. Když je jich hodně
 
 ## Regulační T buňka (Treg) {#treg}
 
+![Regulační T buňka](icon:treg)
+
 Druh T buňky, který tlumí ostatní obránce. Hlídá, aby obrana nepoškodila vlastní tělo.
 <!-- TODO-FACT: HOREJSI – regulační T lymfocyty -->
 
@@ -280,10 +306,14 @@ Drobounká částečka, ze které vyroste nová plíseň. Je tak lehká, že lé
 
 ## Stafylokok {#stafylokok}
 
+![Hrozen stafylokoků](icon:stafylokok)
+
 Kulatá bakterie, která drží s ostatními ve shlucích jako hrozen vína. Nejznámější je zlatý stafylokok.
 <!-- TODO-FACT: MIKRO – rod Staphylococcus -->
 
 ## T buňka {#t-bunka}
+
+![T buňka](icon:t-bunka)
 
 Bílá krvinka, která pomáhá řídit obranu. Některé T buňky samy ničí nakažené buňky.
 <!-- TODO-FACT: HOREJSI – T lymfocyty, pomocné a cytotoxické -->
@@ -305,6 +335,8 @@ Přípravek, který se používá k očkování. Ukáže tělu, jak nepřítel v
 
 ## Virus {#virus}
 
+![Virus chřipky](icon:virus-chripka)
+
 Drobná částice, mnohem menší než bakterie. Sama se množit neumí, a tak nutí tvoje buňky, aby vyráběly nové viry.
 <!-- TODO-FACT: MIKRO – viry, množení v hostitelské buňce -->
 
@@ -324,6 +356,8 @@ Třes a pocit chladu, když horečka stoupá. Tělo se tak zahřívá na novou t
 <!-- TODO-FACT: HOREJSI – zimnice při vzestupu teploty -->
 
 ## Žírná buňka {#zirna-bunka}
+
+![Žírná buňka](icon:zirna-bunka)
 
 Buňka v tkáních plná drobných zrníček. Když vypustí jejich obsah, spustí poplach a místo zčervená a oteče.
 <!-- TODO-FACT: HOREJSI – žírné buňky, degranulace -->

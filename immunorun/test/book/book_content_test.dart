@@ -28,6 +28,12 @@ void main() {
               f.uri.pathSegments.last,
           }
         : null,
+    iconIds:     {
+      for (final f in Directory('assets/images/icons')
+          .listSync().whereType<File>())
+        if (f.path.endsWith('.webp'))
+          f.uri.pathSegments.last.replaceFirst(RegExp(r'\.webp$'), ''),
+    },
     release:     _release,
   );
 

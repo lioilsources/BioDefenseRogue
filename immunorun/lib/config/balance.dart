@@ -238,6 +238,7 @@ abstract final class Balance {
   static const int bookQuizAnswers          = 3;
   static const int bookQuizWhyWordsMax      = 25;
   static const int bookZvedaveMax           = 2;   // boxů „Pro zvědavé" v kapitole
+  static const int bookIconsPerRowMax       = 4;   // ikon v jedné řadě `![…](icon:…)`
 
   // ── Kniha: čtečka (K2) ────────────────────────────────────────────────────
   static const List<double> bookFontScales = [1.0, 1.2, 1.4]; // A / A / A
@@ -257,6 +258,8 @@ abstract final class Balance {
   static const double bookPlaceholderAlpha = 0.35;
   static const int    bookImageCacheWidth = 768;   // hero; schéma 512 (K4)
   static const double bookImageAspect     = 16 / 10;
+  static const double bookIconSize        = 96.0;  // px, ikona buňky v kapitole
+  static const double bookGlossaryIconSize = 72.0; // px, ikona v bublině slovníčku
   static const int    bookPageTurnMs      = 280;
   static const int    bookAssetsBudgetBytes = 12 * 1024 * 1024; // assets/book ≤ 12 MB (F7, K4)
   static const double bookToastSeconds    = 2.0;   // „Nová stránka v knize"

@@ -177,4 +177,33 @@ void main() {
           _has('zdroj bez odstavce'));
     });
   });
+
+  group('ikony', () {
+    test('řada ikon v odstavci', () {
+      final r = parseChapter('$_fm## A {#a}\n\n'
+          '![Makrofág](icon:makrofag) ![Kok](icon:kok)\n\nText.\n');
+      expect(r.errors, isEmpty, reason: r.errors.join('\n'));
+      final row = r.chapter!.allBlocks.whereType<IconRowBlock>().single;
+      expect(row.icons.map((i) => '${i.id}:${i.alt}'),
+          ['makrofag:Makrofág', 'kok:Kok']);
+      expect(r.chapter!.allBlocks.whereType<ImageBlock>(), isEmpty);
+    });
+    test('ikona a schéma v jednom odstavci', () {
+      expect(_bodyErrors('## A {#a}\n\n![K](icon:kok) ![S](x-schema-1.webp)\n'),
+          _has('ikony a schéma'));
+    });
+    test('ikona hesla ve slovníčku', () {
+      final r = parseGlossary('## Kok {#kok}\n\n![Kok](icon:kok)\n\n'
+          'Kulatá bakterie.\n\n## Otok {#otok}\n\nTekutina.\n');
+      expect(r.errors, isEmpty, reason: r.errors.join('\n'));
+      expect(r.terms.first.icon?.id, 'kok');
+      expect(r.terms.first.definition.map((i) => i.text).join(),
+          'Kulatá bakterie.');
+      expect(r.terms.last.icon, isNull);
+    });
+    test('heslo se dvěma ikonami', () {
+      final r = parseGlossary('## Kok {#kok}\n\n![K](icon:kok) ![S](icon:x)\n\nT.\n');
+      expect(r.errors, _has('nejvýš jedna ikona'));
+    });
+  });
 }

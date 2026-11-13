@@ -48,9 +48,21 @@ Future<void> showGlossaryBubble(
                 mainAxisSize: MainAxisSize.min,
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  BubbleText(term.name,
-                      role: KidRole.title, palette: palette,
-                      size: Balance.bookListTitleSize, align: TextAlign.left),
+                  Row(
+                    children: [
+                      if (term.icon != null) ...[
+                        BookIconImage(
+                            icon: term.icon!, size: Balance.bookGlossaryIconSize),
+                        const SizedBox(width: 12),
+                      ],
+                      Expanded(
+                        child: BubbleText(term.name,
+                            role: KidRole.title, palette: palette,
+                            size: Balance.bookListTitleSize,
+                            align: TextAlign.left),
+                      ),
+                    ],
+                  ),
                   const SizedBox(height: 8),
                   InlineText(inlines: term.definition, palette: palette,
                       scale: 1, interactive: false),

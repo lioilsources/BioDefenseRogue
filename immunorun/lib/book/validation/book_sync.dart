@@ -127,6 +127,8 @@ Iterable<String> _texts(Chapter c) sync* {
         yield* items.map(inlineText);
       case ImageBlock(:final alt):
         yield alt;
+      case IconRowBlock(:final icons):
+        yield* icons.map((i) => i.alt);
       case BoxBlock():
         break; // děti boxu projde allBlocks
     }
