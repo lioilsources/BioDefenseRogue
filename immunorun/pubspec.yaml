@@ -20,6 +20,10 @@ version: 1.0.1+1
 
 environment:
   sdk: ^3.11.4
+  # Přesná verze Flutteru pro CI i release (flutter-version-file) a lokálně.
+  # Zvednutí: změnit tady, `flutter pub get`, commitnout pubspec.lock, na macOS
+  # pustit `flutter test --update-goldens test/book/book_golden_test.dart`.
+  flutter: 3.47.9
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions

@@ -21,6 +21,10 @@ flutter analyze
 flutter test
 ```
 
+Verze Flutteru je připnutá v `immunorun/pubspec.yaml` (`environment.flutter`); CI i release
+workflow ji čtou odtud (`flutter-version-file`). Zvedá se jen tam, s novým `pubspec.lock`
+a goldeny knihy přegenerovanými na macOS.
+
 ## Architecture
 
 ```
