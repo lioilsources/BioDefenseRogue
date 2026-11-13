@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
+import '../../config/balance.dart';
 import '../../domain/lore.dart';
 import '../../domain/upgrade.dart';
 import '../../game/immuno_game.dart';
+import 'fit_to_screen.dart';
 
 /// Výběr upgradu po vyčištění místnosti — 1 z N karet.
 class UpgradeChoiceOverlay extends StatelessWidget {
@@ -13,7 +15,7 @@ class UpgradeChoiceOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final choices = game.pendingUpgrades;
-    return Center(
+    return FitToScreen(
       child: Container(
         padding:    const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
         decoration: BoxDecoration(
@@ -91,7 +93,18 @@ class _UpgradeCard extends StatelessWidget {
                   onPressed: () => game.openBookAt(lore.byRef(def.id)),
                 ),
               ),
-              Image.asset(upgradeIconAsset(def.id), width: 72, height: 72),
+              Image.asset(
+                upgradeIconAsset(def.id),
+                width:  Balance.upgradeCardIconSize,
+                height: Balance.upgradeCardIconSize,
+                // Zdroj má 512 px; dekóduje se jen tolik, kolik slot potřebuje.
+                cacheWidth: (Balance.upgradeCardIconSize *
+                        MediaQuery.devicePixelRatioOf(context))
+                    .round(),
+                excludeFromSemantics: true, // název karty je hned pod ní
+                errorBuilder: (context, _, _) => const SizedBox.square(
+                    dimension: Balance.upgradeCardIconSize),
+              ),
               const SizedBox(height: 10),
               Text(
                 def.nameCz,

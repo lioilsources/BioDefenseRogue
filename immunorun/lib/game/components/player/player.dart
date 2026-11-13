@@ -102,7 +102,7 @@ class Player extends CircleComponent with CollisionCallbacks {
   Future<void> onLoad() async {
     await super.onLoad();
     add(CircleHitbox(radius: Balance.playerRadius, anchor: Anchor.center));
-    add(await SwimSprite.icon('makrofag',
+    add(await SwimSprite.icon(GameIcons.makrofag,
         height: Balance.playerSpriteHeight, center: size / 2));
     _publishCharges();
   }

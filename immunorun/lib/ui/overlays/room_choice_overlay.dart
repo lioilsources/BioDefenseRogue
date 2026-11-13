@@ -4,6 +4,7 @@ import '../../config/balance.dart';
 import '../../domain/lore.dart';
 import '../../domain/room_type.dart';
 import '../../game/immuno_game.dart';
+import 'fit_to_screen.dart';
 
 class RoomChoiceOverlay extends StatelessWidget {
   const RoomChoiceOverlay({super.key, required this.game});
@@ -13,7 +14,7 @@ class RoomChoiceOverlay extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final choices = game.pendingChoices;
-    return Center(
+    return FitToScreen(
       child: Container(
         padding:    const EdgeInsets.symmetric(horizontal: 40, vertical: 32),
         decoration: BoxDecoration(

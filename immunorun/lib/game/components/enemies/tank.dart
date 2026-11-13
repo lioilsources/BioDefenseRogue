@@ -1,6 +1,7 @@
 import '../../../config/balance.dart';
 import '../../../domain/enemy_archetype.dart';
 import '../player/player.dart';
+import '../swim_sprite.dart';
 import 'enemy.dart';
 
 /// Tank — pomalý, tuhý, vysoký kontaktní dmg, odolný proti knockbacku.
@@ -19,7 +20,7 @@ class Tank extends Enemy {
   @override
   Future<void> onLoad() async {
     await super.onLoad();
-    await addIcon('biofilm', Balance.tankSpriteHeight);
+    await addIcon(GameIcons.biofilm, Balance.tankSpriteHeight);
   }
 
   @override
