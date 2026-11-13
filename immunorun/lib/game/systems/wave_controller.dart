@@ -62,7 +62,23 @@ class WaveController extends Component {
     _difficulty = difficulty;
   }
 
-  int get _enemyCount => world.children.whereType<Enemy>().length;
+  /// Přidaní nepřátelé, kteří ještě nejsou připojení (čekají v `onLoad`).
+  /// `world.children` je nevidí, bez nich by se vlna vyčistila dřív, než začne.
+  final Set<Enemy> _pending = {};
+
+  /// Přidá nepřítele do světa a počítá ho do vlny už před připojením.
+  /// Všechny spawny vlny (i boss z ImmunoGame) musí jít tudy.
+  void spawn(Enemy enemy) {
+    _pending.add(enemy);
+    world.add(enemy);
+  }
+
+  int get pendingCount => _pending.length;
+
+  int get _enemyCount {
+    _pending.removeWhere((e) => e.isMounted || e.isRemoved);
+    return world.children.whereType<Enemy>().length + _pending.length;
+  }
 
   @override
   void update(double dt) {
@@ -101,13 +117,13 @@ class WaveController extends Component {
 
   void _spawnSwarmers(int count) {
     for (var i = 0; i < count; i++) {
-      world.add(swarmerPool.acquire(_ringSpawnPos(i, count), player));
+      spawn(swarmerPool.acquire(_ringSpawnPos(i, count), player));
     }
   }
 
   void _spawnTanks(int count) {
     for (var i = 0; i < count; i++) {
-      world.add(
+      spawn(
         Tank(player: player, onPlayerContact: onPlayerContact)
           ..position = _ringSpawnPos(i, count),
       );
@@ -121,6 +137,11 @@ class WaveController extends Component {
   }
 
   void reset() {
+    // Nepřipojený nepřítel z minulé místnosti by se jinak připojil v nové.
+    for (final e in _pending) {
+      e.removeFromParent();
+    }
+    _pending.clear();
     _wave  = 0;
     _phase = WavePhase.countdown;
     _timer = Balance.waveCountdown;

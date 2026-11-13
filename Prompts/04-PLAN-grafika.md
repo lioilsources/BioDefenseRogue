@@ -2,6 +2,11 @@
 
 > Navazuje na `01-PLAN-phase-0-2.md` §3 (vizuální pipeline). Stejný formát: milník / obsah / Definition of Done.
 > Stav k 2. 10. 2026, po merge Etap A–D do `main`.
+>
+> **Aktualizace 11/2026:** §0 a §2 popisují výchozí stav. Hotové jsou G1 pro karty upgradů, G2
+> (hráč, koky, tank, boss jako fotorealistické ikony z `art/icons/`, ne z `cells/` a `pathogens/`)
+> a ikona appky z G4. `cells/macrophage.png`, `pathogens/cocci.png` a barva tanku z kódu už
+> neexistují. Co zbývá (karty místností, G3, zbytek G4), je v `07-PLAN-dalsi-kroky.md` §3.
 
 ---
 

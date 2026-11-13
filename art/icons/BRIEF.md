@@ -1,5 +1,11 @@
 # Zadání pro L40S: fotorealistické ikony buněk a patogenů
 
+> **Stav (11/2026): hotovo, zadání je historické.** Sada má 24 ikon, ne 21: přibyly tři ikony pro
+> karty upgradů (pyrogen, membrána, cytotoxin) a `protilatka` se změnila na `opsonizace`, protože
+> samotnou protilátku model nezvládl (`manifest.json`, `notes`).
+> `sheets/protilatka.jpg` je arch toho nepovedeného pokusu. Aktuální seznam je jen v manifestu,
+> instalace do hry přes `install.py`.
+
 Zadavatel: session **BioDefense** (Mac, repo `BioDefenseRogue`). Odpovědi a dotazy posílej zpět
 jí. Zdroj pravdy je `art/icons/manifest.json` na větvi `art/icons`.
 

@@ -1,8 +1,24 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flutter/painting.dart';
 
 import '../../config/balance.dart';
+
+/// Ikony herních entit v `assets/images/icons/`. Jediné místo s jejich id;
+/// [all] se přednačítá v `ImmunoGame.onLoad`, aby `onLoad` entit nečekal na dekódování.
+abstract final class GameIcons {
+  static const makrofag        = 'makrofag';
+  static const kok             = 'kok';
+  static const biofilm         = 'biofilm';
+  static const stafylokok      = 'stafylokok';
+  static const stafylokokFaze2 = 'stafylokok-faze2';
+
+  static const all = [makrofag, kok, biofilm, stafylokok, stafylokokFaze2];
+
+  /// Cesta relativní k `assets/images/` (konvence Flame `Images`).
+  static String path(String id) => 'icons/$id.webp';
+}
 
 /// `SpriteComponent` s jemným „plaváním" — nezávislý idle pohyb pro život buňky.
 ///
@@ -26,6 +42,9 @@ class SwimSprite extends SpriteComponent {
     _phaseBobX    = r.nextDouble() * 2 * pi;
     _phaseBobY    = r.nextDouble() * 2 * pi;
     _speedMul     = 1.0 + (r.nextDouble() - 0.5) * 2 * Balance.spriteSwimSpeedJitter;
+    // Ikony mají 512 px a kreslí se na 36–96 pt. Výchozí FilterQuality.none
+    // (nejbližší soused) z fotky dělá zrno, které se při plavání třpytí.
+    paint.filterQuality = FilterQuality.medium;
   }
 
   /// Čtvercová ikona z `assets/images/icons/<id>.webp`, vystředěná na [center]
@@ -35,7 +54,7 @@ class SwimSprite extends SpriteComponent {
     required double height,
     required Vector2 center,
   }) async {
-    final sprite = await Sprite.load('icons/$id.webp');
+    final sprite = await Sprite.load(GameIcons.path(id));
     final aspect = sprite.srcSize.x / sprite.srcSize.y;
     return SwimSprite(
       sprite:   sprite,
