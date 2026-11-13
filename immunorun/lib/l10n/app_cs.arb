@@ -1,0 +1,91 @@
+{
+  "@@locale": "cs",
+  "menuSubtitle": "Imunitní buňka vs. infekce",
+  "@menuSubtitle": {"description": "Podtitul v hlavním menu pod názvem hry IMMUNORUN."},
+  "menuMemoryCells": "{name}: {count}  ·  +{hp} max HP",
+  "@menuMemoryCells": {
+    "description": "Stav mety v menu: název pojmu (Paměťové buňky), počet buněk a bonus k maximálnímu zdraví. HP nechat.",
+    "placeholders": {"name": {"type": "String"}, "count": {"type": "int"}, "hp": {"type": "int"}}
+  },
+  "menuStartRun": "SPUSTIT RUN",
+  "@menuStartRun": {"description": "Tlačítko: začít nový run (jedno kolo roguelite hry). Verzálky."},
+  "menuBook": "LEXIKON",
+  "@menuBook": {"description": "Tlačítko otevírající knihu Lexikon zdraví (encyklopedie těla pro děti). Verzálky."},
+  "menuSoundOn": "ZVUK: ZAP",
+  "@menuSoundOn": {"description": "Přepínač zvuku, stav zapnuto. Verzálky."},
+  "menuSoundOff": "ZVUK: VYP",
+  "@menuSoundOff": {"description": "Přepínač zvuku, stav vypnuto. Verzálky."},
+  "pauseTitle": "PAUZA",
+  "@pauseTitle": {"description": "Nadpis obrazovky pauzy."},
+  "pauseResume": "POKRAČOVAT",
+  "@pauseResume": {"description": "Tlačítko: pokračovat ve hře."},
+  "pauseRestart": "RESTART RUNU",
+  "@pauseRestart": {"description": "Tlačítko: začít aktuální run znovu."},
+  "backToMenu": "ZPĚT DO MENU",
+  "@backToMenu": {"description": "Tlačítko: návrat do hlavního menu."},
+  "gameOverTitle": "GAME OVER",
+  "@gameOverTitle": {"description": "Nadpis po prohře."},
+  "gameOverWaves": "Přežito vln: {count}",
+  "@gameOverWaves": {
+    "description": "Kolik vln nepřátel hráč přežil.",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "gameOverInstant": "Padl jsi hned.",
+  "@gameOverInstant": {"description": "Hráč prohrál dřív, než přežil první vlnu."},
+  "gameOverCause": "CO MĚ ZABILO?",
+  "@gameOverCause": {"description": "Tlačítko: otevře v knize stránku o tom, co hráče porazilo."},
+  "gameOverRetry": "ZKUSIT ZNOVU",
+  "@gameOverRetry": {"description": "Tlačítko: hrát znovu."},
+  "runWonTitle": "IMMUNITA DOSAŽENA",
+  "@runWonTitle": {"description": "Nadpis po výhře runu (boss poražen)."},
+  "runWonSubtitle": "Patogen zničen. Host přežil.",
+  "@runWonSubtitle": {"description": "Podtitul po výhře. Host = hostitel, tělo, které imunita chrání."},
+  "runWonNewRun": "NOVÝ RUN",
+  "@runWonNewRun": {"description": "Tlačítko: začít nový run."},
+  "metaCellsEarned": "{count, plural, =1{+1 paměťová buňka} few{+{count} paměťové buňky} other{+{count} paměťových buněk}}",
+  "@metaCellsEarned": {
+    "description": "Kolik paměťových buněk (meta měna) hráč za run získal.",
+    "placeholders": {"count": {"type": "int"}}
+  },
+  "metaVaccinationHint": "Příště: imunizace proti {enemy} ({bonus} dmg)",
+  "@metaVaccinationHint": {
+    "description": "Vakcinace: v příštím runu dáváš víc poškození tomu, kdo tě zabil. enemy je název nepřítele (v češtině ve 3. pádě), bonus je třeba „+25 %“. dmg = poškození.",
+    "placeholders": {"enemy": {"type": "String"}, "bonus": {"type": "String"}}
+  },
+  "roomChoiceTitle": "VYBER CESTU",
+  "@roomChoiceTitle": {"description": "Výběr další místnosti (dveří)."},
+  "upgradeChoiceTitle": "VYBER CYTOKIN / RECEPTOR",
+  "@upgradeChoiceTitle": {"description": "Výběr karty vylepšení; karty jsou cytokiny a receptory imunitní buňky."},
+  "upgradeInfoTooltip": "Co to je? (Lexikon)",
+  "@upgradeInfoTooltip": {"description": "Tooltip ikony info na kartě: otevře stránku v knize Lexikon."},
+  "hudStartingIn": "ZAČÍNÁME ZA {secs}s",
+  "@hudStartingIn": {
+    "description": "Odpočet před první vlnou; s = sekundy.",
+    "placeholders": {"secs": {"type": "int"}}
+  },
+  "hudWaveIn": "VLNA {wave} ZA {secs}s",
+  "@hudWaveIn": {
+    "description": "Odpočet do další vlny; s = sekundy.",
+    "placeholders": {"wave": {"type": "int"}, "secs": {"type": "int"}}
+  },
+  "hudWave": "VLNA {wave}",
+  "@hudWave": {
+    "description": "Probíhající vlna nepřátel.",
+    "placeholders": {"wave": {"type": "int"}}
+  },
+  "hudWaveCleared": "VLNA {wave} — VYČIŠTĚNO!",
+  "@hudWaveCleared": {
+    "description": "Vlna nepřátel poražena.",
+    "placeholders": {"wave": {"type": "int"}}
+  },
+  "bookToastOne": "Nová stránka v knize: {name}",
+  "@bookToastOne": {
+    "description": "Oznámení: hráč potkal nový pojem, v knize se mu odemkla stránka.",
+    "placeholders": {"name": {"type": "String"}}
+  },
+  "bookToastMany": "Nové stránky v knize: {name} a další ({count})",
+  "@bookToastMany": {
+    "description": "Oznámení: víc nových stránek v knize; name je první pojem, count počet dalších.",
+    "placeholders": {"name": {"type": "String"}, "count": {"type": "int"}}
+  }
+}

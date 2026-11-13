@@ -1,0 +1,9 @@
+Immunorun on toiminnallinen roguelite yli 10-vuotiaille lapsille ja aikuisille. Pelaat makrofagina – valkosoluna, joka ui kudoksissa ja tuhoaa bakteerit ennen kuin ne lisääntyvät.
+
+• Lyhyet runit: selvitä huoneet, valitse reitti ja voita pomo – kultainen stafylokokki.
+• Oikeaan biologiaan perustuvat päivityskortit: opsonisaatio, histamiini, pyrogeeni, mitokondriot ja muuta.
+• Kuume pelimekaniikkana: lievä kuume auttaa, korkea kuume vahingoittaa.
+• Muistisolut ja rokotus: se, mikä sinut voitti, on ensi kerralla helpompi voittaa.
+• Eleohjaus: pyyhkäise syöksyäksesi, piirrä ympyrä ampuaksesi sarjan.
+
+Peliin kuuluu kuvitettu Terveyden tietosanakirja (toistaiseksi vain tšekiksi): lukuja valkosoluista, kuumeesta, tulehduksesta, vasta-aineista ja rokotuksista visailuineen. Kun peli yksinkertaistaa hauskuuden vuoksi, kirja kertoo, miten asiat oikeasti ovat.

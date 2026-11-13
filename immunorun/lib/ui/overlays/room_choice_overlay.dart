@@ -4,6 +4,8 @@ import '../../config/balance.dart';
 import '../../domain/lore.dart';
 import '../../domain/room_type.dart';
 import '../../game/immuno_game.dart';
+import '../../l10n/app_localizations.dart';
+import '../../l10n/lore_l10n.dart';
 import 'fit_to_screen.dart';
 
 class RoomChoiceOverlay extends StatelessWidget {
@@ -25,9 +27,9 @@ class RoomChoiceOverlay extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            const Text(
-              'VYBER CESTU',
-              style: TextStyle(
+            Text(
+              AppLocalizations.of(context).roomChoiceTitle,
+              style: const TextStyle(
                 color:      Colors.white,
                 fontSize:   22,
                 fontWeight: FontWeight.bold,
@@ -63,7 +65,7 @@ class _DoorButton extends StatelessWidget {
   final RoomNode   node;
   final ImmunoGame game;
 
-  static String _label(RoomType t) => lore.byRef(t).nameCz.toUpperCase();
+  static String _label(RoomType t) => lore.byRef(t).name.toUpperCase();
 
   static Color _color(RoomType t) => switch (t) {
         RoomType.combat   => Colors.red,

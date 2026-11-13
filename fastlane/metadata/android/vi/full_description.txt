@@ -1,0 +1,9 @@
+Immunorun là trò chơi roguelite hành động dành cho trẻ từ 10 tuổi và người lớn. Bạn vào vai đại thực bào – một tế bào bạch cầu bơi qua các mô và tiêu diệt vi khuẩn trước khi chúng sinh sôi.
+
+• Lượt chơi ngắn: dọn sạch phòng, chọn đường và hạ trùm – tụ cầu vàng.
+• Thẻ nâng cấp dựa trên sinh học thật: opsonin hóa, histamin, chất gây sốt, ty thể và nhiều hơn nữa.
+• Sốt là một cơ chế: sốt nhẹ giúp bạn, sốt cao gây hại.
+• Tế bào nhớ và tiêm chủng: thứ đã hạ bạn sẽ dễ bị đánh bại hơn ở lần sau.
+• Điều khiển bằng cử chỉ: vuốt để lướt, vẽ vòng tròn để bắn loạt.
+
+Trò chơi đi kèm Từ điển sức khỏe có minh họa (hiện chỉ có tiếng Séc): các chương về bạch cầu, sốt, viêm, kháng thể và tiêm chủng, kèm câu đố. Ở những chỗ trò chơi đơn giản hóa cho vui, cuốn sách giải thích sự thật là thế nào.

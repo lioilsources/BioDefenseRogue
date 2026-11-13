@@ -4,6 +4,7 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:immunorun/domain/room_type.dart';
 import 'package:immunorun/domain/upgrade.dart';
 import 'package:immunorun/game/immuno_game.dart';
+import 'package:immunorun/l10n/app_localizations.dart';
 import 'package:immunorun/ui/overlays/room_choice_overlay.dart';
 import 'package:immunorun/ui/overlays/upgrade_choice_overlay.dart';
 
@@ -40,7 +41,12 @@ void main() {
         tester.view.devicePixelRatio = 1;
         addTearDown(tester.view.reset);
 
-        await tester.pumpWidget(MaterialApp(home: Scaffold(body: build(_Game()))));
+        await tester.pumpWidget(MaterialApp(
+          locale: const Locale('cs'),
+          localizationsDelegates: AppLocalizations.localizationsDelegates,
+          supportedLocales: AppLocalizations.supportedLocales,
+          home: Scaffold(body: build(_Game())),
+        ));
         await tester.pump();
 
         expect(tester.takeException(), isNull); // RenderFlex overflow

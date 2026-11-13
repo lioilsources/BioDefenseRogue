@@ -1,0 +1,9 @@
+Immunorun este un roguelite de acțiune pentru copii de la 10 ani și adulți. Joci ca un macrofag – un globul alb care înoată prin țesuturi și distruge bacteriile înainte să se înmulțească.
+
+• Runde scurte: curăță camerele, alege drumul și învinge boss-ul – stafilococul auriu.
+• Cărți de îmbunătățire bazate pe biologie reală: opsonizare, histamină, pirogen, mitocondrii și altele.
+• Febra ca mecanică: febra ușoară te ajută, cea mare îți face rău.
+• Celule de memorie și vaccinare: ce te-a învins va fi mai ușor de învins data viitoare.
+• Control prin gesturi: glisează pentru salt, desenează un cerc pentru o salvă.
+
+Jocul include Lexiconul sănătății ilustrat (deocamdată doar în cehă): capitole despre globulele albe, febră, inflamație, anticorpi și vaccinare, cu chestionare. Acolo unde jocul simplifică de dragul distracției, cartea explică cum stau lucrurile cu adevărat.

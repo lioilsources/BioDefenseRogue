@@ -1,0 +1,9 @@
+Immunorun è un roguelite d'azione per ragazzi dai 10 anni in su e per adulti. Giochi nei panni di un macrofago, un globulo bianco che nuota nei tessuti ed elimina i batteri prima che si moltiplichino.
+
+• Partite brevi: ripulisci le stanze, scegli la strada e sconfiggi il boss, lo stafilococco aureo.
+• Carte potenziamento basate sulla vera biologia: opsonizzazione, istamina, pirogeno, mitocondri e altro.
+• La febbre come meccanica: la febbre lieve ti aiuta, quella alta ti danneggia.
+• Cellule della memoria e vaccinazione: ciò che ti ha sconfitto sarà più facile da battere la volta dopo.
+• Controlli a gesti: scorri per scattare, disegna un cerchio per lanciare una raffica.
+
+Il gioco include il Lessico della salute illustrato (per ora solo in ceco): capitoli su globuli bianchi, febbre, infiammazione, anticorpi e vaccinazione, con quiz. Dove il gioco semplifica per divertire, il libro spiega come stanno davvero le cose.

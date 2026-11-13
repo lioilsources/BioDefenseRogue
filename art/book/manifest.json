@@ -1,7 +1,7 @@
 {
   "_comment": "Lexikon zdraví – obrázky knihy (05-kniha ADR 0004, plán K4). Prompt = styles[style] + ', ' + subject. Generuje art/book/gen.py; výběr varianty zapisuje 'selected' (seed). Žádný text v obrázku.",
   "backend": {
-    "url": "http://192.168.88.66:8091/nim/flux-schnell",
+    "url": "http://${SPARK_HOST}:8091/nim/flux-schnell",
     "model": "flux-schnell (NIM)",
     "license": "Apache-2.0",
     "license_verified": false,

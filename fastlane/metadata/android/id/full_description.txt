@@ -1,0 +1,9 @@
+Immunorun adalah roguelite aksi untuk anak usia 10 tahun ke atas dan orang dewasa. Kamu bermain sebagai makrofag – sel darah putih yang berenang di jaringan dan memusnahkan bakteri sebelum berkembang biak.
+
+• Run singkat: bersihkan ruangan, pilih jalan, dan kalahkan bos – stafilokokus emas.
+• Kartu peningkatan berdasarkan biologi nyata: opsonisasi, histamin, pirogen, mitokondria, dan lainnya.
+• Demam sebagai mekanik: demam ringan membantumu, demam tinggi merugikanmu.
+• Sel memori dan vaksinasi: yang mengalahkanmu akan lebih mudah dikalahkan lain kali.
+• Kontrol gerakan: usap untuk dash, gambar lingkaran untuk menembakkan salvo.
+
+Game ini dilengkapi Leksikon Kesehatan bergambar (saat ini hanya dalam bahasa Ceko): bab tentang sel darah putih, demam, peradangan, antibodi, dan vaksinasi, lengkap dengan kuis. Di bagian yang disederhanakan demi keseruan, buku ini menjelaskan bagaimana kenyataannya.

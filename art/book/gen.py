@@ -14,6 +14,7 @@ popisek ani měřítko v obrázku (ADR 0004); vadnou variantu nevybírat.
 Závislosti: stdlib + Pillow.
 """
 import json
+import os
 import sys
 import time
 import urllib.request
@@ -100,7 +101,10 @@ def run_job(m, e, seed):
     out = raw_path(e, seed)
     if out.exists():
         return f"{out.name}: už stažen"
-    base = m["backend"]["url"]
+    # URL v manifestu nese ${SPARK_HOST}; adresu stroje dodá prostředí (.env).
+    base = os.path.expandvars(m["backend"]["url"])
+    if "$" in base:
+        raise SystemExit("nastav SPARK_HOST (adresa SPARKu, viz art/book/.env.example)")
     w, h = e["size"]
     gw, gh = gen_size(w, h)
     job = http("POST", f"{base}/v1/infer", {

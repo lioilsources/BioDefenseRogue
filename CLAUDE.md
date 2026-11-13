@@ -68,6 +68,8 @@ immunorun/lib/
 - Comments and UI copy in Czech, code in English
 - Rooms are self-contained — room type drives enemy spawning and layout (`wave_composition.dart`)
 - UI state via Riverpod v3 `Notifier` API; game publishes snapshots per frame
+- l10n: UI hry v ARB (`lib/l10n/app_cs.arb` je zdroj, ostatní jazyky překlady), názvy pojmů v UI přes
+  `lore_l10n.dart` (`entry.name`, `entry.inGame`, tabulky `lib/l10n/lore/`). Kniha je zatím jen česky.
 
 ## Hra ↔ kniha (Lexikon zdraví)
 

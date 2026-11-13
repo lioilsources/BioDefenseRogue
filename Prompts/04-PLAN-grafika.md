@@ -140,11 +140,11 @@ Držíme se jen dvou licenčně bezpečných cest. Co jde udělat bez modelu, d�
 Pouštíme sami přes HTTP; kontejnery nestartovat ani nezastavovat. Každou dávku předem ohlásit Directorovi (čas, počet).
 
 ```bash
-curl -s -X POST http://192.168.88.66:8091/nim/flux-schnell/v1/infer \
+curl -s -X POST http://$SPARK_HOST:8091/nim/flux-schnell/v1/infer \
   -H 'Content-Type: application/json' \
   -d '{"prompt":"…","width":1024,"height":1024,"seed":42,"steps":4}'      # → 202 {"id":"…"}
-curl -s http://192.168.88.66:8091/nim/flux-schnell/jobs/<id>              # queued | running | done | error
-curl -s -o out.jpg http://192.168.88.66:8091/nim/flux-schnell/jobs/<id>/result   # JPEG
+curl -s http://$SPARK_HOST:8091/nim/flux-schnell/jobs/<id>              # queued | running | done | error
+curl -s -o out.jpg http://$SPARK_HOST:8091/nim/flux-schnell/jobs/<id>/result   # JPEG
 ```
 
 - Fronta je sdílená: na `done` čekat minuty, neposílat duplikáty. Nejvýš 2 souběžné joby na projekt.

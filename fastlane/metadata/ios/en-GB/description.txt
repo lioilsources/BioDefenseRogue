@@ -1,0 +1,9 @@
+Immunorun is an action roguelite for kids aged 10+ and adults. You play as a macrophage – a white blood cell that swims through tissue and wipes out bacteria before they multiply.
+
+• Short runs: clear rooms, choose your path and defeat the boss – golden staph.
+• Upgrade cards based on real biology: opsonization, histamine, pyrogen, mitochondria and more.
+• Fever as a mechanic: a mild fever helps you, a high one hurts.
+• Memory cells and vaccination: whatever beat you is easier to beat next time.
+• Gesture controls: flick to dash, draw a circle to fire a salvo.
+
+The game includes the illustrated Health Lexicon (currently in Czech only): chapters on white blood cells, fever, inflammation, antibodies and vaccination, with quizzes. Where the game simplifies for fun, the book explains how it really works.

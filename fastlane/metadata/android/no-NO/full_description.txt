@@ -1,0 +1,9 @@
+Immunorun er en action-roguelite for barn fra 10 år og voksne. Du spiller en makrofag – en hvit blodcelle som svømmer gjennom vevet og utsletter bakterier før de formerer seg.
+
+• Korte runs: rydd rom, velg vei og beseir bossen – den gylne stafylokokken.
+• Oppgraderingskort basert på ekte biologi: opsonisering, histamin, pyrogen, mitokondrier og mer.
+• Feber som spillmekanikk: lett feber hjelper deg, høy feber skader deg.
+• Minneceller og vaksinasjon: det som slo deg, er lettere å slå neste gang.
+• Bevegelseskontroller: sveip for å dashe, tegn en sirkel for å fyre av en salve.
+
+Spillet inneholder det illustrerte Helseleksikonet (foreløpig bare på tsjekkisk): kapitler om hvite blodceller, feber, betennelse, antistoffer og vaksinasjon, med quizer. Der spillet forenkler for moro skyld, forklarer boka hvordan det egentlig er.

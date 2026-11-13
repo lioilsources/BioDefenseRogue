@@ -9,6 +9,9 @@
 // pctLess (0.6 → „40 %"; jen pro hodnoty < 1, sloveso „méně/zpomalí" je
 // v textu), s („4 s"), degC („41,5 °C"), int („1").
 // Neznámá konstanta, id nebo formát = LoreTextException, ne prázdný text.
+// `locale` ≠ 'cs' formátuje čísla podle jazyka UI (intl); čeština zůstává beze změny.
+
+import 'package:intl/intl.dart';
 
 import '../config/balance_map.g.dart';
 import 'lore.dart';
@@ -30,6 +33,7 @@ String renderLore(
   String text, {
   Map<String, num> lookup = balanceLookup,
   LoreRegistry? registry,
+  String locale = 'cs',
 }) {
   return text.replaceAllMapped(loreTextPlaceholder, (m) {
     final key    = m.group(1)!;
@@ -43,7 +47,7 @@ String renderLore(
       if (format == null) {
         throw LoreTextException('{{$key}} nemá formát (|pct, |s, …)');
       }
-      return formatLoreNumber(value, format, name: name);
+      return formatLoreNumber(value, format, name: name, locale: locale);
     }
     if (key.startsWith('lore.')) {
       if (format != null) {
@@ -77,25 +81,32 @@ List<String> checkLoreText(
   return errors;
 }
 
-String formatLoreNumber(num value, String format, {String name = '?'}) {
+String formatLoreNumber(
+  num value,
+  String format, {
+  String name = '?',
+  String locale = 'cs',
+}) {
+  final number = locale == 'cs' ? _cz : (num v) => _intlNumber(v, locale);
+  final pct  = locale == 'cs' ? (num p) => '${_cz(p)} %' : (num p) => _intlPercent(p, locale);
   switch (format) {
     case 'pct':
-      return '${_cz(value * 100)} %';
+      return pct(value * 100);
     case 'pctDelta':
       final d = (value - 1) * 100;
       final sign = d > 0 ? '+' : (d < 0 ? '−' : '');
-      return '$sign${_cz(d.abs())} %';
+      return '$sign${pct(d.abs())}';
     case 'pctLess':
       if (value >= 1) {
         throw LoreTextException(
             'Balance.$name = $value: pctLess čeká hodnotu < 1 '
             '(text říká „méně"; při změně znaménka uprav text)');
       }
-      return '${_cz((1 - value) * 100)} %';
+      return pct((1 - value) * 100);
     case 's':
-      return '${_cz(value)} s';
+      return '${number(value)} s';
     case 'degC':
-      return '${_cz(value)} °C';
+      return '${number(value)} °C';
     case 'int':
       if (value != value.roundToDouble()) {
         throw LoreTextException('Balance.$name = $value není celé číslo');
@@ -113,6 +124,19 @@ String _cz(num v) {
   s = s.replaceFirst(RegExp(r'\.?0+$'), '');
   return s.replaceAll('.', ',');
 }
+
+String _intlLocale(String locale) =>
+    Intl.verifiedLocale(locale, NumberFormat.localeExists, onFailure: (_) => 'en')!;
+
+/// Jiné jazyky: nejvýš 2 desetinná místa, oddělovače podle locale.
+String _intlNumber(num v, String locale) =>
+    (NumberFormat.decimalPattern(_intlLocale(locale))..maximumFractionDigits = 2)
+        .format(v);
+
+/// [percent] v procentech (25 → „25%" / „25 %" / „%25" podle locale).
+String _intlPercent(num percent, String locale) =>
+    (NumberFormat.percentPattern(_intlLocale(locale))..maximumFractionDigits = 2)
+        .format(percent / 100);
 
 extension LoreEntryText on LoreEntry {
   /// inGameCz s dosazenými čísly.
