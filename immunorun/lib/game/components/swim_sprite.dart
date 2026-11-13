@@ -1,6 +1,7 @@
 import 'dart:math';
 
 import 'package:flame/components.dart';
+import 'package:flutter/painting.dart';
 
 import '../../config/balance.dart';
 
@@ -26,6 +27,9 @@ class SwimSprite extends SpriteComponent {
     _phaseBobX    = r.nextDouble() * 2 * pi;
     _phaseBobY    = r.nextDouble() * 2 * pi;
     _speedMul     = 1.0 + (r.nextDouble() - 0.5) * 2 * Balance.spriteSwimSpeedJitter;
+    // Ikony mají 512 px a kreslí se na 36–96 pt. Výchozí FilterQuality.none
+    // (nejbližší soused) z fotky dělá zrno, které se při plavání třpytí.
+    paint.filterQuality = FilterQuality.medium;
   }
 
   /// Čtvercová ikona z `assets/images/icons/<id>.webp`, vystředěná na [center]
