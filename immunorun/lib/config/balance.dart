@@ -150,6 +150,7 @@ abstract final class Balance {
   static const double gateDetectDepth        = 80.0;  // px detekce vstupu do brány
   static const double eliteEnemyMultiplier   = 1.5;   // počet swarmers × 1.5
   static const int    treasureHealAmount     = 25;    // HP bonus v treasure místnosti
+  static const double roomCardIconSize       = 64.0;  // pt, ilustrace na kartě dveří
 
   // ── ATP / Special ability ────────────────────────────────────────────────
   static const double atpMax             = 100.0;

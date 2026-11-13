@@ -1,5 +1,5 @@
 // GENEROVÁNO: dart run tool/gen_balance_map.dart — needitovat ručně.
-// Zdroj: lib/config/balance.dart (static const int/double), 190 konstant.
+// Zdroj: lib/config/balance.dart (static const int/double), 191 konstant.
 
 import 'balance.dart';
 
@@ -95,6 +95,7 @@ const Map<String, num> balanceLookup = {
   'gateDetectDepth': Balance.gateDetectDepth,
   'eliteEnemyMultiplier': Balance.eliteEnemyMultiplier,
   'treasureHealAmount': Balance.treasureHealAmount,
+  'roomCardIconSize': Balance.roomCardIconSize,
   'atpMax': Balance.atpMax,
   'atpRegen': Balance.atpRegen,
   'atpSpecialCost': Balance.atpSpecialCost,
