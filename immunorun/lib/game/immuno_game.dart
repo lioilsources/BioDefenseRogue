@@ -25,6 +25,7 @@ import 'components/movement_trail.dart';
 import 'components/pickup.dart';
 import 'components/player/player.dart';
 import 'components/player/player_controller.dart';
+import 'components/swim_sprite.dart';
 import 'rooms/room_graph.dart';
 import 'systems/audio_controller.dart';
 import 'systems/fever_controller.dart';
@@ -191,6 +192,7 @@ class ImmunoGame extends FlameGame
     await _tryLoadFeverShader();
     await _tryLoadMicroscopeShader();
     await audio.preload();
+    await images.loadAll(GameIcons.all.map(GameIcons.path).toList());
 
     // Boot do hlavního menu — run startuje až startRun()
     overlays.add('mainMenu');
@@ -483,7 +485,7 @@ class ImmunoGame extends FlameGame
   }
 
   void _spawnBoss() {
-    _activeWorld.add(
+    _waves.spawn(
       (MiniBoss(
         player:          _player,
         feverGetter:     () => _fever.snapshot,

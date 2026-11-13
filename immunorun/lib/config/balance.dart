@@ -150,6 +150,7 @@ abstract final class Balance {
   static const double gateDetectDepth        = 80.0;  // px detekce vstupu do brány
   static const double eliteEnemyMultiplier   = 1.5;   // počet swarmers × 1.5
   static const int    treasureHealAmount     = 25;    // HP bonus v treasure místnosti
+  static const double roomCardIconSize       = 64.0;  // pt, ilustrace na kartě dveří
 
   // ── ATP / Special ability ────────────────────────────────────────────────
   static const double atpMax             = 100.0;
@@ -205,6 +206,8 @@ abstract final class Balance {
   static const double cytotoxinDamageMulti      = 1.25; // +25 % base dmg projektilu
   static const int    membranaExtraDashCharges  = 1;    // +1 max dash náboj
   static const Color  opsonizedRingColor        = Color(0xFFF1C40F); // žlutý ring
+  static const double upgradeCardIconSize       = 72.0; // pt, ilustrace na kartě
+  static const double overlayScreenMargin       = 12.0; // pt, dialog se zmenší, nepřeteče
 
   // ── Meta-progrese (paměťové buňky, vakcinace) ─────────────────────────────
   static const int    memoryCellsPerRoom     = 1;    // buňky za vyčištěnou místnost

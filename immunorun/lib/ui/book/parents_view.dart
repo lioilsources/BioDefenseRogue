@@ -1,17 +1,57 @@
 import 'package:cute_kid_fonts/cute_kid_fonts.dart';
 import 'package:flutter/material.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import '../../book/model/book_model.dart';
 import '../../config/balance.dart';
 import 'blocks/block_view.dart';
 
-/// Strana Pro rodiče a učitele (F10). Adresy webů jsou jen text; otevírání
-/// v prohlížeči s potvrzením přijde s balíčkem url_launcher (05-kniha OQ-29).
+/// Otevře adresu mimo appku; vrací false, když to nejde.
+typedef OpenUrl = Future<bool> Function(Uri url);
+
+Future<bool> _openExternally(Uri url) =>
+    launchUrl(url, mode: LaunchMode.externalApplication);
+
+/// Strana Pro rodiče a učitele (F10). Adresy webů v textu (szu.cz…) jdou
+/// ťuknout a otevřou se v prohlížeči až po potvrzení (05-kniha OQ-29).
 class ParentsView extends StatelessWidget {
-  const ParentsView({super.key, required this.sections, required this.onBack});
+  const ParentsView({
+    super.key,
+    required this.sections,
+    required this.onBack,
+    this.openUrl = _openExternally,
+  });
 
   final List<BookPage> sections;
   final VoidCallback   onBack;
+  final OpenUrl        openUrl;
+
+  Future<void> _confirmAndOpen(BuildContext context, String domain) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (context) => AlertDialog(
+        title:   const Text('Otevřít v prohlížeči?'),
+        content: Text('Odejdeš ze hry na web $domain.'),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context, false),
+            child:     const Text('Zůstat'),
+          ),
+          FilledButton(
+            onPressed: () => Navigator.pop(context, true),
+            child:     const Text('Otevřít'),
+          ),
+        ],
+      ),
+    );
+    if (ok != true) return;
+    final opened = await openUrl(Uri.https(domain));
+    if (!opened && context.mounted) {
+      ScaffoldMessenger.maybeOf(context)?.showSnackBar(
+        SnackBar(content: Text('Web $domain se nepodařilo otevřít.')),
+      );
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -45,7 +85,10 @@ class ParentsView extends StatelessWidget {
                 children: [
                   for (final s in sections)
                     for (final b in s.blocks)
-                      BlockView(block: b, palette: pal, scale: 1),
+                      BlockView(
+                        block: b, palette: pal, scale: 1,
+                        onLink: (d) => _confirmAndOpen(context, d),
+                      ),
                 ],
               ),
             ),

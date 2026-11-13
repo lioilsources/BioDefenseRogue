@@ -20,6 +20,10 @@ version: 1.0.1+1
 
 environment:
   sdk: ^3.11.4
+  # Přesná verze Flutteru pro CI i release (flutter-version-file) a lokálně.
+  # Zvednutí: změnit tady, `flutter pub get`, commitnout pubspec.lock, na macOS
+  # pustit `flutter test --update-goldens test/book/book_golden_test.dart`.
+  flutter: 3.47.9
 
 # Dependencies specify other packages that your package needs in order to work.
 # To automatically upgrade your package dependencies to the latest versions
@@ -47,6 +51,7 @@ dependencies:
     git:
       url: https://github.com/lioilsources/CuteKidFonts.git
       ref: v0.2.1
+  url_launcher: ^6.3.3
 
 dev_dependencies:
   flutter_test:
