@@ -78,6 +78,8 @@ flutter:
 
   assets:
     - assets/images/icons/
+    - assets/images/fx/
+    - assets/images/bg/
     - assets/audio/
     - assets/book/cs/
     - assets/book/images/

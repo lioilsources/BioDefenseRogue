@@ -5,8 +5,10 @@ import 'package:flutter/painting.dart';
 import '../../config/balance.dart';
 import '../../domain/status_effects.dart';
 import 'enemies/enemy.dart';
+import 'fx_sprite.dart';
 
-class Projectile extends CircleComponent with CollisionCallbacks {
+class Projectile extends CircleComponent
+    with CollisionCallbacks, FxSpriteRender {
   Projectile({
     required this.velocity,
     this.damage  = Balance.projectileDamage,
@@ -20,6 +22,12 @@ class Projectile extends CircleComponent with CollisionCallbacks {
           anchor: Anchor.center,
           paint:  Paint()..color = color,
         );
+
+  @override
+  String get fxImagePath => FxImages.granula;
+
+  @override
+  bool get fxTinted => true;
 
   final Vector2 velocity;
   final double  damage;

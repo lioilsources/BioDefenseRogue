@@ -26,7 +26,7 @@ není. Grafika G3/G4 se generuje na L40S podle `art/fx/BRIEF.md` (větev `art/fx
 | §9 dokumentace, `install.py` | #34 | `install.py` vyzkoušený na kopii repa |
 | §9 ikona v `LoreEntry` | – | návrh do registru, čeká na vlastníka |
 | 3 karty místností (G1) | #35 | existující ikony; Léčení = červená krvinka (k rozhodnutí) |
-| 3 FX, pozadí, menu (G3, G4) | – | potřebuje nové obrázky ze SPARKu |
+| 3 FX, pozadí, menu (G3, G4) | art/fx-wiring | obrázky z L40S (`art/fx/`); `fluid.frag` dál procedurální, aréna ho zakrývá |
 | 4 OQ-29 odkazy pro rodiče | #36 | dialog + `url_launcher`; otevřená rodičovská brána pro Kids/Families |
 | 4 balíček pro garanta | – | připravený lokálně (zip), poslat garantovi je na vlastníkovi |
 | 5 screenshoty pro story | – | nezačato |

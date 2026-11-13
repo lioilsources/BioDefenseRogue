@@ -5,7 +5,7 @@ Formát: název souboru | zdroj | licence | autor
 
 ## Přehled
 - Žádné externí snímky ani fotky z mikroskopu. Všechny obrázky jsou vygenerované modely
-  uvedenými v sekcích níže (ikona aplikace, kniha, ikony buněk a patogenů), zvuky procedurálně.
+  uvedenými v sekcích níže (ikona aplikace, kniha, ikony buněk a patogenů, FX a pozadí), zvuky procedurálně.
 
 ## Ikona aplikace
 - ios/…/AppIcon.appiconset, android/…/mipmap-*/ic_launcher.png, macos/…/AppIcon.appiconset, web/icons, web/favicon.png
@@ -72,3 +72,14 @@ Generováno podle art/icons/manifest.json (L40S, ComfyUI). Formát: soubor | mod
 - assets/images/icons/pyrogen.webp | Qwen-Image fp8, seed 3210; výřez BiRefNet | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/icons/manifest.json
 - assets/images/icons/membrana.webp | Qwen-Image fp8, seed 3238; výřez BiRefNet | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/icons/manifest.json
 - assets/images/icons/cytotoxin.webp | Qwen-Image fp8, seed 3249; výřez BiRefNet | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/icons/manifest.json
+
+## FX, pozadí a menu
+Generováno podle art/fx/manifest.json (L40S, ComfyUI). Formát: soubor | model, seed | licence | prompt
+- assets/images/fx/fx-granula.webp | Qwen-Image fp8, seed 5003; výřez BiRefNet | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/fx/manifest.json
+- assets/images/fx/fx-toxin.webp | Qwen-Image fp8, seed 5010; výřez BiRefNet | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/fx/manifest.json
+- assets/images/fx/fx-atp.webp | Qwen-Image fp8, seed 5021; výřez BiRefNet | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/fx/manifest.json
+- assets/images/fx/meta-vakcinace.webp | Qwen-Image fp8, seed 5033; výřez BiRefNet | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/fx/manifest.json
+- assets/images/bg/bg-menu.webp | Qwen-Image fp8, seed 5042 | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/fx/manifest.json
+- assets/images/bg/bg-vyhra.webp | Qwen-Image fp8, seed 5051 | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/fx/manifest.json
+- assets/images/bg/bg-prohra.webp | Qwen-Image fp8, seed 5060 | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/fx/manifest.json
+- assets/images/bg/bg-arena.webp | Qwen-Image fp8, seed 5071 | Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4 | prompt v art/fx/manifest.json

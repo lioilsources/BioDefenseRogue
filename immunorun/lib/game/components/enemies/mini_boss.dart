@@ -7,6 +7,7 @@ import 'package:flutter/painting.dart';
 import '../../../config/balance.dart';
 import '../../../domain/enemy_archetype.dart';
 import '../../systems/fever_controller.dart';
+import '../fx_sprite.dart';
 import '../player/player.dart';
 import '../swim_sprite.dart';
 import 'enemy.dart';
@@ -128,7 +129,8 @@ class MiniBoss extends Enemy {
 
 // ── Projektil šéfa ────────────────────────────────────────────────────────
 
-class BossProjectile extends CircleComponent with CollisionCallbacks {
+class BossProjectile extends CircleComponent
+    with CollisionCallbacks, FxSpriteRender {
   BossProjectile({
     required this.velocity,
     required this.player,
@@ -138,6 +140,9 @@ class BossProjectile extends CircleComponent with CollisionCallbacks {
           anchor: Anchor.center,
           paint:  Paint()..color = const Color(0xFFE74C3C),
         );
+
+  @override
+  String get fxImagePath => FxImages.toxin;
 
   final Vector2      velocity;
   final Player       player;

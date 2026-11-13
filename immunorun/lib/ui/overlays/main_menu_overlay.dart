@@ -6,6 +6,7 @@ import '../../game/immuno_game.dart';
 import '../../l10n/app_localizations.dart';
 import '../../l10n/lore_l10n.dart';
 import '../meta_providers.dart';
+import 'screen_background.dart';
 
 /// Hlavní menu — overlay, ne route (viz UX doc §12).
 class MainMenuOverlay extends StatefulWidget {
@@ -22,8 +23,8 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
   Widget build(BuildContext context) {
     final game = widget.game;
     final l10n = AppLocalizations.of(context);
-    return ColoredBox(
-      color: Colors.black.withValues(alpha: 0.75),
+    return ScreenBackground(
+      asset: ScreenImages.menu,
       child: Center(
         child: Column(
           mainAxisSize: MainAxisSize.min,

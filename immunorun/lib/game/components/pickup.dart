@@ -4,18 +4,22 @@ import 'package:flame/components.dart';
 import 'package:flutter/painting.dart';
 
 import '../../config/balance.dart';
+import 'fx_sprite.dart';
 import 'particle_burst.dart';
 import 'player/player.dart';
 
 /// ATP drop z killu — magnet-drift k hráči, po sběru dá ATP.
 /// Recyklace přes ObjectPool (viz ImmunoGame) — resetForPool + onDone.
-class AtpPickup extends CircleComponent {
+class AtpPickup extends CircleComponent with FxSpriteRender {
   AtpPickup()
       : super(
           radius: Balance.pickupRadius,
           anchor: Anchor.center,
           paint:  Paint()..color = Balance.pickupColor,
         );
+
+  @override
+  String get fxImagePath => FxImages.atp;
 
   double  _life   = Balance.pickupLifetime;
   double  _amount = 0;
