@@ -20,6 +20,7 @@ import 'components/enemies/enemy.dart';
 import 'components/enemies/mini_boss.dart';
 import 'components/enemies/swarmer.dart';
 import 'components/fever_overlay.dart';
+import 'components/fx_sprite.dart';
 import 'components/microscope_overlay.dart';
 import 'components/movement_trail.dart';
 import 'components/pickup.dart';
@@ -193,6 +194,8 @@ class ImmunoGame extends FlameGame
     await _tryLoadMicroscopeShader();
     await audio.preload();
     await images.loadAll(GameIcons.all.map(GameIcons.path).toList());
+    await FxImages.load(images);
+    _arena.applyTexture(FxImages.of(FxImages.arena)!);
 
     // Boot do hlavního menu — run startuje až startRun()
     overlays.add('mainMenu');

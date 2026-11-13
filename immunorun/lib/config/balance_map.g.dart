@@ -1,5 +1,5 @@
 // GENEROVÁNO: dart run tool/gen_balance_map.dart — needitovat ručně.
-// Zdroj: lib/config/balance.dart (static const int/double), 191 konstant.
+// Zdroj: lib/config/balance.dart (static const int/double), 196 konstant.
 
 import 'balance.dart';
 
@@ -36,6 +36,11 @@ const Map<String, num> balanceLookup = {
   'spriteSwimBobAmp': Balance.spriteSwimBobAmp,
   'spriteSwimBobFreq': Balance.spriteSwimBobFreq,
   'spriteSwimSpeedJitter': Balance.spriteSwimSpeedJitter,
+  'arenaTileSize': Balance.arenaTileSize,
+  'arenaTextureAlpha': Balance.arenaTextureAlpha,
+  'fxSpriteScale': Balance.fxSpriteScale,
+  'screenBgDimAlpha': Balance.screenBgDimAlpha,
+  'metaIconSize': Balance.metaIconSize,
   'trailLifetime': Balance.trailLifetime,
   'trailMinSpacing': Balance.trailMinSpacing,
   'trailMaxSegment': Balance.trailMaxSegment,

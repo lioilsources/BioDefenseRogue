@@ -62,6 +62,11 @@ abstract final class Balance {
 
   // ── Paralaxní pozadí ──────────────────────────────────────────────────────
   // Každá vrstva: (scrollSpeedFactor, alpha)
+  static const double arenaTileSize      = 720.0; // px strana dlaždice EM textury
+  static const double arenaTextureAlpha  = 0.25;  // textura přes výplň arény (sprity musí být čitelné)
+  static const double fxSpriteScale      = 1.6;   // průměr spritu střely/ATP vůči kolizi (záře)
+  static const double screenBgDimAlpha   = 0.45;  // ztmavení pozadí menu a konce runu
+  static const double metaIconSize       = 28.0;  // ikona vakcinace v souhrnu runu
   static const List<(double, double)> parallaxLayers = [
     (0.10, 0.55), // vzdálená vrstva — pomalejší, průhledná
     (0.25, 0.75), // střední vrstva

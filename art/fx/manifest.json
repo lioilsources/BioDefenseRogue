@@ -1,0 +1,250 @@
+{
+  "_comment": "FX, pozadí a menu (G3, G4 z Prompts/07-PLAN-dalsi-kroky.md). Generuje L40S podle art/fx/BRIEF.md, stejný backend jako art/icons. Prompt = styles[style] + ', ' + tones[tone] + ', ' + subject. 'selected' zapisuje BioDefense. Žádný text v obrázku.",
+  "backend": {
+    "host": "L40S (Linux VM, ComfyUI 0.42.0)",
+    "model": "Qwen-Image fp8: Comfy-Org/Qwen-Image_ComfyUI split_files/diffusion_models/qwen_image_fp8_e4m3fn.safetensors; text encoder qwen_2.5_vl_7b_fp8_scaled (Qwen2.5-VL-7B); VAE qwen_image_vae",
+    "sampler": "size podle položky, 20 steps, euler/simple, cfg 2.5, ModelSamplingAuraFlow shift 3.1, negative = manifest.negative",
+    "license": "Apache-2.0 (Qwen/Qwen-Image, Qwen2.5-VL); výřez BiRefNet ZhengPeng7/BiRefNet MIT, revize e2bf8e4460fc8fa32bba5ea4d94b3233d367b0e4",
+    "license_verified": true,
+    "_note": "Stejný backend jako art/icons (licence ověřeny 7. 11. 2026). Výřez jako u ikon (tmobile-sandbox/uc28/icons.py cut). bg-arena: posun o půl dlaždice, vyrovnání jasu (gauss σ = 1/6 strany) a zacelení křížového švu maskovaným img2img stejným modelem a promptem, denoise 0,6, pás 192 px (tmobile-sandbox/uc31/seam.py). F0 13. 11.: fx-granula a bg-menu přegenerovány s upraveným promptem (styles.fx, styles.tile, negative, subject), F0 varianty jsou v sheets/<id>_f0.jpg.",
+    "timing": "20,7 s/obr. warm 1024², 32,5 s/obr. 1664×928 na L40S"
+  },
+  "styles": {
+    "fx": "photorealistic scientific 3D render of a single small isolated object centered in frame, no ground plane, no surface, no reflection, no shadow, whole object fully visible with wide margin around it, simple bold rounded silhouette that stays readable when shrunk to 16 pixels, soft inner glow, physically based materials, sharp focus, plain pure black background, floating in empty space, no floor, no reflection",
+    "scene": "photorealistic cinematic microscopic scene inside the human body, wide landscape composition, shallow depth of field, soft volumetric light, gentle dark vignette, calm uncluttered middle third of the frame, highly detailed, child-friendly, not gory, no blood splatter",
+    "tile": "seamless tileable top-down texture, flat even lighting with no vignette and no light falloff, no single object in focus, uniform density across the whole frame, very low contrast, organic microscopic tissue surface, everything in sharp focus, no depth of field, no bokeh"
+  },
+  "negative": "text, letters, words, numbers, label, caption, watermark, logo, signature, scale bar, ruler, frame, border, diagram, arrows, multiple panels, cropped, cut off, blurry, cartoon, illustration, drawing, gore, wound, needle, syringe, smear, streak",
+  "tones": {
+    "neutral": "colorized in pale ivory white tones with a faint pearly sheen",
+    "toxic": "colorized in deep gold and toxic orange tones",
+    "energy": "colorized in warm golden yellow tones with a soft glowing core",
+    "molecule": "colorized in cool cyan and white tones",
+    "calm": "in deep teal and dark navy tones with a few soft red accents",
+    "healthy": "in warm soft pink and calm cyan tones, bright and hopeful",
+    "infected": "in dim amber and muted purple tones, murky but not scary",
+    "arena": "in dark muted green and teal tones"
+  },
+  "seeds": "5000 + 10 × (pořadí v items[], od 0) + k, k = 0…3 (další varianty k = 4…)",
+  "items": [
+    {
+      "id": "fx-granula",
+      "cz": "Střela hráče (granule)",
+      "kind": "fx",
+      "style": "fx",
+      "tone": "neutral",
+      "size": [
+        1024,
+        1024
+      ],
+      "cutout": true,
+      "use": [
+        "game:projectile",
+        "game:projectile-crit",
+        "game:nova"
+      ],
+      "code": "immunorun/lib/game/components/projectile.dart (dnes CircleComponent r = 6 px; barvu dodá tint ve hře)",
+      "subject": "a single tiny spherical secretory granule of an immune cell, smooth glossy membrane, with a brighter center",
+      "seeds": [
+        5000,
+        5001,
+        5002,
+        5003
+      ],
+      "notes": "Rerun s novým stylem: model pořád kreslí podlahu s odrazem, výřez ji ale odřízne, všechny 4 výřezy jsou celé a kulaté. Nejčistší 5003 (hladký prstenec) a 5000. Záloha z F0: 5001 (sheets/fx-granula_f0.jpg).",
+      "selected": 5003
+    },
+    {
+      "id": "fx-toxin",
+      "cz": "Střela bosse (toxin)",
+      "kind": "fx",
+      "style": "fx",
+      "tone": "toxic",
+      "size": [
+        1024,
+        1024
+      ],
+      "cutout": true,
+      "use": [
+        "game:boss-projectile"
+      ],
+      "code": "immunorun/lib/game/components/enemies/mini_boss.dart BossProjectile (r = 10 px)",
+      "subject": "a single round droplet of bacterial toxin, glossy viscous blob with a few tiny bubbles inside, smooth outline",
+      "seeds": [
+        5010,
+        5011,
+        5012,
+        5013
+      ],
+      "notes": "5010 a 5012 čisté kulaté kapky s bublinkami. 5011 má uvnitř virus (plete se s nepřítelem), 5013 je slza, ne kulatý obrys.",
+      "selected": 5010
+    },
+    {
+      "id": "fx-atp",
+      "cz": "ATP (pickup)",
+      "kind": "fx",
+      "style": "fx",
+      "tone": "energy",
+      "size": [
+        1024,
+        1024
+      ],
+      "cutout": true,
+      "use": [
+        "game:pickup"
+      ],
+      "code": "immunorun/lib/game/components/pickup.dart AtpPickup (r = 9 px)",
+      "subject": "a single round glowing energy orb, a compact cluster of small spheres like a tiny molecule, gently radiant",
+      "seeds": [
+        5020,
+        5021,
+        5022,
+        5023
+      ],
+      "notes": "Všechny drží shluk kuliček se září. 5021 a 5022 nejpravidelnější obrys; 5023 má uprostřed velkou kouli, obrys je roztřepený.",
+      "selected": 5021
+    },
+    {
+      "id": "meta-vakcinace",
+      "cz": "Vakcinace (meta)",
+      "kind": "icon",
+      "style": "fx",
+      "tone": "molecule",
+      "size": [
+        1024,
+        1024
+      ],
+      "cutout": true,
+      "use": [
+        "ui:menu",
+        "ui:run-end"
+      ],
+      "lore": "meta.vaccination",
+      "code": "immunorun/lib/ui/overlays/main_menu_overlay.dart, run_end_overlays.dart",
+      "subject": "a single harmless inactivated virus particle, a dull grey sphere with short surface spikes, surrounded by several small Y-shaped antibodies attached to its surface",
+      "seeds": [
+        5030,
+        5031,
+        5032,
+        5033
+      ],
+      "notes": "Virus je spíš bílý s azurovým nádechem než šedý. Protilátky ve tvaru Y model nekreslí: 5030 žádné, 5031 a 5032 malé volné úlomky okolo (ve výřezu jako oddělené tečky), 5033 větvičky přichycené k obalu, nejblíž zadání.",
+      "selected": 5033
+    },
+    {
+      "id": "bg-menu",
+      "cz": "Pozadí hlavního menu",
+      "kind": "background",
+      "style": "scene",
+      "tone": "calm",
+      "size": [
+        1664,
+        928
+      ],
+      "cutout": false,
+      "use": [
+        "ui:menu"
+      ],
+      "code": "immunorun/lib/ui/overlays/main_menu_overlay.dart (dnes černá 75 %); uprostřed bude název a tlačítka",
+      "subject": "inside a wide blood vessel, a few red blood cells drifting out of focus near the edges, one round smooth cyan white blood cell with a soft membrane, no spikes, resting in the lower left, empty dark open space in the center",
+      "seeds": [
+        5040,
+        5041,
+        5042,
+        5043
+      ],
+      "notes": "Střed klidný a tmavý. Bílá krvinka je teď kulatá s jemnými krátkými ostny, méně virová než v F0, ale ne úplně hladká. Dole zůstaly tmavě červené šmouhy, menší než v F0 (nejméně 5042).",
+      "selected": 5042
+    },
+    {
+      "id": "bg-vyhra",
+      "cz": "Pozadí výhry runu",
+      "kind": "background",
+      "style": "scene",
+      "tone": "healthy",
+      "size": [
+        1664,
+        928
+      ],
+      "cutout": false,
+      "use": [
+        "ui:run-won"
+      ],
+      "code": "immunorun/lib/ui/overlays/run_end_overlays.dart (výhra)",
+      "subject": "a calm healthy capillary after an infection was cleared, the capillary with red blood cells flowing smoothly runs along the bottom third of the frame, a few resting round smooth cyan white blood cells with a soft membrane, no spikes, clean and peaceful, calm empty middle",
+      "seeds": [
+        5050,
+        5051,
+        5052,
+        5053
+      ],
+      "notes": "F2 (nový subject): céva je ve spodní třetině a střed je klidný ve všech 4. Buňky jsou pořád lehce ostnaté, nejméně u 5051. Nejlepší je 5051, u 5053 vadí velká ostnatá buňka vlevo. Původní F1 je v sheets/bg-vyhra_f1.jpg (ostnaté viry, céva středem).",
+      "selected": 5051
+    },
+    {
+      "id": "bg-prohra",
+      "cz": "Pozadí prohry runu",
+      "kind": "background",
+      "style": "scene",
+      "tone": "infected",
+      "size": [
+        1664,
+        928
+      ],
+      "cutout": false,
+      "use": [
+        "ui:game-over"
+      ],
+      "code": "immunorun/lib/ui/overlays/run_end_overlays.dart (prohra)",
+      "subject": "tissue overgrown by clusters of round golden bacteria and translucent purple slime, quiet and still, a single faint cyan glow far in the distance as a hint of hope",
+      "seeds": [
+        5060,
+        5061,
+        5062,
+        5063
+      ],
+      "notes": "Tunel s fialovým slizem a zlatými bakteriemi, smutné, ne strašidelné. Ve středu je světlo (naděje), text přes něj bude potřebovat stín. 5061 a 5062 mají v záři siluetu postavičky, působí divně; 5060 a 5063 bez ní. Dole drobné tmavě červené skvrny.",
+      "selected": 5060
+    },
+    {
+      "id": "bg-arena",
+      "cz": "Textura arény",
+      "kind": "tile",
+      "style": "tile",
+      "tone": "arena",
+      "size": [
+        1024,
+        1024
+      ],
+      "cutout": false,
+      "use": [
+        "game:arena"
+      ],
+      "code": "immunorun/lib/game/world/background.dart + assets/shaders/fluid.frag (sampler2D místo procedurálního vzoru); musí jít dlaždicovat",
+      "subject": "soft gelatinous extracellular matrix with faint fibers and scattered tiny round vesicles, seen from above",
+      "seeds": [
+        5070,
+        5071,
+        5072,
+        5073
+      ],
+      "notes": "Vybraná 5071 (BioDefense): na 2×2 prakticky bez švu. 5070, 5072 a 5073 mají hloubku ostrosti (půlka neostrá), na 2×2 je vidět mřížka; nová věta o ostrosti ve styles.tile se k nim už nedostala.",
+      "selected": 5071
+    }
+  ],
+  "review": {
+    "date": "2026-11-13",
+    "by": "BioDefense",
+    "verdict": "Výběr hotový, pošli mastery do art/fx/selected/.",
+    "why": {
+      "fx-granula": "nejčistší kulatý obrys, bez obalu",
+      "fx-toxin": "kulatý, bez viru uvnitř",
+      "fx-atp": "nejpravidelnější obrys",
+      "meta-vakcinace": "jediná s navázanými protilátkami bez volných fragmentů",
+      "bg-menu": "nejméně červených šmouh",
+      "bg-vyhra": "klidný střed, céva dole",
+      "bg-prohra": "bez siluety postavy",
+      "bg-arena": "bez švu na 2×2"
+    }
+  }
+}

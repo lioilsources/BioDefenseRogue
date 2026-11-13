@@ -128,30 +128,34 @@ class _GameScreenState extends State<_GameScreen> {
   Widget _buildGame(ImmunoGame game) {
     return UncontrolledProviderScope(
       container: _container,
-      child: GameWidget<ImmunoGame>(
-        game:       game,
-        focusNode:  _focusNode,
-        autofocus:  true,
-        overlayBuilderMap: {
-          'mainMenu':   (context, game) => MainMenuOverlay(game: game),
-          'pause':      (context, game) => PauseOverlay(game: game),
-          'hud':        (context, game) => HudOverlay(
-                onPause:     game.pauseGame,
-                onFeverInfo: (zone) => game.openBookAt(lore.byRef(zone)),
-              ),
-          'gesture':    (_, game) => GesturePadOverlay(
-                controller: game.playerController,
-              ),
-          'gameOver':   (context, game) => GameOverOverlay(game: game),
-          'runWon':     (context, game) => RunWonOverlay(game: game),
-          'roomChoice': (context, game) => RoomChoiceOverlay(game: game),
-          'upgradeChoice': (context, game) => UpgradeChoiceOverlay(game: game),
-          'transition': (context, game) => const _TransitionOverlay(),
-          'book':       (context, game) => BookOverlay(game: game),
-          'bookToast':  (context, game) => BookToast(text: bookToastText(
-                AppLocalizations.of(context), game.bookToastFresh)),
-        },
-        initialActiveOverlays: const [],
+      // Material dodá overlayům výchozí styl textu (jinak žluté podtržení).
+      child: Material(
+        type: MaterialType.transparency,
+        child: GameWidget<ImmunoGame>(
+          game:       game,
+          focusNode:  _focusNode,
+          autofocus:  true,
+          overlayBuilderMap: {
+            'mainMenu':   (context, game) => MainMenuOverlay(game: game),
+            'pause':      (context, game) => PauseOverlay(game: game),
+            'hud':        (context, game) => HudOverlay(
+                  onPause:     game.pauseGame,
+                  onFeverInfo: (zone) => game.openBookAt(lore.byRef(zone)),
+                ),
+            'gesture':    (_, game) => GesturePadOverlay(
+                  controller: game.playerController,
+                ),
+            'gameOver':   (context, game) => GameOverOverlay(game: game),
+            'runWon':     (context, game) => RunWonOverlay(game: game),
+            'roomChoice': (context, game) => RoomChoiceOverlay(game: game),
+            'upgradeChoice': (context, game) => UpgradeChoiceOverlay(game: game),
+            'transition': (context, game) => const _TransitionOverlay(),
+            'book':       (context, game) => BookOverlay(game: game),
+            'bookToast':  (context, game) => BookToast(text: bookToastText(
+                  AppLocalizations.of(context), game.bookToastFresh)),
+          },
+          initialActiveOverlays: const [],
+        ),
       ),
     );
   }

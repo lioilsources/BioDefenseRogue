@@ -1,3 +1,6 @@
+import 'dart:typed_data';
+import 'dart:ui' as ui;
+
 import 'package:flame/components.dart';
 import 'package:flutter/painting.dart';
 
@@ -27,6 +30,22 @@ class ArenaComponent extends PositionComponent {
 
   static const double _gridStep = 200.0;
 
+  /// EM textura (art/fx, bg-arena) jako dlaždice; bez ní zůstane mřížka.
+  Paint? _texturePaint;
+
+  void applyTexture(ui.Image img) {
+    final s = Balance.arenaTileSize / img.width;
+    _texturePaint = Paint()
+      ..filterQuality = FilterQuality.medium
+      ..color = Color.fromRGBO(255, 255, 255, Balance.arenaTextureAlpha)
+      ..shader = ui.ImageShader(
+        img,
+        ui.TileMode.repeated,
+        ui.TileMode.repeated,
+        Float64List.fromList([s, 0, 0, 0, 0, s, 0, 0, 0, 0, 1, 0, 0, 0, 0, 1]),
+      );
+  }
+
   @override
   void render(Canvas canvas) {
     final w = Balance.arenaWidth;
@@ -35,12 +54,16 @@ class ArenaComponent extends PositionComponent {
 
     canvas.drawRect(rect, _bgPaint);
 
-    // grid
-    for (double x = 0; x <= w; x += _gridStep) {
-      canvas.drawLine(Offset(x, 0), Offset(x, h), _gridPaint);
-    }
-    for (double y = 0; y <= h; y += _gridStep) {
-      canvas.drawLine(Offset(0, y), Offset(w, y), _gridPaint);
+    final texture = _texturePaint;
+    if (texture != null) {
+      canvas.drawRect(rect, texture);
+    } else {
+      for (double x = 0; x <= w; x += _gridStep) {
+        canvas.drawLine(Offset(x, 0), Offset(x, h), _gridPaint);
+      }
+      for (double y = 0; y <= h; y += _gridStep) {
+        canvas.drawLine(Offset(0, y), Offset(w, y), _gridPaint);
+      }
     }
 
     canvas.drawRect(rect, _borderPaint);
