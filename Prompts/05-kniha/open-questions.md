@@ -96,6 +96,12 @@ v `garant-todo-fact.md`):
   adresy (szu.cz, mzcr.cz, who.int) jsou ve čtečce jen text. Otevření potřebuje balíček
   `url_launcher` (nová závislost a oprávnění v iOS/Android) – návrh: přidat před vydáním spolu
   s dialogem „Otevřít v prohlížeči?“.
+  **Hotovo 2026-11-13:** `url_launcher`, na straně pro rodiče jdou holé domény ťuknout, otevřou
+  se v prohlížeči až po dialogu „Otevřít v prohlížeči?“ (`parents_view.dart`, test
+  `test/book/parents_links_test.dart`). V kapitolách pro děti odkazy nejsou. **Otevřené:** kdyby
+  appka šla do kategorie Kids (App Store) nebo programu Families (Google Play), potvrzovací dialog
+  nestačí, obchody chtějí rodičovskou bránu (úkol, který dítě snadno nesplní). Rozhodnout s
+  výběrem kategorie pro store.
 - **OQ-30 Polish.** Hero paralax z plánu K7 vynechán (na placeholderech nemá smysl); přechody
   stránek jsou výchozí PageView. Vrátit se k tomu po K4 s reálnými obrázky.
 - **OQ-31 Razítko „kvíz hotov“.** Udělí se po zodpovězení všech tří otázek bez ohledu na
