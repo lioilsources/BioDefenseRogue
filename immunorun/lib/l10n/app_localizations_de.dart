@@ -29,6 +29,12 @@ class AppLocalizationsDe extends AppLocalizations {
   String get menuSoundOff => 'TON: AUS';
 
   @override
+  String get menuStatsOn => 'STATISTIK: AN';
+
+  @override
+  String get menuStatsOff => 'STATISTIK: AUS';
+
+  @override
   String get pauseTitle => 'PAUSE';
 
   @override

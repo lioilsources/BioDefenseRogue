@@ -29,6 +29,12 @@ class AppLocalizationsSl extends AppLocalizations {
   String get menuSoundOff => 'ZVOK: IZKLOP';
 
   @override
+  String get menuStatsOn => 'STATISTIKA: VKLOP';
+
+  @override
+  String get menuStatsOff => 'STATISTIKA: IZKLOP';
+
+  @override
   String get pauseTitle => 'PREMOR';
 
   @override

@@ -29,6 +29,12 @@ class AppLocalizationsNl extends AppLocalizations {
   String get menuSoundOff => 'GELUID: UIT';
 
   @override
+  String get menuStatsOn => 'STATISTIEKEN: AAN';
+
+  @override
+  String get menuStatsOff => 'STATISTIEKEN: UIT';
+
+  @override
   String get pauseTitle => 'PAUZE';
 
   @override

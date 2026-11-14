@@ -6,6 +6,8 @@
   "menuBook": "ЛЕКСИКОН",
   "menuSoundOn": "ЗВУК: ВКЛ",
   "menuSoundOff": "ЗВУК: ВЫКЛ",
+  "menuStatsOn": "СТАТИСТИКА: ВКЛ",
+  "menuStatsOff": "СТАТИСТИКА: ВЫКЛ",
   "pauseTitle": "ПАУЗА",
   "pauseResume": "ПРОДОЛЖИТЬ",
   "pauseRestart": "ЗАНОВО",

@@ -29,6 +29,12 @@ class AppLocalizationsOr extends AppLocalizations {
   String get menuSoundOff => 'ଶବ୍ଦ: ବନ୍ଦ';
 
   @override
+  String get menuStatsOn => 'ପରିସଂଖ୍ୟାନ: ଚାଲୁ';
+
+  @override
+  String get menuStatsOff => 'ପରିସଂଖ୍ୟାନ: ବନ୍ଦ';
+
+  @override
   String get pauseTitle => 'ବିରତି';
 
   @override

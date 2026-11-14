@@ -6,6 +6,8 @@
   "menuBook": "ΛΕΞΙΚΟ",
   "menuSoundOn": "ΗΧΟΣ: ΝΑΙ",
   "menuSoundOff": "ΗΧΟΣ: ΟΧΙ",
+  "menuStatsOn": "ΣΤΑΤΙΣΤΙΚΑ: ΝΑΙ",
+  "menuStatsOff": "ΣΤΑΤΙΣΤΙΚΑ: ΟΧΙ",
   "pauseTitle": "ΠΑΥΣΗ",
   "pauseResume": "ΣΥΝΕΧΕΙΑ",
   "pauseRestart": "ΕΠΑΝΕΚΚΙΝΗΣΗ RUN",

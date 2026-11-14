@@ -29,6 +29,12 @@ class AppLocalizationsJa extends AppLocalizations {
   String get menuSoundOff => 'サウンド：オフ';
 
   @override
+  String get menuStatsOn => '統計：オン';
+
+  @override
+  String get menuStatsOff => '統計：オフ';
+
+  @override
   String get pauseTitle => 'ポーズ';
 
   @override

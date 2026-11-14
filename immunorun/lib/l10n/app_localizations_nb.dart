@@ -29,6 +29,12 @@ class AppLocalizationsNb extends AppLocalizations {
   String get menuSoundOff => 'LYD: AV';
 
   @override
+  String get menuStatsOn => 'STATISTIKK: PÅ';
+
+  @override
+  String get menuStatsOff => 'STATISTIKK: AV';
+
+  @override
   String get pauseTitle => 'PAUSE';
 
   @override

@@ -29,6 +29,12 @@ class AppLocalizationsMl extends AppLocalizations {
   String get menuSoundOff => 'ശബ്ദം: ഓഫ്';
 
   @override
+  String get menuStatsOn => 'സ്ഥിതിവിവരം: ഓൺ';
+
+  @override
+  String get menuStatsOff => 'സ്ഥിതിവിവരം: ഓഫ്';
+
+  @override
   String get pauseTitle => 'വിരാമം';
 
   @override

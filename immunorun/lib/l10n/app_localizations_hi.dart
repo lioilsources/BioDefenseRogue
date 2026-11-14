@@ -29,6 +29,12 @@ class AppLocalizationsHi extends AppLocalizations {
   String get menuSoundOff => 'आवाज़: बंद';
 
   @override
+  String get menuStatsOn => 'आँकड़े: चालू';
+
+  @override
+  String get menuStatsOff => 'आँकड़े: बंद';
+
+  @override
   String get pauseTitle => 'रुका हुआ';
 
   @override

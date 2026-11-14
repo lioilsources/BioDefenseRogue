@@ -29,6 +29,12 @@ class AppLocalizationsRu extends AppLocalizations {
   String get menuSoundOff => 'ЗВУК: ВЫКЛ';
 
   @override
+  String get menuStatsOn => 'СТАТИСТИКА: ВКЛ';
+
+  @override
+  String get menuStatsOff => 'СТАТИСТИКА: ВЫКЛ';
+
+  @override
   String get pauseTitle => 'ПАУЗА';
 
   @override

@@ -12,3 +12,5 @@
 - 2026-10-17: obrázky kapitol 00–12 (19× flux-schnell, výběr variant v `art/book/manifest.json`, K4).
 - 2026-11-08: fotorealistické ikony buněk a patogenů v kapitolách 02 a 03 (`![…](icon:<id>)`)
   a u 17 hesel slovníčku; soubory sdílené se hrou (`assets/images/icons/`, `art/icons/manifest.json`).
+- 2026-11-14: strana pro rodiče, Soukromí: hra posílá anonymní statistiky hraní a jdou vypnout
+  (`docs/telemetry.md`).

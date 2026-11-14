@@ -29,6 +29,12 @@ class AppLocalizationsEs extends AppLocalizations {
   String get menuSoundOff => 'SONIDO: NO';
 
   @override
+  String get menuStatsOn => 'ESTADÍSTICAS: SÍ';
+
+  @override
+  String get menuStatsOff => 'ESTADÍSTICAS: NO';
+
+  @override
   String get pauseTitle => 'PAUSA';
 
   @override

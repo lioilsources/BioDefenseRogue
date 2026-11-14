@@ -218,6 +218,18 @@ abstract class AppLocalizations {
   /// **'ZVUK: VYP'**
   String get menuSoundOff;
 
+  /// Přepínač anonymních statistik hraní, stav zapnuto. Verzálky. Zobrazí se jen v buildu, který je umí posílat.
+  ///
+  /// In cs, this message translates to:
+  /// **'STATISTIKY: ZAP'**
+  String get menuStatsOn;
+
+  /// Přepínač anonymních statistik hraní, stav vypnuto. Verzálky.
+  ///
+  /// In cs, this message translates to:
+  /// **'STATISTIKY: VYP'**
+  String get menuStatsOff;
+
   /// Nadpis obrazovky pauzy.
   ///
   /// In cs, this message translates to:

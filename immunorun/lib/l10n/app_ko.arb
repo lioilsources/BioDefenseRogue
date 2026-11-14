@@ -6,6 +6,8 @@
   "menuBook": "백과사전",
   "menuSoundOn": "소리: 켜짐",
   "menuSoundOff": "소리: 꺼짐",
+  "menuStatsOn": "통계: 켜짐",
+  "menuStatsOff": "통계: 꺼짐",
   "pauseTitle": "일시 정지",
   "pauseResume": "계속하기",
   "pauseRestart": "런 다시 시작",

@@ -29,6 +29,12 @@ class AppLocalizationsId extends AppLocalizations {
   String get menuSoundOff => 'SUARA: MATI';
 
   @override
+  String get menuStatsOn => 'STATISTIK: AKTIF';
+
+  @override
+  String get menuStatsOff => 'STATISTIK: MATI';
+
+  @override
   String get pauseTitle => 'JEDA';
 
   @override

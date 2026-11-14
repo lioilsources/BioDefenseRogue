@@ -6,6 +6,8 @@
   "menuBook": "LEKSIKON",
   "menuSoundOn": "LYD: TIL",
   "menuSoundOff": "LYD: FRA",
+  "menuStatsOn": "STATISTIK: TIL",
+  "menuStatsOff": "STATISTIK: FRA",
   "pauseTitle": "PAUSE",
   "pauseResume": "FORTSÆT",
   "pauseRestart": "GENSTART RUN",
