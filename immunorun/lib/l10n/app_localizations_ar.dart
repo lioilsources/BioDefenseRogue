@@ -29,6 +29,12 @@ class AppLocalizationsAr extends AppLocalizations {
   String get menuSoundOff => 'الصوت: إيقاف';
 
   @override
+  String get menuStatsOn => 'الإحصاءات: تشغيل';
+
+  @override
+  String get menuStatsOff => 'الإحصاءات: إيقاف';
+
+  @override
   String get pauseTitle => 'إيقاف مؤقت';
 
   @override

@@ -6,6 +6,8 @@
   "menuBook": "शब्दकोश",
   "menuSoundOn": "आवाज: चालू",
   "menuSoundOff": "आवाज: बंद",
+  "menuStatsOn": "आकडेवारी: चालू",
+  "menuStatsOff": "आकडेवारी: बंद",
   "pauseTitle": "विराम",
   "pauseResume": "पुढे चला",
   "pauseRestart": "रन पुन्हा सुरू करा",

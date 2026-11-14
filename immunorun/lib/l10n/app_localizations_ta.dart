@@ -29,6 +29,12 @@ class AppLocalizationsTa extends AppLocalizations {
   String get menuSoundOff => 'ஒலி: அணை';
 
   @override
+  String get menuStatsOn => 'புள்ளிவிவரம்: இயக்கு';
+
+  @override
+  String get menuStatsOff => 'புள்ளிவிவரம்: அணை';
+
+  @override
   String get pauseTitle => 'இடைநிறுத்தம்';
 
   @override

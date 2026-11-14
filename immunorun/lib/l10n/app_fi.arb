@@ -6,6 +6,8 @@
   "menuBook": "TIETOSANAKIRJA",
   "menuSoundOn": "ÄÄNI: PÄÄLLÄ",
   "menuSoundOff": "ÄÄNI: POIS",
+  "menuStatsOn": "TILASTOT: PÄÄLLÄ",
+  "menuStatsOff": "TILASTOT: POIS",
   "pauseTitle": "TAUKO",
   "pauseResume": "JATKA",
   "pauseRestart": "ALOITA RUN ALUSTA",

@@ -29,6 +29,12 @@ class AppLocalizationsTh extends AppLocalizations {
   String get menuSoundOff => 'เสียง: ปิด';
 
   @override
+  String get menuStatsOn => 'สถิติ: เปิด';
+
+  @override
+  String get menuStatsOff => 'สถิติ: ปิด';
+
+  @override
   String get pauseTitle => 'หยุดชั่วคราว';
 
   @override

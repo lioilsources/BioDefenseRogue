@@ -29,6 +29,12 @@ class AppLocalizationsPa extends AppLocalizations {
   String get menuSoundOff => 'ਆਵਾਜ਼: ਬੰਦ';
 
   @override
+  String get menuStatsOn => 'ਅੰਕੜੇ: ਚਾਲੂ';
+
+  @override
+  String get menuStatsOff => 'ਅੰਕੜੇ: ਬੰਦ';
+
+  @override
   String get pauseTitle => 'ਰੁਕਿਆ';
 
   @override

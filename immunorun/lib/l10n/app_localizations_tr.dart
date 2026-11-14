@@ -29,6 +29,12 @@ class AppLocalizationsTr extends AppLocalizations {
   String get menuSoundOff => 'SES: KAPALI';
 
   @override
+  String get menuStatsOn => 'İSTATİSTİK: AÇIK';
+
+  @override
+  String get menuStatsOff => 'İSTATİSTİK: KAPALI';
+
+  @override
   String get pauseTitle => 'DURAKLATILDI';
 
   @override

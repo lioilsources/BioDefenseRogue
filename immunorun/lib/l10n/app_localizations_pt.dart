@@ -29,6 +29,12 @@ class AppLocalizationsPt extends AppLocalizations {
   String get menuSoundOff => 'SOM: DESLIGADO';
 
   @override
+  String get menuStatsOn => 'ESTATÍSTICAS: LIGADO';
+
+  @override
+  String get menuStatsOff => 'ESTATÍSTICAS: DESLIGADO';
+
+  @override
   String get pauseTitle => 'PAUSA';
 
   @override
@@ -146,6 +152,12 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get menuSoundOff => 'SOM: DESLIGADO';
+
+  @override
+  String get menuStatsOn => 'ESTATÍSTICAS: LIGADO';
+
+  @override
+  String get menuStatsOff => 'ESTATÍSTICAS: DESLIGADO';
 
   @override
   String get pauseTitle => 'PAUSA';

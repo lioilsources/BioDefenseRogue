@@ -29,6 +29,12 @@ class AppLocalizationsMs extends AppLocalizations {
   String get menuSoundOff => 'BUNYI: MATI';
 
   @override
+  String get menuStatsOn => 'STATISTIK: HIDUP';
+
+  @override
+  String get menuStatsOff => 'STATISTIK: MATI';
+
+  @override
   String get pauseTitle => 'JEDA';
 
   @override

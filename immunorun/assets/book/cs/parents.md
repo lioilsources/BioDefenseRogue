@@ -44,8 +44,11 @@ berte knihu jako pracovní verzi.
 
 ## Soukromí {#soukromi}
 
-Kniha nic neměří a nikam nic neposílá. Hra si v telefonu pamatuje jen to, které kapitoly dítě
-otevřelo, a zvolenou velikost písma.
+Hra si v telefonu pamatuje, které kapitoly dítě otevřelo, a zvolenou velikost písma. Vývojáři
+posílá anonymní statistiky hraní: jak dlouhé jsou runy, kde hra končí, které karty se vybírají
+a jestli se otevírá kniha. Nikdy jméno, identifikátor zařízení, text ani odpovědi z kvízů.
+Statistiky jdou vypnout v hlavním menu přepínačem STATISTIKY. Podrobnosti jsou v zásadách
+ochrany soukromí hry.
 
 ## Kam dál {#kam-dal}
 

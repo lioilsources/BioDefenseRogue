@@ -6,6 +6,8 @@
   "menuBook": "المعجم",
   "menuSoundOn": "الصوت: تشغيل",
   "menuSoundOff": "الصوت: إيقاف",
+  "menuStatsOn": "الإحصاءات: تشغيل",
+  "menuStatsOff": "الإحصاءات: إيقاف",
   "pauseTitle": "إيقاف مؤقت",
   "pauseResume": "متابعة",
   "pauseRestart": "إعادة الجولة",

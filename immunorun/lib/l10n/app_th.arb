@@ -6,6 +6,8 @@
   "menuBook": "สารานุกรม",
   "menuSoundOn": "เสียง: เปิด",
   "menuSoundOff": "เสียง: ปิด",
+  "menuStatsOn": "สถิติ: เปิด",
+  "menuStatsOff": "สถิติ: ปิด",
   "pauseTitle": "หยุดชั่วคราว",
   "pauseResume": "เล่นต่อ",
   "pauseRestart": "เริ่มรอบใหม่",

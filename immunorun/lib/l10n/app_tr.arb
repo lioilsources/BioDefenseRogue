@@ -6,6 +6,8 @@
   "menuBook": "SÖZLÜK",
   "menuSoundOn": "SES: AÇIK",
   "menuSoundOff": "SES: KAPALI",
+  "menuStatsOn": "İSTATİSTİK: AÇIK",
+  "menuStatsOff": "İSTATİSTİK: KAPALI",
   "pauseTitle": "DURAKLATILDI",
   "pauseResume": "DEVAM ET",
   "pauseRestart": "YENİDEN BAŞLAT",

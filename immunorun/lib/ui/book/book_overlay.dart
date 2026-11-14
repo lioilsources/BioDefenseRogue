@@ -1,6 +1,7 @@
 import 'package:cute_kid_fonts/cute_kid_fonts.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ol1n_telemetry/ol1n_telemetry.dart';
 
 import '../../book/model/book_model.dart';
 import '../../book/parser/book_loader.dart';
@@ -147,7 +148,10 @@ class _BookScreenState extends State<BookScreen> {
                 quizDone:    widget.quizDone,
                 onParents:   widget.book.parents.isEmpty
                     ? null
-                    : () => setState(() => _parents = true),
+                    : () {
+                        Telemetry.feature('parents');
+                        setState(() => _parents = true);
+                      },
               )
             : ChapterReader(
                 key:        ValueKey(open.id),

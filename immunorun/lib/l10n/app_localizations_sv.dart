@@ -29,6 +29,12 @@ class AppLocalizationsSv extends AppLocalizations {
   String get menuSoundOff => 'LJUD: AV';
 
   @override
+  String get menuStatsOn => 'STATISTIK: PÅ';
+
+  @override
+  String get menuStatsOff => 'STATISTIK: AV';
+
+  @override
   String get pauseTitle => 'PAUS';
 
   @override

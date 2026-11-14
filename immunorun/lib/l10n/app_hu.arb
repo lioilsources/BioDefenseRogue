@@ -6,6 +6,8 @@
   "menuBook": "LEXIKON",
   "menuSoundOn": "HANG: BE",
   "menuSoundOff": "HANG: KI",
+  "menuStatsOn": "STATISZTIKA: BE",
+  "menuStatsOff": "STATISZTIKA: KI",
   "pauseTitle": "SZÜNET",
   "pauseResume": "FOLYTATÁS",
   "pauseRestart": "FUTAM ÚJRAKEZDÉSE",

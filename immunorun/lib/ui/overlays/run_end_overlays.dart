@@ -63,7 +63,7 @@ class GameOverOverlay extends StatelessWidget {
               _EndButton(
                 label:     l10n.gameOverRetry,
                 color:     Colors.green.shade700,
-                onPressed: game.resetGame,
+                onPressed: game.playAgain,
               ),
               const SizedBox(height: 10),
               _EndButton(
@@ -128,7 +128,7 @@ class RunWonOverlay extends StatelessWidget {
               _EndButton(
                 label:     l10n.runWonNewRun,
                 color:     Colors.green.shade700,
-                onPressed: game.resetGame,
+                onPressed: game.playAgain,
               ),
               const SizedBox(height: 10),
               _EndButton(
