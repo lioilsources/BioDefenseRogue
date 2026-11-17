@@ -65,7 +65,6 @@ immunorun/lib/
 - Flame `PositionComponent` hierarchy for all game objects
 - Domain types in `domain/` — pure Dart, no Flame imports; systems in `game/systems/` testable without render
 - All tuning numbers live in `config/balance.dart`
-- Comments and UI copy in Czech, code in English
 - Rooms are self-contained — room type drives enemy spawning and layout (`wave_composition.dart`)
 - UI state via Riverpod v3 `Notifier` API; game publishes snapshots per frame
 - l10n: UI hry v ARB (`lib/l10n/app_cs.arb` je zdroj, ostatní jazyky překlady), názvy pojmů v UI přes
@@ -73,22 +72,9 @@ immunorun/lib/
 
 ## Hra ↔ kniha (Lexikon zdraví)
 
-Plán: `Prompts/05-kniha/` (kniha) a `Prompts/06-sync/` (synchronizace). Pravidla:
+Hra a kniha sdílejí jeden registr pojmů (`lib/domain/lore.dart`); pravidla synchronizace,
+placeholdery `{{balance.…}}`, standard kapitol a kontroly: [docs/hra-kniha.md](docs/hra-kniha.md).
 
-- **Jeden zdroj.** Český název, věta „ve hře“ a „doopravdy“ každého herního pojmu žijí jen
-  v `lib/domain/lore.dart`. UI je čte z registru (`lore.byRef(...)`), nikdy je nekopíruje.
-- **Nový herní pojem začíná záznamem v `lore.dart`** (nejdřív `realityCz`, pak mechanika, pak kód,
-  `03-mechaniky-z-biologie.md`). Nová hodnota enumu bez záznamu shodí `lore_registry_test`.
-- **Žádná čísla v textech.** Registr, karty i kapitoly používají `{{balance.<konstanta>|<formát>}}`
-  (pct, pctDelta, pctLess, s, degC, int) a `{{lore.<id>}}` pro názvy karet. Po změně názvů
-  v `balance.dart`: `dart run tool/gen_balance_map.dart` (CI gen-check).
-- **Kapitoly** jsou Markdown v `assets/book/cs/` podle `Prompts/05-kniha/03-redakcni-standard.md`.
-  Každá uvádí své pojmy v `lore:` a má jejich kotvy. Kde hra lže, kapitola má box `[!doopravdy]`.
-  Tvrzení o těle mají `<!-- src: KLÍČ … -->` nebo `<!-- TODO-FACT: KLÍČ – … -->` (klíče
-  v `Prompts/05-kniha/sources.md`). Release (`--dart-define=BOOK_RELEASE=true`) nesmí mít TODO-FACT.
-- **Hra → kniha jen přes `LoreEncounters`** (razítka). Kniha, kvíz ani razítka nemají vliv
-  na gameplay, balance ani odemykání.
-- Kontrola: `flutter test` (validace, BookSync, registr), report pokrytí
-  `flutter test tool/lore_report.dart` (`--dart-define=LORE_RENDER=out/` vyrenderuje kapitoly
-  pro garanta). Změna kapitoly → řádek v `assets/book/CHANGELOG.md`.
+## Odchylky
 
+- Odchylka od lang.md: komentáře česky. UI texty česky (zdroj `app_cs.arb`), kód a identifikátory anglicky.
