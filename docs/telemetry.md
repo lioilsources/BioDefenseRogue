@@ -46,6 +46,17 @@ Families, plan 04 §10.3, book OQ-8). If the app is listed for children under
 13 on a store, `Telemetry.init` must not run on that platform (as in Lexify:
 not on Android).
 
+The release workflows enforce this per platform. The secret `TELEMETRY_KEY`
+is passed into a build only when the repository variable for that platform
+is `true`: `TELEMETRY_IOS` (Release iOS) or `TELEMETRY_ANDROID` (Release
+Android). Without the variable the build gets an empty key and stays silent,
+so setting the secret alone measures nothing.
+
+```bash
+gh variable set TELEMETRY_IOS --body true      # iOS only, after the decision
+gh variable delete TELEMETRY_ANDROID            # Android stays silent
+```
+
 ## Screens
 
 A game has no routes; `Telemetry.screen()` follows the overlays:
