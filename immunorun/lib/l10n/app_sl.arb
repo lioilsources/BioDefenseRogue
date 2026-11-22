@@ -6,6 +6,8 @@
   "menuBook": "LEKSIKON",
   "menuSoundOn": "ZVOK: VKLOP",
   "menuSoundOff": "ZVOK: IZKLOP",
+  "menuStatsOn": "STATISTIKA: VKLOP",
+  "menuStatsOff": "STATISTIKA: IZKLOP",
   "pauseTitle": "PREMOR",
   "pauseResume": "NADALJUJ",
   "pauseRestart": "ZNOVA ZAČNI RUN",

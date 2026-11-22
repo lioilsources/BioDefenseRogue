@@ -29,6 +29,12 @@ class AppLocalizationsFi extends AppLocalizations {
   String get menuSoundOff => 'ÄÄNI: POIS';
 
   @override
+  String get menuStatsOn => 'TILASTOT: PÄÄLLÄ';
+
+  @override
+  String get menuStatsOff => 'TILASTOT: POIS';
+
+  @override
   String get pauseTitle => 'TAUKO';
 
   @override

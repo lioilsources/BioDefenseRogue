@@ -52,7 +52,9 @@ immunorun/lib/
 │   ├── components/          # Flame komponenty (player/, enemies/, projectile, pickup, …)
 │   ├── rooms/               # room_graph.dart — generátor runu
 │   ├── systems/             # herní logika: fever, combat_resolver, waves, upgrady, audio, pooly
-│   └── world/               # arena.dart, background.dart
+│   ├── world/               # arena.dart, background.dart
+│   └── game_observer.dart   # háčky pro appku (měření); hra z nich nic nečte
+├── telemetry/               # anonymní statistiky (ol1n_telemetry), slovník v docs/telemetry.md
 └── ui/                      # Flutter overlay UI
     ├── hud/                 # HUD + Riverpod notifiery (fever, hp, wave, atp)
     ├── input/               # gesture pad (mobil)

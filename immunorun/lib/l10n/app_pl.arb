@@ -6,6 +6,8 @@
   "menuBook": "LEKSYKON",
   "menuSoundOn": "DŹWIĘK: WŁ.",
   "menuSoundOff": "DŹWIĘK: WYŁ.",
+  "menuStatsOn": "STATYSTYKI: WŁ.",
+  "menuStatsOff": "STATYSTYKI: WYŁ.",
   "pauseTitle": "PAUZA",
   "pauseResume": "KONTYNUUJ",
   "pauseRestart": "RESTART RUNU",

@@ -29,6 +29,12 @@ class AppLocalizationsHr extends AppLocalizations {
   String get menuSoundOff => 'ZVUK: ISKLJ.';
 
   @override
+  String get menuStatsOn => 'STATISTIKA: UKLJ.';
+
+  @override
+  String get menuStatsOff => 'STATISTIKA: ISKLJ.';
+
+  @override
   String get pauseTitle => 'PAUZA';
 
   @override

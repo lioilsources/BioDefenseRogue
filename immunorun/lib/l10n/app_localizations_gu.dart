@@ -29,6 +29,12 @@ class AppLocalizationsGu extends AppLocalizations {
   String get menuSoundOff => 'અવાજ: બંધ';
 
   @override
+  String get menuStatsOn => 'આંકડા: ચાલુ';
+
+  @override
+  String get menuStatsOff => 'આંકડા: બંધ';
+
+  @override
   String get pauseTitle => 'વિરામ';
 
   @override

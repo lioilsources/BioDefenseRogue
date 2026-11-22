@@ -29,6 +29,12 @@ class AppLocalizationsZh extends AppLocalizations {
   String get menuSoundOff => '声音：关';
 
   @override
+  String get menuStatsOn => '统计：开';
+
+  @override
+  String get menuStatsOff => '统计：关';
+
+  @override
   String get pauseTitle => '暂停';
 
   @override
@@ -144,6 +150,12 @@ class AppLocalizationsZhHant extends AppLocalizationsZh {
 
   @override
   String get menuSoundOff => '聲音：關';
+
+  @override
+  String get menuStatsOn => '統計：開';
+
+  @override
+  String get menuStatsOff => '統計：關';
 
   @override
   String get pauseTitle => '暫停';

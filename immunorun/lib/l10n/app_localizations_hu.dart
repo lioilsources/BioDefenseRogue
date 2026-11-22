@@ -29,6 +29,12 @@ class AppLocalizationsHu extends AppLocalizations {
   String get menuSoundOff => 'HANG: KI';
 
   @override
+  String get menuStatsOn => 'STATISZTIKA: BE';
+
+  @override
+  String get menuStatsOff => 'STATISZTIKA: KI';
+
+  @override
   String get pauseTitle => 'SZÜNET';
 
   @override

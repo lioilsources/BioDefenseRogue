@@ -29,6 +29,12 @@ class AppLocalizationsUr extends AppLocalizations {
   String get menuSoundOff => 'آواز: آف';
 
   @override
+  String get menuStatsOn => 'اعداد و شمار: آن';
+
+  @override
+  String get menuStatsOff => 'اعداد و شمار: آف';
+
+  @override
   String get pauseTitle => 'وقفہ';
 
   @override

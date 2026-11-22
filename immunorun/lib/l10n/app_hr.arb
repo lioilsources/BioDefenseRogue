@@ -6,6 +6,8 @@
   "menuBook": "LEKSIKON",
   "menuSoundOn": "ZVUK: UKLJ.",
   "menuSoundOff": "ZVUK: ISKLJ.",
+  "menuStatsOn": "STATISTIKA: UKLJ.",
+  "menuStatsOff": "STATISTIKA: ISKLJ.",
   "pauseTitle": "PAUZA",
   "pauseResume": "NASTAVI",
   "pauseRestart": "PONOVI RUN",

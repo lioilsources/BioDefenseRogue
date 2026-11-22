@@ -27,6 +27,7 @@ import 'components/pickup.dart';
 import 'components/player/player.dart';
 import 'components/player/player_controller.dart';
 import 'components/swim_sprite.dart';
+import 'game_observer.dart';
 import 'rooms/room_graph.dart';
 import 'systems/audio_controller.dart';
 import 'systems/fever_controller.dart';
@@ -84,6 +85,11 @@ class ImmunoGame extends FlameGame
   late final double           _camBaseZoom;
 
   PlayerController get playerController => _controller;
+
+  /// Háčky pro vrstvu appky (anonymní statistiky). Hra z nich nic nečte.
+  GameObserver? observer;
+  GameScreen?   _screen;
+  bool          _runActive = false;
 
   bool   _gameOver      = false;
   bool   _runWon        = false;
@@ -200,6 +206,59 @@ class ImmunoGame extends FlameGame
     // Boot do hlavního menu — run startuje až startRun()
     overlays.add('mainMenu');
     pauseEngine();
+    _notifyScreen();
+  }
+
+  // ─── Háčky pro appku (game_observer.dart) ─────────────────────────────────
+
+  /// Obrazovka, jak ji vidí hráč (podle aktivních overlayů).
+  GameScreen get screen {
+    if (isBookOpen) return GameScreen.book;
+    if (overlays.isActive('mainMenu')) return GameScreen.menu;
+    if (overlays.isActive('gameOver') || overlays.isActive('runWon')) {
+      return GameScreen.result;
+    }
+    if (overlays.isActive('pause')) return GameScreen.pause;
+    if (overlays.isActive('upgradeChoice')) return GameScreen.upgrade;
+    if (overlays.isActive('roomChoice')) return GameScreen.roomChoice;
+    return GameScreen.play;
+  }
+
+  void _notifyScreen() {
+    final o = observer;
+    if (o == null) return;
+    final now = screen;
+    if (now == _screen) return;
+    _screen = now;
+    o.screenChanged(now);
+  }
+
+  RunStats _runStats({int cellsEarned = 0, String? killedBy}) => RunStats(
+        level:        _roomNumber + 1,
+        room:         _currentNode?.type ?? RoomType.combat,
+        roomsCleared: _roomsCleared,
+        upgrades:     upgrades.owned.length,
+        cellsEarned:  cellsEarned,
+        killedBy:     killedBy,
+      );
+
+  void _runStarted(RunFrom from) {
+    _runActive = true;
+    final o = observer;
+    if (o == null) return;
+    o.runStarted(
+      from,
+      vaccinated: _player.vaccinatedVs != null,
+      live:       _runStats,
+    );
+  }
+
+  void _runEnded(RunEnd end, {int cellsEarned = 0, String? killedBy}) {
+    if (!_runActive) return;
+    _runActive = false;
+    final o = observer;
+    if (o == null) return;
+    o.runEnded(end, _runStats(cellsEarned: cellsEarned, killedBy: killedBy));
   }
 
   // ─── Menu / pauza ─────────────────────────────────────────────────────────
@@ -211,6 +270,8 @@ class ImmunoGame extends FlameGame
     if (!kIsWeb && !_isDesktop) overlays.add('gesture');
     overlays.add('hud');
     resumeEngine();
+    _runStarted(RunFrom.menu);
+    _notifyScreen();
   }
 
   void pauseGame() {
@@ -220,27 +281,41 @@ class ImmunoGame extends FlameGame
     if (_upgradePending || _pendingChoices.isNotEmpty) return; // probíhá volba
     overlays.add('pause');
     pauseEngine();
+    _notifyScreen();
   }
 
   void resumeGame() {
     overlays.remove('pause');
     resumeEngine();
+    _notifyScreen();
   }
 
   /// Restart runu z pauzy.
   void restartRun() {
+    _runEnded(RunEnd.restart);
     overlays.remove('pause');
     resetGame();
+    _runStarted(RunFrom.pause);
+    _notifyScreen();
+  }
+
+  /// Nový run z obrazovky konce runu (game over / run won).
+  void playAgain() {
+    resetGame();
+    _runStarted(RunFrom.result);
+    _notifyScreen();
   }
 
   /// Návrat do hlavního menu (z pauzy nebo game over/run won).
   void returnToMenu() {
+    _runEnded(RunEnd.menu);
     overlays.remove('pause');
     resetGame();
     overlays.remove('hud');
     overlays.remove('gesture');
     overlays.add('mainMenu');
     pauseEngine();
+    _notifyScreen();
   }
 
   // ─── Kniha (Lexikon zdraví) ───────────────────────────────────────────────
@@ -264,6 +339,8 @@ class ImmunoGame extends FlameGame
     overlays.add('book');
     audio.play(Sfx.bookOpen);
     audio.startAmbient();
+    observer?.bookOpened(fromHint: chapterId != null);
+    _notifyScreen();
   }
 
   /// Deep-link na pojem registru (kapitola + kotva).
@@ -277,6 +354,7 @@ class ImmunoGame extends FlameGame
     audio.stopAmbient();
     if (_bookPausedEngine) resumeEngine();
     _bookPausedEngine = false;
+    _notifyScreen();
   }
 
   /// Uloží potkané pojmy; při vyčištění místnosti ukáže toast (max 1× za
@@ -305,6 +383,7 @@ class ImmunoGame extends FlameGame
 
   /// Dokončený kvíz kapitoly → razítko. Žádný vliv na hru (ADR 0002).
   void markQuizDone(String chapterId) {
+    observer?.quizDone();
     if (meta.quizDone.contains(chapterId)) return;
     meta = meta.copyWith(quizDone: {...meta.quizDone, chapterId});
     onMetaChanged?.call(meta);
@@ -312,6 +391,7 @@ class ImmunoGame extends FlameGame
 
   /// Velikost písma knihy se ukládá do mety (přežije restart appky).
   void setBookFontStep(int step) {
+    observer?.bookFontChanged();
     meta = meta.copyWith(bookFontStep: step);
     onMetaChanged?.call(meta);
   }
@@ -377,6 +457,7 @@ class ImmunoGame extends FlameGame
     _upgradePending  = true;
     overlays.add('upgradeChoice');
     pauseEngine();
+    _notifyScreen();
   }
 
   void chooseUpgrade(UpgradeDef def) {
@@ -386,6 +467,8 @@ class ImmunoGame extends FlameGame
     _upgradePending  = false;
     overlays.remove('upgradeChoice');
     resumeEngine();
+    observer?.upgradePicked(def.id, _roomNumber + 1);
+    _notifyScreen();
   }
 
   void _checkGateEntry() {
@@ -408,6 +491,7 @@ class ImmunoGame extends FlameGame
       _pendingChoices = node.children;
       overlays.add('roomChoice');
       pauseEngine();
+      _notifyScreen();
     }
   }
 
@@ -431,6 +515,9 @@ class ImmunoGame extends FlameGame
     _pendingChoices = [];
     overlays.remove('roomChoice');
     resumeEngine();
+    // Volba dveří vede do místnosti o jedno dál.
+    observer?.roomChosen(node.type, _roomNumber + 2);
+    _notifyScreen();
     _beginTransition(node);
   }
 
@@ -565,18 +652,21 @@ class ImmunoGame extends FlameGame
   void _triggerGameOver() {
     if (_gameOver) return;
     _gameOver = true;
-    _finishRun(
-      won:      false,
-      killedBy: _fever.isDead ? 'fever' : _lastDamageSource,
-    );
+    final killedBy = _fever.isDead ? 'fever' : _lastDamageSource;
+    _finishRun(won: false, killedBy: killedBy);
+    _runEnded(RunEnd.death,
+        cellsEarned: lastRunCellsEarned, killedBy: killedBy);
     overlays.add('gameOver');
+    _notifyScreen();
   }
 
   void _triggerRunWon() {
     if (_runWon) return;
     _runWon = true;
     _finishRun(won: true, killedBy: null);
+    _runEnded(RunEnd.won, cellsEarned: lastRunCellsEarned);
     overlays.add('runWon');
+    _notifyScreen();
   }
 
   // ─── Shader ──────────────────────────────────────────────────────────────

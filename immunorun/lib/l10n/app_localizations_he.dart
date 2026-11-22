@@ -29,6 +29,12 @@ class AppLocalizationsHe extends AppLocalizations {
   String get menuSoundOff => 'צליל: כבוי';
 
   @override
+  String get menuStatsOn => 'סטטיסטיקה: פועל';
+
+  @override
+  String get menuStatsOff => 'סטטיסטיקה: כבוי';
+
+  @override
   String get pauseTitle => 'השהיה';
 
   @override

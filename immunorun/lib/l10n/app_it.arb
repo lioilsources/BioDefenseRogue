@@ -6,6 +6,8 @@
   "menuBook": "LESSICO",
   "menuSoundOn": "AUDIO: SÌ",
   "menuSoundOff": "AUDIO: NO",
+  "menuStatsOn": "STATISTICHE: SÌ",
+  "menuStatsOff": "STATISTICHE: NO",
   "pauseTitle": "PAUSA",
   "pauseResume": "CONTINUA",
   "pauseRestart": "RICOMINCIA PARTITA",

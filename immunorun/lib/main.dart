@@ -1,7 +1,11 @@
+import 'dart:async';
+
 import 'package:flame/game.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_localizations/flutter_localizations.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ol1n_telemetry/ol1n_telemetry.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import 'data/meta_repository.dart';
 import 'domain/lore.dart';
@@ -9,6 +13,7 @@ import 'domain/meta_progress.dart';
 import 'game/immuno_game.dart';
 import 'l10n/app_localizations.dart';
 import 'l10n/lore_l10n.dart';
+import 'telemetry/telemetry.dart';
 import 'ui/book/book_overlay.dart';
 import 'ui/book/book_toast.dart';
 import 'ui/hud/hud_overlay.dart';
@@ -20,12 +25,44 @@ import 'ui/overlays/room_choice_overlay.dart';
 import 'ui/overlays/run_end_overlays.dart';
 import 'ui/overlays/upgrade_choice_overlay.dart';
 
-void main() {
-  runApp(const ProviderScope(child: ImmunoApp()));
+Future<void> main() async {
+  final launchedAt = DateTime.now();
+  WidgetsFlutterBinding.ensureInitialized();
+  final telemetry = ImmunoTelemetry();
+  try {
+    final prefs = await SharedPreferences.getInstance();
+    // Jazyk, který vybere MaterialApp, pro události před prvním snímkem.
+    setTelemetryLocale(resolveAppLocale(
+      WidgetsBinding.instance.platformDispatcher.locales,
+      AppLocalizations.supportedLocales,
+    ));
+    // Anonymní statistiky (docs/telemetry.md). Bez await: hra na měření
+    // nečeká a build bez TELEMETRY_KEY nedělá vůbec nic.
+    unawaited(Telemetry.init(
+      app:           kTelemetryApp,
+      appVersion:    kAppVersion,
+      dictionary:    immunoDictionary,
+      store:         PrefsTelemetryStore(prefs),
+      lang:          () => telemetryLang,
+      tester:        kTesterBuild,
+      hadDataBefore: () => hadMetaBefore(prefs),
+      pauseProps:    () => {'runs': telemetry.runs},
+      launchedAt:    launchedAt,
+    ));
+  } catch (_) {
+    // Bez úložiště se neměří; hra jede dál.
+  }
+  runApp(ProviderScope(
+    child: ImmunoApp(telemetry: telemetry, launchedAt: launchedAt),
+  ));
 }
 
 class ImmunoApp extends StatelessWidget {
-  const ImmunoApp({super.key});
+  const ImmunoApp({super.key, this.telemetry, this.launchedAt});
+
+  /// Háčky měření; null v testech.
+  final ImmunoTelemetry? telemetry;
+  final DateTime? launchedAt;
 
   @override
   Widget build(BuildContext context) {
@@ -41,7 +78,7 @@ class ImmunoApp extends StatelessWidget {
       ],
       supportedLocales:           AppLocalizations.supportedLocales,
       localeListResolutionCallback: resolveAppLocale,
-      home:                       const _GameScreen(),
+      home: _GameScreen(telemetry: telemetry, launchedAt: launchedAt),
     );
   }
 }
@@ -62,7 +99,10 @@ Locale resolveAppLocale(List<Locale>? preferred, Iterable<Locale> supported) {
 }
 
 class _GameScreen extends StatefulWidget {
-  const _GameScreen();
+  const _GameScreen({this.telemetry, this.launchedAt});
+
+  final ImmunoTelemetry? telemetry;
+  final DateTime?        launchedAt;
 
   @override
   State<_GameScreen> createState() => _GameScreenState();
@@ -109,20 +149,34 @@ class _GameScreenState extends State<_GameScreen> {
   Widget build(BuildContext context) {
     // Názvy pojmů čte i herní kód bez contextu → jazyk do globálu registru.
     loreLocale = AppLocalizations.of(context).localeName;
+    setTelemetryLocale(Localizations.localeOf(context));
     return FutureBuilder<MetaProgress>(
       future:  _metaFuture,
       builder: (context, snapshot) {
         if (!snapshot.hasData) {
           return const ColoredBox(color: Colors.black);
         }
-        final game = _game ??= ImmunoGame(
-          providerContainer: _container,
-          initialMeta:       snapshot.data!,
-          onMetaChanged:     _onMetaChanged,
-        );
+        final game = _game ??= _createGame(snapshot.data!);
         return _buildGame(game);
       },
     );
+  }
+
+  ImmunoGame _createGame(MetaProgress meta) {
+    final game = ImmunoGame(
+      providerContainer: _container,
+      initialMeta:       meta,
+      onMetaChanged:     _onMetaChanged,
+    )..observer = widget.telemetry;
+    final launchedAt = widget.launchedAt;
+    if (launchedAt != null) {
+      // Čas načítání: od startu procesu po použitelné menu.
+      game.loaded.then((_) {
+        final ms = DateTime.now().difference(launchedAt).inMilliseconds;
+        Telemetry.track('menu_ready', {'ms': ms.clamp(0, 600000)});
+      });
+    }
+    return game;
   }
 
   Widget _buildGame(ImmunoGame game) {

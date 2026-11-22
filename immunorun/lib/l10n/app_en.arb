@@ -6,6 +6,8 @@
   "menuBook": "LEXICON",
   "menuSoundOn": "SOUND: ON",
   "menuSoundOff": "SOUND: OFF",
+  "menuStatsOn": "STATS: ON",
+  "menuStatsOff": "STATS: OFF",
   "pauseTitle": "PAUSED",
   "pauseResume": "RESUME",
   "pauseRestart": "RESTART RUN",

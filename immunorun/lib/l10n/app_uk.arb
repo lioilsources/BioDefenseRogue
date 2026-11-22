@@ -6,6 +6,8 @@
   "menuBook": "ЛЕКСИКОН",
   "menuSoundOn": "ЗВУК: УВІМК.",
   "menuSoundOff": "ЗВУК: ВИМК.",
+  "menuStatsOn": "СТАТИСТИКА: УВІМК.",
+  "menuStatsOff": "СТАТИСТИКА: ВИМК.",
   "pauseTitle": "ПАУЗА",
   "pauseResume": "ПРОДОВЖИТИ",
   "pauseRestart": "ПОЧАТИ ЗАНОВО",

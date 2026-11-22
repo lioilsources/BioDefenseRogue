@@ -6,6 +6,8 @@
   "menuBook": "LEXICON",
   "menuSoundOn": "GELUID: AAN",
   "menuSoundOff": "GELUID: UIT",
+  "menuStatsOn": "STATISTIEKEN: AAN",
+  "menuStatsOff": "STATISTIEKEN: UIT",
   "pauseTitle": "PAUZE",
   "pauseResume": "DOORGAAN",
   "pauseRestart": "RUN OPNIEUW",
