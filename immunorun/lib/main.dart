@@ -25,7 +25,10 @@ void main() {
 }
 
 class ImmunoApp extends StatelessWidget {
-  const ImmunoApp({super.key});
+  const ImmunoApp({super.key, this.locale});
+
+  /// Pevný jazyk (screenshoty obchodů); null = jazyk zařízení.
+  final Locale? locale;
 
   @override
   Widget build(BuildContext context) {
@@ -40,6 +43,7 @@ class ImmunoApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales:           AppLocalizations.supportedLocales,
+      locale:                     locale,
       localeListResolutionCallback: resolveAppLocale,
       home:                       const _GameScreen(),
     );

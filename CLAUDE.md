@@ -21,6 +21,15 @@ flutter analyze
 flutter test
 ```
 
+Screenshoty do obchodů (cs + en, iPhone 6,9", iPad 13", Android telefon a 10" tablet):
+
+```bash
+tool/store_screenshots.sh [ios-phone ios-tablet android-phone android-tablet]  # → fastlane/metadata/…
+python3 tool/upload_store_screenshots.py ios|android [--dry-run]               # nahradí screenshoty v obchodě
+```
+
+Scény řídí `integration_test/store_screenshots_test.dart` přes `debug*` metody `ImmunoGame`.
+
 Verze Flutteru je připnutá v `immunorun/pubspec.yaml` (`environment.flutter`); CI i release
 workflow ji čtou odtud (`flutter-version-file`). Zvedá se jen tam, s novým `pubspec.lock`
 a goldeny knihy přegenerovanými na macOS.
