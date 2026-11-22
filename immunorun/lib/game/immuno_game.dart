@@ -777,6 +777,42 @@ class ImmunoGame extends FlameGame
     _spawnAtpDrop(pos, archetype);
   }
 
+  // ─── Scény pro screenshoty obchodů ────────────────────────────────────────
+  // Jen pro integration_test/store_screenshots_test.dart: navodí stav, ke
+  // kterému se hráč dostane až po vyčištění místností.
+
+  /// Nabídka upgradu hned, bez čištění místnosti.
+  @visibleForTesting
+  void debugOfferUpgrades() => _offerUpgrades();
+
+  /// Volba dveří ze startovní místnosti (start má vždy víc potomků).
+  @visibleForTesting
+  void debugOfferDoors() {
+    _pendingChoices = _roomGraph.start.children;
+    overlays.add('roomChoice');
+    pauseEngine();
+  }
+
+  /// Zavře volbu dveří bez přechodu do další místnosti.
+  @visibleForTesting
+  void debugDismissDoors() {
+    _pendingChoices = [];
+    overlays.remove('roomChoice');
+    resumeEngine();
+  }
+
+  /// Výhra po celém runu: start → větev → léčení → boss.
+  @visibleForTesting
+  void debugWinRun({int rooms = 4}) {
+    // Mezitím mohla padnout vlna a otevřít nabídku upgradu — nad výhrou ne.
+    _pendingUpgrades = [];
+    _upgradePending  = false;
+    overlays.remove('upgradeChoice');
+    _roomsCleared = rooms;
+    _wavesCleared = rooms;
+    _triggerRunWon();
+  }
+
   // ─── Public state ─────────────────────────────────────────────────────────
 
   int get wavesCleared => _wavesCleared;

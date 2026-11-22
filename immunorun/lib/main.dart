@@ -58,11 +58,14 @@ Future<void> main() async {
 }
 
 class ImmunoApp extends StatelessWidget {
-  const ImmunoApp({super.key, this.telemetry, this.launchedAt});
+  const ImmunoApp({super.key, this.telemetry, this.launchedAt, this.locale});
 
   /// Háčky měření; null v testech.
   final ImmunoTelemetry? telemetry;
   final DateTime? launchedAt;
+
+  /// Pevný jazyk (screenshoty obchodů); null = jazyk zařízení.
+  final Locale? locale;
 
   @override
   Widget build(BuildContext context) {
@@ -77,6 +80,7 @@ class ImmunoApp extends StatelessWidget {
         GlobalCupertinoLocalizations.delegate,
       ],
       supportedLocales:           AppLocalizations.supportedLocales,
+      locale:                     locale,
       localeListResolutionCallback: resolveAppLocale,
       home: _GameScreen(telemetry: telemetry, launchedAt: launchedAt),
     );
