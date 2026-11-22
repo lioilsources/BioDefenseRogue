@@ -6,6 +6,8 @@
   "menuBook": "百科",
   "menuSoundOn": "聲音：開",
   "menuSoundOff": "聲音：關",
+  "menuStatsOn": "統計：開",
+  "menuStatsOff": "統計：關",
   "pauseTitle": "暫停",
   "pauseResume": "繼續",
   "pauseRestart": "重新開始本局",

@@ -29,6 +29,12 @@ class AppLocalizationsBn extends AppLocalizations {
   String get menuSoundOff => 'শব্দ: বন্ধ';
 
   @override
+  String get menuStatsOn => 'পরিসংখ্যান: চালু';
+
+  @override
+  String get menuStatsOff => 'পরিসংখ্যান: বন্ধ';
+
+  @override
   String get pauseTitle => 'বিরতি';
 
   @override

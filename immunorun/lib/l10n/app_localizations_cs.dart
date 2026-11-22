@@ -29,6 +29,12 @@ class AppLocalizationsCs extends AppLocalizations {
   String get menuSoundOff => 'ZVUK: VYP';
 
   @override
+  String get menuStatsOn => 'STATISTIKY: ZAP';
+
+  @override
+  String get menuStatsOff => 'STATISTIKY: VYP';
+
+  @override
   String get pauseTitle => 'PAUZA';
 
   @override

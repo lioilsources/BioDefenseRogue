@@ -1,4 +1,6 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Anonymní statistiky hraní (docs/telemetry.md); bez klíče v buildu se nic neposílá. -->
+    <uses-permission android:name="android.permission.INTERNET"/>
     <application
         android:label="immunorun"
         android:name="${applicationName}"

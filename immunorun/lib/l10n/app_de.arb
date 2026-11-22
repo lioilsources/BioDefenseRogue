@@ -6,6 +6,8 @@
   "menuBook": "LEXIKON",
   "menuSoundOn": "TON: AN",
   "menuSoundOff": "TON: AUS",
+  "menuStatsOn": "STATISTIK: AN",
+  "menuStatsOff": "STATISTIK: AUS",
   "pauseTitle": "PAUSE",
   "pauseResume": "WEITER",
   "pauseRestart": "RUN NEU STARTEN",

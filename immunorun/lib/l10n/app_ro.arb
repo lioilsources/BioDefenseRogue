@@ -6,6 +6,8 @@
   "menuBook": "LEXICON",
   "menuSoundOn": "SUNET: PORNIT",
   "menuSoundOff": "SUNET: OPRIT",
+  "menuStatsOn": "STATISTICI: PORNIT",
+  "menuStatsOff": "STATISTICI: OPRIT",
   "pauseTitle": "PAUZĂ",
   "pauseResume": "CONTINUĂ",
   "pauseRestart": "RELUAREA RUNDEI",

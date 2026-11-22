@@ -29,6 +29,12 @@ class AppLocalizationsDa extends AppLocalizations {
   String get menuSoundOff => 'LYD: FRA';
 
   @override
+  String get menuStatsOn => 'STATISTIK: TIL';
+
+  @override
+  String get menuStatsOff => 'STATISTIK: FRA';
+
+  @override
   String get pauseTitle => 'PAUSE';
 
   @override

@@ -29,6 +29,12 @@ class AppLocalizationsVi extends AppLocalizations {
   String get menuSoundOff => 'ÂM THANH: TẮT';
 
   @override
+  String get menuStatsOn => 'THỐNG KÊ: BẬT';
+
+  @override
+  String get menuStatsOff => 'THỐNG KÊ: TẮT';
+
+  @override
   String get pauseTitle => 'TẠM DỪNG';
 
   @override

@@ -6,6 +6,8 @@
   "menuBook": "অভিধান",
   "menuSoundOn": "শব্দ: চালু",
   "menuSoundOff": "শব্দ: বন্ধ",
+  "menuStatsOn": "পরিসংখ্যান: চালু",
+  "menuStatsOff": "পরিসংখ্যান: বন্ধ",
   "pauseTitle": "বিরতি",
   "pauseResume": "চালিয়ে যাও",
   "pauseRestart": "রান আবার শুরু করো",

@@ -5,6 +5,11 @@ on:
     tags:
       - 'v*'
   workflow_dispatch:
+    inputs:
+      store:
+        description: 'Build pro odeslání do storů: kniha nesmí mít TODO-FACT (BOOK_RELEASE)'
+        type: boolean
+        default: false
 
 permissions:
   contents: write
@@ -28,6 +33,14 @@ jobs:
       - name: Install dependencies
         working-directory: immunorun
         run: flutter pub get
+
+      # Brána knihy (07-PLAN R3): jen pro build do storů, testovací buildy z tagu ji nemají.
+      - name: Book release gate
+        if: inputs.store
+        working-directory: immunorun
+        run: >-
+          flutter test --dart-define=BOOK_RELEASE=true
+          test/book/book_content_test.dart test/book_sync_test.dart
 
       - name: Bump build number
         working-directory: immunorun
@@ -105,7 +118,7 @@ jobs:
 
       - name: Build Flutter iOS (no codesign)
         working-directory: immunorun
-        run: flutter build ios --release --no-codesign
+        run: flutter build ios --release --no-codesign --dart-define=TELEMETRY_KEY=${{ secrets.TELEMETRY_KEY }} --dart-define=TELEMETRY_HOST=${{ secrets.TELEMETRY_HOST }}
 
       - name: Archive with manual signing
         env:

@@ -6,6 +6,8 @@
   "menuBook": "LÈXIC",
   "menuSoundOn": "SO: SÍ",
   "menuSoundOff": "SO: NO",
+  "menuStatsOn": "ESTADÍSTIQUES: SÍ",
+  "menuStatsOff": "ESTADÍSTIQUES: NO",
   "pauseTitle": "PAUSA",
   "pauseResume": "CONTINUAR",
   "pauseRestart": "REINICIAR PARTIDA",

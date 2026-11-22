@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:ol1n_telemetry/ol1n_telemetry.dart';
 
 import '../../domain/lore.dart';
 import '../../game/immuno_game.dart';
@@ -75,9 +76,25 @@ class _MainMenuOverlayState extends State<MainMenuOverlay> {
             _MenuButton(
               label: game.audio.enabled ? l10n.menuSoundOn : l10n.menuSoundOff,
               color: Colors.blueGrey.shade700,
-              onPressed: () =>
-                  setState(() => game.audio.enabled = !game.audio.enabled),
+              onPressed: () {
+                final on = !game.audio.enabled;
+                if (!on) Telemetry.feature('sound_off');
+                setState(() => game.audio.enabled = on);
+              },
             ),
+            // Anonymní statistiky: jen v buildu, který je umí posílat.
+            // Vypnutí hned smaže frontu.
+            if (Telemetry.isConfigured) ...[
+              const SizedBox(height: 14),
+              _MenuButton(
+                label: Telemetry.isEnabled ? l10n.menuStatsOn : l10n.menuStatsOff,
+                color: Colors.blueGrey.shade800,
+                onPressed: () async {
+                  await Telemetry.setEnabled(!Telemetry.isEnabled);
+                  if (mounted) setState(() {});
+                },
+              ),
+            ],
           ],
         ),
       ),

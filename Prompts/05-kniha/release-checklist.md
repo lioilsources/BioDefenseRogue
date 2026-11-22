@@ -6,6 +6,9 @@ Fáze 1 je hotová, až je zaškrtnuto všechno. Stav k 2026-10-16.
 - [ ] Garant (imunolog nebo učitel přírodopisu) prošel všech 13 kapitol, slovníček a stranu pro rodiče
   (`garant-todo-fact.md`, render: `flutter test tool/lore_report.dart --dart-define=LORE_RENDER=out/`).
 - [ ] Žádný `TODO-FACT`: `flutter test --dart-define=BOOK_RELEASE=true` je zelený.
+  Build do storů jde jen z ručního spuštění Release iOS/Android se zaškrtnutým `store`, které
+  tuhle bránu pustí před buildem. Buildy z tagu jsou testovací a bránu nemají, do storů je
+  neposílej (ani „povýšením“ buildu z TestFlightu).
 - [ ] Kapitola 12 (očkování) schválena jako první (OQ-10, OQ-21).
 - [ ] Rozhodnuto o `lie: large` (`03-mechaniky-z-biologie.md` §3).
 

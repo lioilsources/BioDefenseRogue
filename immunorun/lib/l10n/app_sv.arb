@@ -6,6 +6,8 @@
   "menuBook": "LEXIKON",
   "menuSoundOn": "LJUD: PÅ",
   "menuSoundOff": "LJUD: AV",
+  "menuStatsOn": "STATISTIK: PÅ",
+  "menuStatsOff": "STATISTIK: AV",
   "pauseTitle": "PAUS",
   "pauseResume": "FORTSÄTT",
   "pauseRestart": "STARTA OM RUN",

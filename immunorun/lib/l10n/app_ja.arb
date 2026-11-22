@@ -6,6 +6,8 @@
   "menuBook": "図鑑",
   "menuSoundOn": "サウンド：オン",
   "menuSoundOff": "サウンド：オフ",
+  "menuStatsOn": "統計：オン",
+  "menuStatsOff": "統計：オフ",
   "pauseTitle": "ポーズ",
   "pauseResume": "つづける",
   "pauseRestart": "ランをやり直す",

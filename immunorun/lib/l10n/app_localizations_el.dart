@@ -29,6 +29,12 @@ class AppLocalizationsEl extends AppLocalizations {
   String get menuSoundOff => 'ΗΧΟΣ: ΟΧΙ';
 
   @override
+  String get menuStatsOn => 'ΣΤΑΤΙΣΤΙΚΑ: ΝΑΙ';
+
+  @override
+  String get menuStatsOff => 'ΣΤΑΤΙΣΤΙΚΑ: ΟΧΙ';
+
+  @override
   String get pauseTitle => 'ΠΑΥΣΗ';
 
   @override

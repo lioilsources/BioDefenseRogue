@@ -29,6 +29,12 @@ class AppLocalizationsKn extends AppLocalizations {
   String get menuSoundOff => 'ಧ್ವನಿ: ಆಫ್';
 
   @override
+  String get menuStatsOn => 'ಅಂಕಿಅಂಶ: ಆನ್';
+
+  @override
+  String get menuStatsOff => 'ಅಂಕಿಅಂಶ: ಆಫ್';
+
+  @override
   String get pauseTitle => 'ವಿರಾಮ';
 
   @override

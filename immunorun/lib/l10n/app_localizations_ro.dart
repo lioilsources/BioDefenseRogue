@@ -29,6 +29,12 @@ class AppLocalizationsRo extends AppLocalizations {
   String get menuSoundOff => 'SUNET: OPRIT';
 
   @override
+  String get menuStatsOn => 'STATISTICI: PORNIT';
+
+  @override
+  String get menuStatsOff => 'STATISTICI: OPRIT';
+
+  @override
   String get pauseTitle => 'PAUZĂ';
 
   @override

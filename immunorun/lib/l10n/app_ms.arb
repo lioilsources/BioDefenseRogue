@@ -6,6 +6,8 @@
   "menuBook": "LEKSIKON",
   "menuSoundOn": "BUNYI: HIDUP",
   "menuSoundOff": "BUNYI: MATI",
+  "menuStatsOn": "STATISTIK: HIDUP",
+  "menuStatsOff": "STATISTIK: MATI",
   "pauseTitle": "JEDA",
   "pauseResume": "SAMBUNG",
   "pauseRestart": "MULA SEMULA",

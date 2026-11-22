@@ -6,6 +6,8 @@
   "menuBook": "அகராதி",
   "menuSoundOn": "ஒலி: இயக்கு",
   "menuSoundOff": "ஒலி: அணை",
+  "menuStatsOn": "புள்ளிவிவரம்: இயக்கு",
+  "menuStatsOff": "புள்ளிவிவரம்: அணை",
   "pauseTitle": "இடைநிறுத்தம்",
   "pauseResume": "தொடர்",
   "pauseRestart": "ரன் மீண்டும் தொடங்கு",

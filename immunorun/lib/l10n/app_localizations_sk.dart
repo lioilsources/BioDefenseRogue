@@ -29,6 +29,12 @@ class AppLocalizationsSk extends AppLocalizations {
   String get menuSoundOff => 'ZVUK: VYP';
 
   @override
+  String get menuStatsOn => 'ŠTATISTIKY: ZAP';
+
+  @override
+  String get menuStatsOff => 'ŠTATISTIKY: VYP';
+
+  @override
   String get pauseTitle => 'PAUZA';
 
   @override

@@ -29,6 +29,12 @@ class AppLocalizationsTe extends AppLocalizations {
   String get menuSoundOff => 'శబ్దం: ఆఫ్';
 
   @override
+  String get menuStatsOn => 'గణాంకాలు: ఆన్';
+
+  @override
+  String get menuStatsOff => 'గణాంకాలు: ఆఫ్';
+
+  @override
   String get pauseTitle => 'విరామం';
 
   @override

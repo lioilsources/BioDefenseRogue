@@ -6,6 +6,8 @@
   "menuBook": "LEKSIKON",
   "menuSoundOn": "SUARA: AKTIF",
   "menuSoundOff": "SUARA: MATI",
+  "menuStatsOn": "STATISTIK: AKTIF",
+  "menuStatsOff": "STATISTIK: MATI",
   "pauseTitle": "JEDA",
   "pauseResume": "LANJUTKAN",
   "pauseRestart": "ULANGI RUN",

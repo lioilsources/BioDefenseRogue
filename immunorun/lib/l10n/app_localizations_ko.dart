@@ -29,6 +29,12 @@ class AppLocalizationsKo extends AppLocalizations {
   String get menuSoundOff => '소리: 꺼짐';
 
   @override
+  String get menuStatsOn => '통계: 켜짐';
+
+  @override
+  String get menuStatsOff => '통계: 꺼짐';
+
+  @override
   String get pauseTitle => '일시 정지';
 
   @override
