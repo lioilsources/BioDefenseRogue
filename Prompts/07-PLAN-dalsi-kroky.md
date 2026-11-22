@@ -152,9 +152,9 @@ zařízení). Co jde udělat bez nich:
 
 - Balíček pro garanta: `flutter test tool/lore_report.dart --dart-define=LORE_RENDER=out/`,
   k tomu `garant-todo-fact.md`. Kapitola 12 (očkování) jde první (OQ-10, OQ-21).
-- OQ-29: odkazy ze strany pro rodiče mají otevírat prohlížeč až po potvrzení. Zjisti stav a dodělej.
-- `BOOK_RELEASE=true` dnes nepouští žádný workflow, `v1.0.1` vyšel s `TODO-FACT` v obsahu. Pro
-  testery to nevadí. Před odesláním do storů musí existovat brána (viz rozhodnutí R3).
+- `v1.0.1`–`v1.0.3` vyšly s `TODO-FACT`, pro testery to nevadí. Brána pro story je hotová (R3):
+  ruční Release s volbou `store` pustí testy knihy s `BOOK_RELEASE=true`.
+- OQ-29: potvrzovací dialog je hotový. Rodičovská brána jen při kategorii Kids/Families (vlastník).
 - `TODO-FACT` sám neodstraňuj a zdroje nedoplňuj z hlavy. Smí je uzavřít jen garant nebo ověřená
   citace z `sources.md`.
 
@@ -177,8 +177,8 @@ nezačínej bez zadání od vlastníka. Každý nový pojem jde přes `lore.dart
 - **R1** Merge #26: strojové překlady pustit hned, nebo až po kontrole vybraných jazyků?
 - **R2** Ochrana `main`: `enforce_admins` je vypnuté, takže vlastník pushne i bez zelené „ci“.
   Zapnout?
-- **R3** Kde bude brána `BOOK_RELEASE`: doporučuju u odeslání do storů, ne u tagu, protože tagy bez
-  přípony se používají i pro testovací buildy.
+- **R3** ~~Kde bude brána `BOOK_RELEASE`~~ Rozhodnuto 2026-11-22: u odeslání do storů. Ruční
+  spuštění Release workflow s volbou `store` pustí před buildem testy knihy s `BOOK_RELEASE=true`.
 - **R4** Firebase skupina a `prerelease` u tagů bez přípony (2.4).
 - **R5** PR #1 a staré vzdálené větve (`docs/*`, `claude/jak-dal-r2cbif`): zavřít a smazat?
 - **R6** Priorita mezi etapami B, C, D, E po dokončení etapy A.
