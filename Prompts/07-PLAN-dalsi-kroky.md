@@ -19,7 +19,7 @@ není. Grafika G3/G4 se generuje na L40S podle `art/fx/BRIEF.md` (větev `art/fx
 | 2.2 goldeny knihy | #28 | tolerance 0,01 %, přegenerované, `failures/` pryč; na macOS 247/247 |
 | 2.3 pin Flutteru | #29 | `environment.flutter` v pubspec + `flutter-version-file` |
 | 2.4 verze z tagu, pre-release | #30 | úryvek otestovaný lokálně; workflow neběžel |
-| 2.5 #1 a staré větve | #39 | z #1 převzatá jen revize biologie (podklad ke kap. 13), #1 zavřený |
+| 2.5 #1 a staré větve | #43 | z #1 převzatá jen revize biologie (podklad ke kap. 13), #1 zavřený |
 | §9 hitboxy | #31 | test u 6 komponent; balance neladěná |
 | §9 přetečení dialogu, obrázky karet | #32 | `FitToScreen`, `cacheWidth`, velikost v `balance.dart` |
 | §9 filtrování spritů | #33 | ověřeno okem; výkon na zařízení neměřen |
