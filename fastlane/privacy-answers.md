@@ -12,7 +12,9 @@ dospělé“. Než se nastaví klíč, rozhoduje vlastník o zařazení (Apple K
 category, Google Play Target audience a Families; plán 04 §10.3, OQ-8 v
 `Prompts/05-kniha/open-questions.md`). Když na Play bude cílová skupina
 zahrnovat děti pod 13, na Androidu se neměří (jako Lexify) a Data safety
-zůstává bez statistik.
+zůstává bez statistik. Měření se zapíná pro každou platformu zvlášť proměnnou repa
+`TELEMETRY_IOS` / `TELEMETRY_ANDROID` (`true`). Bez ní build klíč nedostane, i když je secret
+nastavený (`docs/telemetry.md`).
 
 **Privacy Policy URL:** `https://lioilsources.github.io/BioDefenseRogue/privacy.html`
 (GitHub Pages z `main` `/docs` je potřeba zapnout).

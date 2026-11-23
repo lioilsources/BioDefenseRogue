@@ -116,9 +116,11 @@ jobs:
             immunorun/ios/Runner.xcodeproj/project.pbxproj
           grep PROVISIONING_PROFILE_SPECIFIER immunorun/ios/Runner.xcodeproj/project.pbxproj
 
+      # Měření jen se zapnutou proměnnou repa (docs/telemetry.md, Audience):
+      # samotný secret TELEMETRY_KEY nestačí, bez proměnné je build tichý.
       - name: Build Flutter iOS (no codesign)
         working-directory: immunorun
-        run: flutter build ios --release --no-codesign --dart-define=TELEMETRY_KEY=${{ secrets.TELEMETRY_KEY }} --dart-define=TELEMETRY_HOST=${{ secrets.TELEMETRY_HOST }}
+        run: flutter build ios --release --no-codesign --dart-define=TELEMETRY_KEY=${{ vars.TELEMETRY_IOS == 'true' && secrets.TELEMETRY_KEY || '' }} --dart-define=TELEMETRY_HOST=${{ secrets.TELEMETRY_HOST }}
 
       - name: Archive with manual signing
         env:

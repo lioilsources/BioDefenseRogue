@@ -79,13 +79,15 @@ jobs:
           echo -n "$KEYSTORE_BASE64" | tr -d '[:space:]' | base64 --decode --ignore-garbage > immunorun/android/app/release.keystore
           printf "storePassword=%s\nkeyPassword=%s\nkeyAlias=%s\nstoreFile=release.keystore\n" "$KEYSTORE_PASSWORD" "$KEY_PASSWORD" "$KEY_ALIAS" > immunorun/android/key.properties
 
+      # Měření jen se zapnutou proměnnou repa (docs/telemetry.md, Audience):
+      # samotný secret TELEMETRY_KEY nestačí, bez proměnné je build tichý.
       - name: Build release AAB
         working-directory: immunorun
-        run: flutter build appbundle --release --dart-define=TELEMETRY_KEY=${{ secrets.TELEMETRY_KEY }} --dart-define=TELEMETRY_HOST=${{ secrets.TELEMETRY_HOST }}
+        run: flutter build appbundle --release --dart-define=TELEMETRY_KEY=${{ vars.TELEMETRY_ANDROID == 'true' && secrets.TELEMETRY_KEY || '' }} --dart-define=TELEMETRY_HOST=${{ secrets.TELEMETRY_HOST }}
 
       - name: Build release APK
         working-directory: immunorun
-        run: flutter build apk --release --dart-define=TELEMETRY_KEY=${{ secrets.TELEMETRY_KEY }} --dart-define=TELEMETRY_HOST=${{ secrets.TELEMETRY_HOST }}
+        run: flutter build apk --release --dart-define=TELEMETRY_KEY=${{ vars.TELEMETRY_ANDROID == 'true' && secrets.TELEMETRY_KEY || '' }} --dart-define=TELEMETRY_HOST=${{ secrets.TELEMETRY_HOST }}
 
       - name: Verify APK signing certificate
         run: |
